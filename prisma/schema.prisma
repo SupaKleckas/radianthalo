@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String
+  firstName      String?
+  lastName       String?
+  role           Role      @default(USER)
+  Client         Client?
+  Employee       Employee?
+}
+
+model Client {
+  user     User          @relation(fields: [userId], references: [id])
+  userId   String        @id
+  reviews  Review[]
+  Schedule Appointment[]
+}
+
+model Employee {
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String        @id
+  appointments Appointment[]
+  services     Service[]
+  reviews      Review[]
+}
+
+model Appointment {
+  id         String   @id @default(cuid())
+  title      String
+  startTime  DateTime
+  endTime    DateTime
+  Employee   Employee @relation(fields: [employeeId], references: [userId])
+  employeeId String
+  Client     Client   @relation(fields: [clientId], references: [userId])
+  clientId   String
+  service    Service  @relation(fields: [serviceId], references: [id])
+  serviceId  String
+}
+
+model Service {
+  id          String        @id @default(cuid())
+  title       String
+  price       Float
+  duration    Int
+  employees   Employee[]
+  appointment Appointment[]
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  rating     Int
+  author     Client   @relation(fields: [authorId], references: [userId])
+  authorId   String
+  employee   Employee @relation(fields: [employeeId], references: [userId])
+  employeeId String
+}
+
+enum Role {
+  ADMIN
+  USER
+  EMPLOYEE
+}
