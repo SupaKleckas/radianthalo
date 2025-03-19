@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Lexend_Zetta, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
 
 const lexendZetta = Lexend_Zetta({
   variable: "--font-lexend-zetta",
@@ -31,7 +30,6 @@ export default function RootLayout({
       <body
         className={`${lexendZetta.variable} ${inter.variable} antialiased`}
       >
-        <Navbar />
         {children}
       </body>
     </html>

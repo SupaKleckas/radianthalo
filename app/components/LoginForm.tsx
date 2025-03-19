@@ -1,7 +1,7 @@
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
 import SignupForm from './SignupForm';
-import { login } from "@/app/authActions/loginActions";
+import { login } from "@/app/actions/loginActions";
 
 interface LoginFormProps {
   onClose: () => void;

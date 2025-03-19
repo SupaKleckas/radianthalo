@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
-import { signup } from "@/app/authActions/signupActions";
+import { signup } from "@/app/actions/signupActions";
 import { useFormStatus } from "react-dom";
 
 interface SignupFormProps {
@@ -11,6 +11,8 @@ interface SignupFormProps {
 function SignupForm({ onClose }: SignupFormProps) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [state, signupAction] = useActionState(signup, undefined);
 
   return (
@@ -26,7 +28,8 @@ function SignupForm({ onClose }: SignupFormProps) {
             onChange={e => setEmail(e.target.value)}
             className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
           />
-          {state?.errors.email && <p className='text-red-500 text-sm'>{state.errors.email._errors[0]}</p>}
+          {state?.errors?.email && <p className='text-red-500 text-sm'>{state.errors.email._errors[0]}</p>}
+          {state?.email?._errors && <p className='text-red-500 text-sm'>{state.email._errors}</p>}
           <input
             type='password'
             name='password'
@@ -35,7 +38,23 @@ function SignupForm({ onClose }: SignupFormProps) {
             onChange={e => setPassword(e.target.value)}
             className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
           />
-          {state?.errors.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
+          <input
+            type='firstName'
+            name='firstName'
+            placeholder='First Name'
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+          />
+          <input
+            type='lastName'
+            name='lastName'
+            placeholder='Last Name'
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+          />
+          {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
           <SubmitButton />
         </form>
       </div>

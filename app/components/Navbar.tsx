@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link'
-import React,  {useState, useEffect} from 'react';
-import {HiMenu, HiX} from "react-icons/hi";
+import React, { useState, useEffect } from 'react';
+import { HiMenu, HiX } from "react-icons/hi";
 import LoginForm from './LoginForm';
 
 const Navbar = () => {
@@ -39,7 +39,7 @@ const Navbar = () => {
       <nav className='flex justify-between items-center w-[92%] mx-auto'>
         <div>
           <Link href='/'>
-          <h3 className='text-3xl name font-bold px-5'>{isSmallScreen ? 'RH' : 'Radiant Halo'}</h3>
+            <h3 className='text-3xl name font-bold px-5'>{isSmallScreen ? 'RH' : 'Radiant Halo'}</h3>
           </Link>
         </div>
         <div className={`bg-[#94B6CE] lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-15 flex-col' : 'top-[-100%] flex-row'} lg:w-auto w-full px-5`}>

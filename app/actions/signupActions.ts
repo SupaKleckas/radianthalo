@@ -2,13 +2,10 @@
 
 import { signupSchema } from "../lib/zod"
 import { saltAndHashPassword } from "../lib/hash";
-import { addUser, getUserByEmail } from "../actions/userActions";
+import { addUser, getUserByEmail } from "./userDbActions";
 import { redirect } from "next/navigation";
 
 export async function signup(state: any, formData: FormData) {
-    console.log(formData.get("email"));
-    console.log(formData.get("password"));
-
     const validationResult = signupSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
@@ -19,14 +16,14 @@ export async function signup(state: any, formData: FormData) {
 
     if (await getUserByEmail(validationResult.data.email) != null) {
         return {
-            errors: {
-                email: "Email already exists."
+            email: {
+                _errors: ["Email already exists."]
             }
         }
     }
 
     const hashed = await saltAndHashPassword(validationResult.data.password);
-    await addUser(validationResult.data.email, hashed);
+    await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName);
 
     redirect("/");
 }

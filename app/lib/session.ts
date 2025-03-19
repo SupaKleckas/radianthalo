@@ -2,18 +2,22 @@
 import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/dist/server/request/cookies";
 
-
 const secret = process.env.JWT_SECRET;
 const encodedSecret = new TextEncoder().encode(secret);
 
 type SessionPayload = {
     userId: string;
     expiresAt: Date;
+    role: string;
 }
 
-export async function createSession(userId: string) {
+export async function deleteSession() {
+    (await cookies()).delete("session");
+}
+
+export async function createSession(userId: string, role: string) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const session = await encrypt({ userId, expiresAt });
+    const session = await encrypt({ userId, expiresAt, role });
 
     (await cookies()).set("session", session, {
         httpOnly: true,

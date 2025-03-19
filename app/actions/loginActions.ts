@@ -2,8 +2,8 @@
 
 import { loginSchema } from "../lib/zod"
 import { verifyPassword } from "../lib/hash";
-import { getUserByEmail } from "../actions/userActions";
-import { createSession } from "../lib/session";
+import { getUserByEmail } from "./userDbActions";
+import { createSession, deleteSession } from "../lib/session";
 import { redirect } from "next/navigation";
 
 export async function login(state: any, formData: FormData) {
@@ -36,10 +36,12 @@ export async function login(state: any, formData: FormData) {
         }
     }
 
-    await createSession(user.id);
+    await createSession(user.id, user.role);
 
     redirect("/");
 }
 
 export async function logout() {
+    await deleteSession();
+    redirect("/");
 }
