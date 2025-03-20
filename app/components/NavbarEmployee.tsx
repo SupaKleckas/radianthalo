@@ -38,23 +38,7 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <div className={`bg-[#94B6CE] lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-15 flex-col' : 'top-[-100%] flex-row'} lg:w-auto w-full px-5`}>
-                    {/* <ul className={`flex ${menuOpen ? 'flex-col py-5' : 'lg:flex-row'} lg:gap-[4vw] gap-8 px-10`}>
-                        <li>
-                            <Link className='hover:text-[#1f3d53]' href='/services'>
-                                Services
-                            </Link>
-                        </li>
-                        <li>
-                            <Link className='hover:text-[#1f3d53]' href='/locations'>
-                                Locations
-                            </Link>
-                        </li>
-                        <li>
-                            <Link className='hover:text-[#1f3d53]' href='/faq'>
-                                FAQ
-                            </Link>
-                        </li>
-                    </ul> */}
+                    {/* nav items */}
                 </div>
                 <div className='flex items-center gap-6 px-5'>
                     {menuOpen ? (

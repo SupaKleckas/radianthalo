@@ -1,9 +1,8 @@
 "use server";
-
-import { addUserSchema } from "../lib/zod"
-import { saltAndHashPassword } from "../lib/hash";
-import { addUser, getUserByEmail } from "./userDbActions";
-import { redirect } from "next/navigation";
+import { addUserSchema, editUserSchema } from "@/app/lib/zod"
+import { saltAndHashPassword } from "@/app/lib/hash";
+import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/userDbActions"
+import { NextResponse } from 'next/server';
 
 export async function addUserByForm(state: any, formData: FormData) {
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
@@ -23,5 +22,23 @@ export async function addUserByForm(state: any, formData: FormData) {
     const hashed = await saltAndHashPassword(validationResult.data.password);
     await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.role);
 
-    redirect("/dashboard/users")
+    return NextResponse.redirect('/dashboard/users');
+}
+
+export async function editUserByForm(state: any, formData: FormData) {
+    const validationResult = editUserSchema.safeParse(Object.fromEntries(formData));
+
+    if (!validationResult.success) {
+        return {
+            errors: validationResult.error.format(),
+        }
+    }
+
+    if (await getUserById(validationResult.data.id) == null) {
+        return {
+            _errors: ["ID doesn't exist."]
+        }
+    }
+
+    await updateUser(validationResult.data.id, validationResult.data.email, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.role);
 }

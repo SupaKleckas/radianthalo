@@ -1,38 +1,29 @@
-import { HiOutlineChevronLeft, HiPencil } from "react-icons/hi";
+import { HiOutlineChevronLeft } from "react-icons/hi";
 import Link from "next/link";
 import { getUserById } from "@/app/actions/userDbActions";
+import UserEditForm from "@/app/components/EditUserForm";
 
-interface PageParams {
+interface UserParams {
     params: {
         id: string;
     };
 }
 
-export default async function Page({ params }: PageParams) {
+export default async function Page({ params }: UserParams) {
     const { id } = await params;
     const user = await getUserById(id);
 
     return (
-        <>
-            <div className='flex flex-row items-center justify-between w-full'>
+        <div className="flex flex-col items-center justify-center py-[5%]">
+            <div className='w-[50%] flex justify-start mb-6'>
                 <Link href="/dashboard/users">
-                    <HiOutlineChevronLeft className='mr-2 text-5xl' />
+                    <HiOutlineChevronLeft className='text-5xl hover:cursor-pointer hover:text-[#7d94b6]' />
                 </Link>
-                <button>
-                    <HiPencil className='mr-2 text-5xl' />
-                </button>
             </div>
-
-            <div className="flex flex-col items-center justify-center py-3">
-                <h1 className="text-4xl mb-4 mr-5"> User Card </h1>
-
-
-                <div className='w-[80%]'>
-                    <div className='flex justify-center mb-4'>
-                        <p>{user?.firstName} {user?.lastName} {user?.email} {user?.role}</p>
-                    </div>
-                </div>
+            <h1 className="text-4xl font-bold mb-6"> User Card </h1>
+            <div className='w-full'>
+                {user && <UserEditForm user={user} />}
             </div>
-        </>
+        </div>
     );
 }

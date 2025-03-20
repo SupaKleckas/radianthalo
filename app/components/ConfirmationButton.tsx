@@ -3,13 +3,11 @@ import { HiTrash } from "react-icons/hi";
 import { useState } from "react";
 import ConfirmationWindow from "./ConfirmationWindow";
 
-interface UserInformation {
-    firstName: string,
-    lastName: string,
-    role: string
+interface Message {
+    message: string
 }
 
-export default function DeleteUserButton(params: UserInformation) {
+export default function ConfirmationButton(params: Message) {
     const [popupOpen, setPopupOpen] = useState(false);
 
     const openPopup = (e: React.MouseEvent) => {
@@ -33,7 +31,7 @@ export default function DeleteUserButton(params: UserInformation) {
                 <HiTrash className='text-2xl hover:cursor-pointer' />
             </button>
             {popupOpen && <ConfirmationWindow
-                message={`Are you sure you want to delete ${params.role.toLowerCase()} ${params.firstName} ${params.lastName}?`}
+                message={params.message}
                 onClose={closePopup}
                 onConfirm={handleConfirm}
             />}

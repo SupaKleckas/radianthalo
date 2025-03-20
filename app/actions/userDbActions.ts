@@ -28,7 +28,7 @@ export async function getUserById(id: string) {
     });
 }
 
-export async function addUser(email: string, hashedPassword: string, firstName: string, lastName: string, role: Role) {
+export async function addUser(email: string, hashedPassword: string, firstName: string, lastName: string, role?: Role) {
     return await prisma.user.create({
         data: {
             email: email,
@@ -40,7 +40,19 @@ export async function addUser(email: string, hashedPassword: string, firstName: 
     });
 }
 
-export async function updateUser() {
+export async function updateUser(id: string, email: string, firstName: string, lastName: string, role: Role) {
+    await prisma.user.update({
+        where: {
+            id: id
+        },
+        data: {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            role: role
+        }
+    })
+    revalidatePath(`/dashboard/users/${id}`);
 }
 
 export async function deleteUser(id: string): Promise<void> {

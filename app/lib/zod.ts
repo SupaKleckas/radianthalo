@@ -1,4 +1,4 @@
-import { object, string, z } from "zod"
+import { number, object, string, z } from "zod"
 
 export const signupSchema = object({
   email: string({ required_error: "Please fill in this field." })
@@ -34,4 +34,30 @@ export const addUserSchema = object({
   lastName: string({ required_error: "Please fill in this field." })
     .min(1, "Please fill in this field."),
   role: z.enum(['ADMIN', 'USER', 'EMPLOYEE'], { required_error: "Please fill in this field." })
+});
+
+export const editUserSchema = object({
+  id: string({ required_error: 'No ID found.' })
+    .min(1),
+  email: string({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field.")
+    .email("Please enter a valid email address."),
+  firstName: string({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field."),
+  lastName: string({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field."),
+  role: z.enum(['ADMIN', 'USER', 'EMPLOYEE'], { required_error: "Please fill in this field." })
+});
+
+export const addServiceSchema = object({
+  title: string({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field."),
+  price: number({ required_error: "Please fill in this field." })
+    .min(0, "Price must be greater than 0.")
+    .refine(value => value % 1 !== 0, {
+      message: "Price must be a decimal (float)."
+    }),
+  duration: number({ required_error: "Please fill in this field." })
+    .int("Duration must be an integer (minutes).")
+    .min(1, "Duration must be greater than 0.")
 });

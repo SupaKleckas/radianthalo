@@ -2,7 +2,7 @@ import { HiUser, HiUserAdd, HiIdentification, HiKey, HiOutlineUser, HiTrash } fr
 import prisma from "@/app/lib/db";
 import Link from "next/link";
 import { deleteUser } from "@/app/actions/userDbActions"
-import DeleteUserButton from "@/app/components/DeleteUserButton"
+import ConfirmationButton from "@/app/components/ConfirmationButton"
 
 export default async function Page() {
     const users = await prisma.user.findMany();
@@ -41,7 +41,7 @@ export default async function Page() {
                                 </div>
                             </Link>
                             <form action={deleteUser.bind(null, user.id)}>
-                                <DeleteUserButton firstName={user.firstName} lastName={user.lastName} role={user.role} />
+                                <ConfirmationButton message={`Are you sure you want to delete ${user.role.toLowerCase()} ${user.firstName} ${user.lastName}?`} />
                             </form>
                         </li>
                     ))}
