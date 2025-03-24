@@ -53,11 +53,22 @@ export const addServiceSchema = object({
   title: string({ required_error: "Please fill in this field." })
     .min(1, "Please fill in this field."),
   price: number({ required_error: "Please fill in this field." })
+    .min(0, "Price must be greater than 0."),
+  duration: number({ required_error: "Please fill in this field." })
+    .min(0, "Duration must be greater than 0.")
+    .int("Duration must be an integer (minutes)."),
+});
+
+export const editServiceSchema = object({
+  id: string({ required_error: 'No ID found.' })
+    .min(1),
+  title: string({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field."),
+  price: number({ required_error: "Please fill in this field." })
     .min(0, "Price must be greater than 0.")
     .refine(value => value % 1 !== 0, {
       message: "Price must be a decimal (float)."
     }),
   duration: number({ required_error: "Please fill in this field." })
-    .int("Duration must be an integer (minutes).")
-    .min(1, "Duration must be greater than 0.")
+    .int("Duration must be an integer (minutes)."),
 });

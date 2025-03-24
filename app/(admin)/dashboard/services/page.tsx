@@ -1,4 +1,4 @@
-import { HiOutlineTruck } from "react-icons/hi";
+import { HiOutlineTruck, HiOutlineClock, HiOutlineCash } from "react-icons/hi";
 import prisma from "@/app/lib/db";
 import Link from "next/link";
 import { deleteService } from "@/app/actions/serviceDbActions"
@@ -22,12 +22,14 @@ export default async function Page() {
                     {services.map((service: any) => (
                         <li key={service.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6] hover:cursor-pointer'>
                             <Link href={`/dashboard/service/${service.id}`} className='w-full p-4'>
-                                <div className='flex items-center'>
-                                    <span> {service?.title} {service?.price} {service.duration}  </span>
+                                <div className='flex items-center space-x-[10%]'>
+                                    <span className='flex items-center'> <HiOutlineTruck className='mr-2 text-2xl' /> {service?.title} </span>
+                                    <span className='flex items-center'> <HiOutlineCash className='ml-2 text-2xl' /> {service?.price} EUR</span>
+                                    <span className='flex items-center'> <HiOutlineClock className='ml-2 text-2xl' /> {service.duration}</span>
                                 </div>
                             </Link>
                             <form action={deleteService.bind(null, service.id)}>
-                                {/* Delete Service Button -> Confirm msg */}
+                                <ConfirmationButton message={`Are you sure you want to delete service ${service.title.toLowerCase()}?`} />
                             </form>
                         </li>
                     ))}

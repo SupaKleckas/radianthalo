@@ -9,7 +9,6 @@ export async function login(state: any, formData: FormData) {
     const validationResult = loginSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
-        console.log(validationResult.error.format())
         return {
             errors: validationResult.error.format(),
         }

@@ -1,12 +1,13 @@
 "use server";
+// UNFINISHED
 import { revalidatePath } from "next/cache";
 import prisma from "../lib/db";
 
-export async function getServices() {
+export async function getAppointments() {
     return await prisma.service.findMany();
 }
 
-export async function getServiceById(id: string) {
+export async function getAppointmentById(id: string) {
     return await prisma.service.findUnique({
         where: {
             id: id
@@ -14,7 +15,7 @@ export async function getServiceById(id: string) {
     });
 }
 
-export async function addService(title: string, price: number, duration: number) {
+export async function addAppointment(title: string, price: number, duration: number) {
     await prisma.service.create({
         data: {
             title: title,
@@ -23,10 +24,10 @@ export async function addService(title: string, price: number, duration: number)
         }
     });
 
-    revalidatePath('/dashboard/services');
+    revalidatePath('/dashboard/appointments');
 }
 
-export async function updateService(id: string, title: string, price: number, duration: number) {
+export async function updateAppointment(id: string, title: string, price: number, duration: number) {
     await prisma.service.update({
         where: {
             id: id
@@ -37,10 +38,10 @@ export async function updateService(id: string, title: string, price: number, du
             duration: duration,
         }
     })
-    revalidatePath(`/dashboard/services/${id}`);
+    revalidatePath(`/dashboard/appointments/${id}`);
 }
 
-export async function deleteService(id: string): Promise<void> {
+export async function deleteAppointment(id: string): Promise<void> {
     await prisma.service.delete({ where: { id: id } });
-    revalidatePath('/dashboard/services');
+    revalidatePath('/dashboard/appointments');
 }

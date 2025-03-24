@@ -2,7 +2,7 @@
 import { addUserSchema, editUserSchema } from "@/app/lib/zod"
 import { saltAndHashPassword } from "@/app/lib/hash";
 import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/userDbActions"
-import { NextResponse } from 'next/server';
+import { redirect } from "next/navigation";
 
 export async function addUserByForm(state: any, formData: FormData) {
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
@@ -21,8 +21,7 @@ export async function addUserByForm(state: any, formData: FormData) {
 
     const hashed = await saltAndHashPassword(validationResult.data.password);
     await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.role);
-
-    return NextResponse.redirect('/dashboard/users');
+    redirect("/dashboard/users");
 }
 
 export async function editUserByForm(state: any, formData: FormData) {
@@ -36,7 +35,7 @@ export async function editUserByForm(state: any, formData: FormData) {
 
     if (await getUserById(validationResult.data.id) == null) {
         return {
-            _errors: ["ID doesn't exist."]
+            errors: ["ID doesn't exist."]
         }
     }
 
