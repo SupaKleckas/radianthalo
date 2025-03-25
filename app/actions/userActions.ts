@@ -35,9 +35,10 @@ export async function editUserByForm(state: any, formData: FormData) {
 
     if (await getUserById(validationResult.data.id) == null) {
         return {
-            errors: ["ID doesn't exist."]
+            _errors: ["ID doesn't exist."]
         }
     }
 
     await updateUser(validationResult.data.id, validationResult.data.email, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.role);
+    redirect("/dashboard/users");
 }

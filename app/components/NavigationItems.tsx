@@ -127,7 +127,6 @@ export function AdminDashboardItems() {
                     ${path === item.href ?
                         "text-white" :
                         "text-black"}`}>
-
                     {item.icon && React.createElement(item.icon)} {item.title}
                 </Link>
             ))}

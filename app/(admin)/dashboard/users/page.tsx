@@ -1,4 +1,4 @@
-import { HiUser, HiUserAdd, HiIdentification, HiKey, HiOutlineUser, HiTrash } from "react-icons/hi";
+import { HiUser, HiUserAdd, HiIdentification, HiKey, HiOutlineUser, HiPencil } from "react-icons/hi";
 import prisma from "@/app/lib/db";
 import Link from "next/link";
 import { deleteUser } from "@/app/actions/userDbActions"
@@ -33,16 +33,20 @@ export default async function Page() {
                 </div>
                 <ul className='w-full'>
                     {users.map((user: any) => (
-                        <li key={user.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6] hover:cursor-pointer'>
-                            <Link href={`/dashboard/users/${user.id}`} className='w-full p-4'>
-                                <div className='flex items-center'>
-                                    <span> {getRoleIcon(user.role)} </span>
-                                    <span> {user?.firstName} {user?.lastName} {user.email}  </span>
-                                </div>
-                            </Link>
-                            <form action={deleteUser.bind(null, user.id)}>
-                                <ConfirmationButton message={`Are you sure you want to delete ${user.role.toLowerCase()} ${user.firstName} ${user.lastName}?`} />
-                            </form>
+                        <li key={user.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6]'>
+                            <div className='flex items-center w-full p-4'>
+                                <span> {getRoleIcon(user.role)} </span>
+                                <span> {user?.firstName} {user?.lastName} {user.email}  </span>
+                            </div>
+                            <div className="flex flex-row">
+                                <Link href={`/dashboard/users/${user.id}`}>
+                                    <HiPencil className="text-2xl hover:cursor-pointer hover:text-green-300 mr-2" />
+                                </Link>
+                                <form action={deleteUser.bind(null, user.id)}>
+                                    <ConfirmationButton message={`Are you sure you want to delete ${user.role.toLowerCase()} ${user.firstName} ${user.lastName}?`} />
+                                </form>
+                            </div>
+
                         </li>
                     ))}
                 </ul>

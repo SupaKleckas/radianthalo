@@ -23,7 +23,7 @@ export async function addService(title: string, price: number, duration: number)
         }
     });
 
-    revalidatePath('/dashboard/services');
+    revalidatePath("/dashboard/services");
 }
 
 export async function updateService(id: string, title: string, price: number, duration: number) {
@@ -37,10 +37,10 @@ export async function updateService(id: string, title: string, price: number, du
             duration: duration,
         }
     })
-    revalidatePath(`/dashboard/services/${id}`);
+    revalidatePath("/dashboard/services");
 }
 
 export async function deleteService(id: string): Promise<void> {
     await prisma.service.delete({ where: { id: id } });
-    revalidatePath('/dashboard/services');
+    revalidatePath("/dashboard/services");
 }
