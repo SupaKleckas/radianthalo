@@ -6,7 +6,7 @@ export default function ClientLayout({
     children: React.ReactNode
 }) {
     return (
-        <section>
+        <section className="bg-[#FCF9DE] min-h-screen">
             <NavbarUser />
             {children}
         </section>);

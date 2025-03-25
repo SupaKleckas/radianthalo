@@ -1,8 +1,9 @@
 "use client";
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react';
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiLogout } from "react-icons/hi";
 import { logout } from "@/app/actions/loginActions"
+import { ClientDashboardItems } from "@/app/components/NavigationItems";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -14,8 +15,8 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 1024);
-            if (window.innerWidth >= 1024) {
+            setIsSmallScreen(window.innerWidth < 1280);
+            if (window.innerWidth >= 1280) {
                 setMenuOpen(false);
             }
         };
@@ -31,25 +32,27 @@ const Navbar = () => {
 
     return (
         <header className='bg-[#94B6CE] py-5'>
-            <nav className='flex justify-between items-center w-[92%] mx-auto'>
-                <div>
+            <nav className='w-[92%] mx-auto flex flex-row'>
+                <div className='flex items-center justify-start'>
                     <Link href='/'>
                         <h3 className='text-3xl name font-bold px-5'>{isSmallScreen ? 'RH' : 'Radiant Halo'}</h3>
                     </Link>
                 </div>
-                <div className={`bg-[#94B6CE] lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-15 flex-col' : 'top-[-100%] flex-row'} lg:w-auto w-full px-5`}>
-                    {/* navitems */}
+                <div className='flex flex-row items-center ml-auto gap-10'>
+                    <div className={`bg-[#94B6CE] flex gap-4 md:gap-10 lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-20 flex-col' : 'top-[-100%] flex-row'} lg:w-auto w-full px-5`}>
+                        <ClientDashboardItems />
+                    </div>
+                    <div className=''>
+                        {menuOpen ? (
+                            <HiX className='text-3xl cursor-pointer lg:hidden' onClick={toggleMenu} />
+                        ) : (
+                            <HiMenu className='text-3xl cursor-pointer lg:hidden' onClick={toggleMenu} />
+                        )}
+                    </div>
+                    <button onClick={() => logout()} className='bg-[#325670] text-white px-5 py-2 rounded-full hover:bg-[#1f3d53] hover:cursor-pointer'>
+                        {isSmallScreen ? <HiLogout className="text-2xl" /> : "Logout"}
+                    </button>
                 </div>
-                <div className='flex items-center gap-6 px-5'>
-                    {menuOpen ? (
-                        <HiX className='text-3xl cursor-pointer lg:hidden' onClick={toggleMenu} />
-                    ) : (
-                        <HiMenu className='text-3xl cursor-pointer lg:hidden' onClick={toggleMenu} />
-                    )}
-                </div>
-                <button onClick={() => logout()} className='bg-[#325670] text-white px-5 py-2 rounded-full hover:bg-[#1f3d53] hover:cursor-pointer'>
-                    Logout
-                </button>
             </nav>
         </header>
     )

@@ -48,55 +48,43 @@ export const adminItems: navItem[] = [
 export const employeeItems: navItem[] = [
     {
         id: 0,
-        title: "",
+        title: "Dashboard",
         href: "/staff-dashboard/",
-        icon: HiOutlineUser
+        icon: HiOutlineHome
     },
     {
         id: 1,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
+        title: "Reports",
+        href: "/staff-dashboard/reports",
+        icon: HiOutlineCalculator
     },
     {
         id: 2,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
-    },
-    {
-        id: 3,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
-    },
+        title: "Schedule",
+        href: "/staff-dashboard/schedule",
+        icon: HiOutlineCalendar
+    }
 ]
 
 export const clientItems: navItem[] = [
     {
         id: 0,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
+        title: "Home",
+        href: "/home",
+        icon: HiOutlineHome
     },
     {
         id: 1,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
+        title: "My Appointments",
+        href: "/home/appointments",
+        icon: HiOutlineCalendar
     },
     {
         id: 2,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
-    },
-    {
-        id: 3,
-        title: "",
-        href: "/staff-dashboard/",
-        icon: HiOutlineUser
-    },
+        title: "All services",
+        href: "/home/services",
+        icon: HiOutlineTruck
+    }
 ]
 
 export const guestItems: navItem[] = [
@@ -135,15 +123,35 @@ export function AdminDashboardItems() {
 }
 
 export function EmployeeDashboardItems() {
+    const path = usePathname();
     return (
         <>
+            {employeeItems.map((item) => (
+                <Link key={item.id} href={item.href} className={`
+                    flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-white
+                    ${path === item.href ?
+                        "text-white" :
+                        "text-black"}`}>
+                    {item.icon && React.createElement(item.icon)} {item.title}
+                </Link>
+            ))}
         </>
     )
 }
 
 export function ClientDashboardItems() {
+    const path = usePathname();
     return (
         <>
+            {clientItems.map((item) => (
+                <Link key={item.id} href={item.href} className={`
+                    flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-white
+                    ${path === item.href ?
+                        "text-white" :
+                        "text-black"}`}>
+                    {item.icon && React.createElement(item.icon)} {item.title}
+                </Link>
+            ))}
         </>
     )
 }
