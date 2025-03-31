@@ -1,6 +1,7 @@
 import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
 import { getServiceById } from "@/app/actions/serviceDbActions";
+import { getEmployees } from "@/app/actions/userDbActions";
 import EditServiceForm from "@/app/components/EditServiceForm";
 
 interface ServiceParams {
@@ -12,6 +13,7 @@ interface ServiceParams {
 export default async function Page({ params }: ServiceParams) {
     const { id } = await params;
     const service = await getServiceById(id);
+    const employees = await getEmployees();
 
     return (
         <div className="">
@@ -26,7 +28,7 @@ export default async function Page({ params }: ServiceParams) {
             <div className="flex flex-col items-center">
                 <h1 className="text-4xl font-bold mb-6"> Edit Service </h1>
                 <div className='w-full'>
-                    {service && <EditServiceForm service={service} />}
+                    {service && <EditServiceForm service={service} employees={employees} />}
                 </div>
             </div>
         </div>

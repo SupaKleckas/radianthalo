@@ -23,8 +23,8 @@ export default async function Page() {
                         <li key={service.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6]'>
                             <div className='flex items-center space-x-[10%] w-full p-4'>
                                 <span className='flex items-center'> <HiOutlineTruck className='mr-2 text-2xl' /> {service?.title} </span>
-                                <span className='flex items-center'> <HiOutlineCash className='ml-2 text-2xl' /> {service?.price} EUR</span>
-                                <span className='flex items-center'> <HiOutlineClock className='ml-2 text-2xl' /> {service.duration}</span>
+                                <span className='flex items-center'> <HiOutlineCash className='ml-2 text-2xl' /> {service?.price} €</span>
+                                <span className='flex items-center'> <HiOutlineClock className='ml-2 text-2xl' /> {service.duration} min</span>
                             </div>
 
 

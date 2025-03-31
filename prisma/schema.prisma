@@ -19,14 +19,14 @@ model User {
 }
 
 model Client {
-  user     User          @relation(fields: [userId], references: [id])
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String        @id
   reviews  Review[]
   Schedule Appointment[]
 }
 
 model Employee {
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String        @id
   appointments Appointment[]
   services     Service[]

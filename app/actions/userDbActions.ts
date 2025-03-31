@@ -4,12 +4,30 @@ import prisma from "../lib/db";
 import { Role } from "@prisma/client";
 
 export async function getUsers() {
-    await prisma.user.findMany({
+    return await prisma.user.findMany({
         orderBy: {
             role: 'asc'
         }
     }
     );
+}
+
+export async function getEmployees() {
+    return await prisma.user.findMany({
+        where: {
+            role: 'EMPLOYEE'
+        }
+    }
+    )
+}
+
+export async function getClients() {
+    return await prisma.user.findMany({
+        where: {
+            role: 'USER'
+        }
+    }
+    )
 }
 
 export async function getUserByEmail(email: string) {

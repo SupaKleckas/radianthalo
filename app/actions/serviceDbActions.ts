@@ -26,7 +26,8 @@ export async function addService(title: string, price: number, duration: number)
     revalidatePath("/dashboard/services");
 }
 
-export async function updateService(id: string, title: string, price: number, duration: number) {
+export async function updateService(id: string, title: string, price: number, duration: number, employeeIds: string[]) {
+    //update client/employee tables
     await prisma.service.update({
         where: {
             id: id
@@ -35,6 +36,9 @@ export async function updateService(id: string, title: string, price: number, du
             title: title,
             price: price,
             duration: duration,
+            employees: {
+                connect: employeeIds.map((userId) => ({ userId })),
+            }
         }
     })
     revalidatePath("/dashboard/services");

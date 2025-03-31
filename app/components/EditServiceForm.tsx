@@ -1,10 +1,13 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { editServiceByForm } from "@/app/actions/serviceActions";
-import { Service } from "@prisma/client";
+import { Service, User } from "@prisma/client";
+import { Button } from "@/components/ui/button"
+import { MultiSelect } from "@/app/components/MultiSelect";
 
-export default function UserEditForm({ service }: { service: Service }) {
+export default function UserEditForm({ service, employees }: { service: Service, employees: User[] }) {
     const [state, updateServiceAction] = useActionState(editServiceByForm, undefined);
+    const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
 
     return (
         <div className='w-full flex flex-col items-center justify-center'>
@@ -16,9 +19,19 @@ export default function UserEditForm({ service }: { service: Service }) {
                     {state?.errors?.price && <p className='text-red-500 text-sm'>{state.errors.price._errors[0]}</p>}
                     <input type="number" name="duration" defaultValue={service.duration} className='w-[50%] p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none' />
                     {state?.errors?.duration && <p className='text-red-500 text-sm'>{state.errors.duration._errors[0]}</p>}
+                    <MultiSelect
+                        employees={employees}
+                        selectedValues={selectedEmployees}
+                        setSelectedValues={setSelectedEmployees}
+                    />
+                    <input
+                        type="hidden"
+                        name="employeeIds"
+                        value={JSON.stringify(selectedEmployees)}
+                    />
                     {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
                     <input type="hidden" name="id" value={service.id} />
-                    <button className="bg-[#325670] text-white px-5 py-2 mt-4 w-fit rounded-full hover:bg-[#1f3d53] hover:cursor-pointer">Save</button>
+                    <Button className="hover:cursor-pointer bg-slate-500 hover:bg-slate-600">Save</Button>
                 </form>
             </div>
         </div >

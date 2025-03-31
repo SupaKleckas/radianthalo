@@ -27,7 +27,6 @@ export async function addServiceByForm(state: any, formData: FormData) {
 }
 
 export async function editServiceByForm(state: any, formData: FormData) {
-    console.log('HELLO????')
     if (formData.get('price') === '' || formData.get('duration') === '') {
         return {
             _errors: ['Please fill in all fields.']
@@ -54,6 +53,12 @@ export async function editServiceByForm(state: any, formData: FormData) {
             _errors: ["ID doesn't exist."]
         }
     }
-    updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration);
+
+    const employeeIds = formData.get('employeeIds') ? (formData.get('employeeIds') as string).split(',') : [];
+
+    console.log('IDS')
+    console.log(formData.get('employeeIds'))
+
+    updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration, employeeIds);
     redirect("/dashboard/services");
 }
