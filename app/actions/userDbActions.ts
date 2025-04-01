@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import prisma from "../lib/db";
-import { Role } from "@prisma/client";
+import { Role, Service } from "@prisma/client";
 
 export async function getUsers() {
     return await prisma.user.findMany({
@@ -19,6 +19,21 @@ export async function getEmployees() {
         }
     }
     )
+}
+
+export async function getEmployeesByService(serviceId: string) {
+    return await prisma.employee.findMany({
+        where: {
+            services: {
+                some: {
+                    id: serviceId
+                }
+            }
+        },
+        include: {
+            user: true
+        }
+    })
 }
 
 export async function getClients() {

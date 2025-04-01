@@ -44,5 +44,3 @@ export default async function Page() {
         </>
     )
 }
-
-//space-x-[10%]

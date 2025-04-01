@@ -26,8 +26,6 @@ export default async function Page() {
                                 <span className='flex items-center'> <HiOutlineCash className='ml-2 text-2xl' /> {service?.price} €</span>
                                 <span className='flex items-center'> <HiOutlineClock className='ml-2 text-2xl' /> {service.duration} min</span>
                             </div>
-
-
                             <div className="flex flex-row">
                                 <Link href={`/dashboard/services/${service.id}`}>
                                     <HiPencil className="text-2xl hover:cursor-pointer hover:text-green-300 mr-2" />

@@ -3,13 +3,16 @@
 import { Calendar } from "@/components/ui/calendar"
 import { useState } from "react";
 
-export function BookingCalendar() {
+interface CalendarParams {
+    selectedDate: Date | undefined;
+    setSelectedDate: (value: Date | undefined) => void;
+}
+
+export function BookingCalendar({ selectedDate, setSelectedDate }: CalendarParams) {
     const [date, setDate] = useState<Date | undefined>(new Date())
 
-    const fromDate = new Date();
-    const toDate = new Date(fromDate.getFullYear(),
-        fromDate.getMonth() + 2,
-        fromDate.getDate())
+    const now = new Date();
+    const maxSelectable = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate());
 
     return (
         <div className="flex items-center justify-center">
@@ -17,10 +20,12 @@ export function BookingCalendar() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                disabled={(date) =>
-                    (date.getTime() < Date.now()) || (date.getTime() > toDate.getTime())
-                }
+                disabled={(date) => {
+                    const isPast = date.getTime() < now.getTime();
+                    const isTooFar = date > maxSelectable;
+                    return isPast || isTooFar;
+                }}
             />
         </div>
-    )
+    );
 }
