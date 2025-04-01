@@ -1,13 +1,21 @@
 "use client";
 import { useActionState, useState } from "react";
 import { editServiceByForm } from "@/app/actions/serviceActions";
-import { Service, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Button } from "@/components/ui/button"
 import { MultiSelect } from "@/app/components/MultiSelect";
 
-export default function UserEditForm({ service, employees }: { service: Service, employees: User[] }) {
+type ServiceWithEmployees = {
+    id: string;
+    title: string;
+    price: number;
+    duration: number;
+    employees: { userId: string }[];
+};
+
+export default function UserEditForm({ service, employees }: { service: ServiceWithEmployees, employees: User[] }) {
     const [state, updateServiceAction] = useActionState(editServiceByForm, undefined);
-    const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+    const [selectedEmployees, setSelectedEmployees] = useState(service.employees.map((e: any) => e.userId)) || [];
 
     return (
         <div className='w-full flex flex-col items-center justify-center'>

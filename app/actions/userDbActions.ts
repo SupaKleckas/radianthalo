@@ -46,8 +46,8 @@ export async function getUserById(id: string) {
     });
 }
 
-export async function addUser(email: string, hashedPassword: string, firstName: string, lastName: string, role?: Role) {
-    return await prisma.user.create({
+export async function addUser(email: string, hashedPassword: string, firstName: string, lastName: string, role: Role = "USER") {
+    const user = await prisma.user.create({
         data: {
             email: email,
             hashedPassword: hashedPassword,
@@ -56,6 +56,16 @@ export async function addUser(email: string, hashedPassword: string, firstName: 
             role: role
         }
     });
+
+    if (role === "EMPLOYEE") {
+        await prisma.employee.create({
+            data: { userId: user.id }
+        });
+    } else if (role === "USER") {
+        await prisma.client.create({
+            data: { userId: user.id }
+        });
+    }
 }
 
 export async function updateUser(id: string, email: string, firstName: string, lastName: string, role: Role) {
@@ -70,6 +80,24 @@ export async function updateUser(id: string, email: string, firstName: string, l
             role: role
         }
     })
+
+    if (role === "EMPLOYEE") {
+        await prisma.client.deleteMany({ where: { userId: id } });
+
+        await prisma.employee.upsert({
+            where: { userId: id },
+            update: {},
+            create: { userId: id },
+        });
+    } else if (role === "USER") {
+        await prisma.employee.deleteMany({ where: { userId: id } });
+
+        await prisma.client.upsert({
+            where: { userId: id },
+            update: {},
+            create: { userId: id },
+        });
+    }
     revalidatePath(`/dashboard/users/${id}`);
 }
 

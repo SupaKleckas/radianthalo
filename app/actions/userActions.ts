@@ -3,6 +3,7 @@ import { addUserSchema, editUserSchema } from "@/app/lib/zod"
 import { saltAndHashPassword } from "@/app/lib/hash";
 import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/userDbActions"
 import { redirect } from "next/navigation";
+import { Role } from "@prisma/client";
 
 export async function addUserByForm(state: any, formData: FormData) {
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));

@@ -10,6 +10,9 @@ export async function getServiceById(id: string) {
     return await prisma.service.findUnique({
         where: {
             id: id
+        },
+        include: {
+            employees: true
         }
     });
 }
@@ -27,7 +30,36 @@ export async function addService(title: string, price: number, duration: number)
 }
 
 export async function updateService(id: string, title: string, price: number, duration: number, employeeIds: string[]) {
-    //update client/employee tables
+    const existingService = await prisma.service.findUnique({
+        where: { id },
+        include: { employees: true },
+    });
+
+    if (!existingService) {
+        revalidatePath("/dashboard/services");
+        return
+    }
+
+    const existingEmployeeIds = existingService.employees.map((e) => e.userId);
+
+    const employeesToConnect = employeeIds.filter((id) => !existingEmployeeIds.includes(id));
+    const employeesToDisconnect = existingEmployeeIds.filter((id) => !employeeIds.includes(id));
+
+    const existingEmployees = await prisma.employee.findMany({
+        where: {
+            userId: { in: employeeIds }
+        },
+        select: { userId: true }
+    });
+
+    const validEmployeeIds = existingEmployees.map(e => e.userId);
+
+    if (validEmployeeIds.length !== employeeIds.length) {
+        revalidatePath("/dashboard/services");
+        return
+        // Send notification?
+    }
+
     await prisma.service.update({
         where: {
             id: id
@@ -37,7 +69,8 @@ export async function updateService(id: string, title: string, price: number, du
             price: price,
             duration: duration,
             employees: {
-                connect: employeeIds.map((userId) => ({ userId })),
+                connect: employeesToConnect.map((userId) => ({ userId })),
+                disconnect: employeesToDisconnect.map((userId) => ({ userId })),
             }
         }
     })

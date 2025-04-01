@@ -50,14 +50,11 @@ export async function editServiceByForm(state: any, formData: FormData) {
 
     if (await getServiceById(validationResult.data.id) == null) {
         return {
-            _errors: ["ID doesn't exist."]
+            _errors: ["Service ID doesn't exist."]
         }
     }
 
-    const employeeIds = formData.get('employeeIds') ? (formData.get('employeeIds') as string).split(',') : [];
-
-    console.log('IDS')
-    console.log(formData.get('employeeIds'))
+    const employeeIds = formData.get('employeeIds') ? JSON.parse(formData.get('employeeIds') as string) : [];
 
     updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration, employeeIds);
     redirect("/dashboard/services");
