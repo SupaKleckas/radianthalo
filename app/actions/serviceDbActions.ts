@@ -57,7 +57,6 @@ export async function updateService(id: string, title: string, price: number, du
     if (validEmployeeIds.length !== employeeIds.length) {
         revalidatePath("/dashboard/services");
         return
-        // Send notification?
     }
 
     await prisma.service.update({

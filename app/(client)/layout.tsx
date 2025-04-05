@@ -1,4 +1,4 @@
-import NavbarUser from "../components/NavbarUser";
+import NavbarUser from "../components/Navbar/NavbarUser";
 
 export default function ClientLayout({
     children,

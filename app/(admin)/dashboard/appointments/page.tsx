@@ -2,7 +2,6 @@
 import { } from "react-icons/hi";
 import prisma from "@/app/lib/db";
 import Link from "next/link";
-import { deleteAppointment } from "@/app/actions/appointmentDbActions"
 import ConfirmationButton from "@/app/components/ConfirmationButton"
 
 export default async function Page() {
@@ -21,9 +20,6 @@ export default async function Page() {
                                     <span className='flex items-center'> {appointment?.title} </span>
                                 </div>
                             </Link>
-                            <form action={deleteAppointment.bind(null, appointment.id)}>
-                                <ConfirmationButton message={`Are you sure you want to cancel appointment ${appointment.title.toLowerCase()}?`} />
-                            </form>
                         </li>
                     ))}
                 </ul>

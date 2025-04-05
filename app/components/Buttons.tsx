@@ -17,7 +17,7 @@ export function SubmitButton({ text, className }: ButtonProps) {
                         Please wait...
                     </Button>
                 ) : (
-                    <Button type="submit" className={`${className ? className : "w-fit"}`}>
+                    <Button type="submit" className={`${className ? className : "w-fit hover:cursor-pointer"}`}>
                         {text}
                     </Button>
                 )

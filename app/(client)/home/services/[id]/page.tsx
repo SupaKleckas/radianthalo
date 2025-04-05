@@ -1,7 +1,7 @@
 import { getServiceById } from "@/app/actions/serviceDbActions";
 import { redirect } from "next/navigation";
 import { getEmployeesByService } from "@/app/actions/userDbActions";
-import { Booking } from "@/app/components/Booking";
+import { Booking } from "@/app/components/Booking/Booking";
 
 interface ServiceParams {
     params: {

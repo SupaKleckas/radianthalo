@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { EmployeeDashboardItems } from "@/app/components/NavigationItems";
+import { EmployeeDashboardItems } from "@/app/components/Navbar/NavigationItems";
 import { HiLogout, HiMenu, HiX } from "react-icons/hi";
 import { logout } from "@/app/actions/loginActions";
 import { useState, useEffect } from "react";

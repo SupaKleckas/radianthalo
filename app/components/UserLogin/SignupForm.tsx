@@ -2,7 +2,7 @@
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
 import { signup } from "@/app/actions/signupActions";
-import { useFormStatus } from "react-dom";
+import { SubmitButton } from '../Buttons';
 
 interface SignupFormProps {
   onClose: () => void;
@@ -55,23 +55,10 @@ function SignupForm({ onClose }: SignupFormProps) {
             className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
           />
           {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
-          <SubmitButton />
+          <SubmitButton text="Sign up" />
         </form>
       </div>
     </div>
   );
 }
 export default SignupForm;
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      className='bg-[#325670] text-white px-5 py-2 mt-4 w-full rounded-full hover:bg-[#1f3d53] hover:cursor-pointer'
-      disabled={pending}
-    >
-      Sign Up
-    </button>
-  );
-}

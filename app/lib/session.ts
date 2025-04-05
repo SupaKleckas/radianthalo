@@ -1,6 +1,6 @@
 "server-only";
 import { SignJWT, jwtVerify } from "jose"
-import { cookies } from "next/dist/server/request/cookies";
+import { cookies } from "next/headers";
 
 const secret = process.env.JWT_SECRET;
 const encodedSecret = new TextEncoder().encode(secret);
@@ -42,4 +42,18 @@ export async function decrypt(session: string | undefined = "") {
     catch (error) {
         console.log("Failed to verify session")
     }
+}
+
+export async function getUserIdFromSession(): Promise<string | null> {
+    const cookie = await cookies();
+    const session = cookie.get("session")?.value;
+
+    if (!session) return null;
+
+    const payload = await decrypt(session);
+    if (payload && typeof payload.userId === "string") {
+        return payload.userId;
+    }
+
+    return null;
 }

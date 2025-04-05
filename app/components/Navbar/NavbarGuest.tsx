@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react';
 import { HiMenu, HiX } from "react-icons/hi";
-import LoginForm from './LoginForm';
+import LoginForm from '../UserLogin/LoginForm';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

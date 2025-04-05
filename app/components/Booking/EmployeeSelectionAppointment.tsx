@@ -9,7 +9,7 @@ interface SelectionParams {
     setSelectedValue: (value: (Employee & { user: User })) => void;
 }
 
-export function Selection({ selectionContent, selectedValue, setSelectedValue }: SelectionParams) {
+export function EmployeeSelection({ selectionContent, selectedValue, setSelectedValue }: SelectionParams) {
     return (
         <div className="flex flex-row items-center gap-5">
             <HiUser className="text-3xl" />
