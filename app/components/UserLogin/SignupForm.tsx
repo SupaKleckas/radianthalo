@@ -17,16 +17,16 @@ function SignupForm({ onClose }: SignupFormProps) {
 
   return (
     <div className='fixed inset-0 flex items-center justify-center'>
-      <div className='bg-[#94B6CE] p-8 rounded-lg relative lg:w-1/3 max-w-[400px] w-full'>
-        <HiX className='absolute top-5 right-5 text-3xl cursor-pointer' onClick={onClose} />
-        <h1 className='text-3xl font-bold mb-4 text-center'>Sign Up</h1>
+      <div className='bg-slate-400 p-8 rounded-lg relative lg:w-1/3 max-w-[400px] w-full'>
+        <HiX className='absolute top-5 right-5 text-3xl cursor-pointer text-slate-800' onClick={onClose} />
+        <h1 className='text-3xl font-bold mb-4 text-center text-slate-800'>Sign Up</h1>
         <form action={signupAction}>
           <input
             placeholder='Email'
             name='email'
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+            className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           {state?.errors?.email && <p className='text-red-500 text-sm'>{state.errors.email._errors[0]}</p>}
           {state?.email?._errors && <p className='text-red-500 text-sm'>{state.email._errors}</p>}
@@ -36,7 +36,7 @@ function SignupForm({ onClose }: SignupFormProps) {
             placeholder='Password'
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+            className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           <input
             type='firstName'
@@ -44,7 +44,7 @@ function SignupForm({ onClose }: SignupFormProps) {
             placeholder='First Name'
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
-            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+            className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           <input
             type='lastName'
@@ -52,10 +52,10 @@ function SignupForm({ onClose }: SignupFormProps) {
             placeholder='Last Name'
             value={lastName}
             onChange={e => setLastName(e.target.value)}
-            className='w-full p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none'
+            className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
-          <SubmitButton text="Sign up" />
+          <SubmitButton text="Sign up" className="w-full bg-slate-700" />
         </form>
       </div>
     </div>

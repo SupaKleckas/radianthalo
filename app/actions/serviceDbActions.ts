@@ -2,8 +2,20 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../lib/db";
 
-export async function getServices() {
+export async function getAllServices() {
     return await prisma.service.findMany();
+}
+
+export async function getServices(currPage: number) {
+    const result = await prisma.service
+        .paginate({})
+        .withPages({
+            limit: 20,
+            page: currPage,
+            includePageCount: true
+        })
+
+    return result;
 }
 
 export async function getServiceById(id: string) {

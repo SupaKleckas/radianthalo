@@ -3,13 +3,16 @@ import { revalidatePath } from "next/cache";
 import prisma from "../lib/db";
 import { Role } from "@prisma/client";
 
-export async function getUsers() {
-    return await prisma.user.findMany({
-        orderBy: {
-            role: 'asc'
-        }
-    }
-    );
+export async function getUsers(currPage: number) {
+    const result = await prisma.user
+        .paginate({})
+        .withPages({
+            limit: 20,
+            page: currPage,
+            includePageCount: true
+        })
+
+    return result;
 }
 
 export async function getEmployees() {

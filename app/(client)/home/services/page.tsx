@@ -1,10 +1,10 @@
-import { getServices } from "@/app/actions/serviceDbActions"
+import { getAllServices } from "@/app/actions/serviceDbActions"
 import { HiOutlineTruck, HiOutlineClock, HiOutlineCash } from "react-icons/hi";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function Page() {
-    const services = await getServices();
+    const services = await getAllServices();
 
     return (
         <>

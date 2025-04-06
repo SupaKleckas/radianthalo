@@ -1,11 +1,21 @@
 import { HiUser, HiUserAdd, HiIdentification, HiKey, HiOutlineUser, HiPencil } from "react-icons/hi";
-import prisma from "@/app/lib/db";
 import Link from "next/link";
-import { deleteUser } from "@/app/actions/userDbActions"
+import { deleteUser, getUsers } from "@/app/actions/userDbActions"
 import ConfirmationButton from "@/app/components/ConfirmationButton"
+import { PaginationComponent } from "@/app/components/Pagination";
 
-export default async function Page() {
-    const users = await prisma.user.findMany();
+interface SearchParamsProps {
+    searchParams?: {
+        page?: string;
+        query?: string;
+    };
+}
+
+export default async function Page({ searchParams }: SearchParamsProps) {
+    const params = await searchParams;
+    const currPage = Number(params?.page) || 1;
+    const [users, meta] = await getUsers(currPage);
+    const pageAmount = meta?.pageCount;
 
     const getRoleIcon = (role: string) => {
         switch (role) {
@@ -22,7 +32,7 @@ export default async function Page() {
 
     return (
         <div className="flex flex-col items-center justify-center py-3">
-            <h1 className="text-4xl mb-4"> Users ({users.length}) </h1>
+            <h1 className="text-4xl mb-4"> Users </h1>
 
             <div className='w-full px-4'>
                 <div className='flex justify-end mb-4'>
@@ -51,6 +61,7 @@ export default async function Page() {
                     ))}
                 </ul>
             </div>
+            <PaginationComponent pageAmount={pageAmount} />
         </div>
     );
 }

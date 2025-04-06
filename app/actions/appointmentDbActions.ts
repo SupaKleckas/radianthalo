@@ -1,11 +1,46 @@
 "use server";
-// UNFINISHED
-import { revalidatePath } from "next/cache";
 import prisma from "../lib/db";
 import { Employee } from "@prisma/client";
 
-export async function getAppointments() {
-    return await prisma.service.findMany();
+export async function getAppointments(currPage: number) {
+    const result = await prisma.appointment
+        .paginate({
+            orderBy: {
+                startTime: "asc"
+            }
+        })
+        .withPages({
+            limit: 20,
+            page: currPage,
+            includePageCount: true
+        })
+
+    return result;
+}
+
+export async function getClientAppointmetns(currPage: number, clientId: string) {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const result = await prisma.appointment
+        .paginate({
+            where: {
+                clientId: clientId,
+                startTime: {
+                    gte: oneMonthAgo
+                }
+            },
+            orderBy: {
+                startTime: "asc"
+            }
+        })
+        .withPages({
+            limit: 20,
+            page: currPage,
+            includePageCount: true
+        })
+
+    return result;
 }
 
 export async function getAppointmentById(id: string) {
@@ -22,7 +57,7 @@ export async function getAppointmentForTimeSlots(employee: Employee, startOfDay:
             employeeId: employee.userId,
             startTime: { gte: startOfDay, lt: endOfDay },
         },
-        select: { startTime: true, endTime: true },
+        select: { startTime: true, endTime: true }
     });
 }
 

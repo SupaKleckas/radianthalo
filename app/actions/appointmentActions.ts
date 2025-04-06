@@ -14,30 +14,28 @@ export async function addAppointmentByBooking(employee: Employee & { user: User 
 
     //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
-    const dateUtc = new Date(date.getFullYear(), date.getMonth() + 2, date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
+    const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
     if (dateUtc <= new Date()) {
-        console.log("date check")
         return;
     }
 
     const userId = await getUserIdFromSession();
     if (!userId) {
-        console.log("userid check")
         return;
     }
 
     const client = await getClientById(userId);
     if (!client) {
-        console.log("role check")
         return;
     }
 
     const title = `${service.title} on ${format(dateUtc, "MMMM do, yyyy")} at ${time}`;
 
     const startTime = addTimeToDate(dateUtc, time);
-    const endTime = new Date(startTime.getFullYear(), startTime.getMonth() + 2, startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
+    const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
+    console.log(dateUtc.toString())
     addAppointment(title, startTime, endTime, employee.userId, client.userId, service.id);
     redirect("/home/appointments");
 }
@@ -48,9 +46,12 @@ function addTimeToDate(date: Date, time: string): Date {
     return date;
 }
 
-export async function getAvailableTimeSlots(employee: Employee, date: Date) {
+export async function getAvailableTimeSlots(employee: Employee, date: Date, timeZone: string) {
     // Get from availibility?
     const workingHours = { start: 8, end: 18 };
+
+    const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
+    date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
     const startOfDay = new Date(date.setHours(workingHours.start, 0, 0, 0));
     const endOfDay = new Date(date.setHours(workingHours.end, 0, 0, 0));

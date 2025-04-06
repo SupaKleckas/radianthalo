@@ -1,11 +1,22 @@
 import { HiOutlineTruck, HiOutlineClock, HiOutlineCash, HiPencil } from "react-icons/hi";
 import prisma from "@/app/lib/db";
 import Link from "next/link";
-import { deleteService } from "@/app/actions/serviceDbActions"
+import { deleteService, getServices } from "@/app/actions/serviceDbActions"
 import ConfirmationButton from "@/app/components/ConfirmationButton"
+import { PaginationComponent } from "@/app/components/Pagination";
 
-export default async function Page() {
-    const services = await prisma.service.findMany();
+interface SearchParamsProps {
+    searchParams?: {
+        page?: string;
+        query?: string;
+    };
+}
+
+export default async function Page({ searchParams }: SearchParamsProps) {
+    const params = await searchParams;
+    const currPage = Number(params?.page) || 1;
+    const [services, meta] = await getServices(currPage);
+    const pageAmount = meta?.pageCount;
 
     return (
         <div className="flex flex-col items-center justify-center py-3">
@@ -38,6 +49,7 @@ export default async function Page() {
                     ))}
                 </ul>
             </div>
+            <PaginationComponent pageAmount={pageAmount} />
         </div>
     );
 }

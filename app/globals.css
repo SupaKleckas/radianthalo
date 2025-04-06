@@ -49,10 +49,6 @@ body {
   font-weight: 400;
 }
 
-main {
-  background-color: #FCF9DE;
-}
-
 .name {
   font-family: var(--font-lexend-zetta);
 }

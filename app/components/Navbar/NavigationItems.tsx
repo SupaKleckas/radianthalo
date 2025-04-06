@@ -157,8 +157,18 @@ export function ClientDashboardItems() {
 }
 
 export function GuestDashboardItems() {
+    const path = usePathname();
     return (
         <>
+            {guestItems.map((item) => (
+                <Link key={item.id} href={item.href} className={`
+                    flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-white
+                    ${path === item.href ?
+                        "text-white" :
+                        "text-black"}`}>
+                    {item.icon && React.createElement(item.icon)} {item.title}
+                </Link>
+            ))}
         </>
     )
 }
