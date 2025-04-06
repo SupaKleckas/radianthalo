@@ -3,6 +3,7 @@ import Link from "next/link";
 import { deleteUser, getUsers } from "@/app/actions/userDbActions"
 import ConfirmationButton from "@/app/components/ConfirmationButton"
 import { PaginationComponent } from "@/app/components/Pagination";
+import { Button } from "@/components/ui/button";
 
 interface SearchParamsProps {
     searchParams?: {
@@ -36,14 +37,16 @@ export default async function Page({ searchParams }: SearchParamsProps) {
 
             <div className='w-full px-4'>
                 <div className='flex justify-end mb-4'>
-                    <Link href="/dashboard/users/add" className='flex items-center bg-[#325670] text-white px-4 py-2 rounded-full hover:bg-[#1f3d53]'>
-                        <HiUserAdd className='mr-2 text-2xl' />
-                        Add User
-                    </Link>
+                    <Button className='bg-slate-700 hover:bg-slate-800'>
+                        <Link href="/dashboard/users/add" className="flex flex-row items-center">
+                            <HiUserAdd className='mr-2 text-2xl' />
+                            Add User
+                        </Link>
+                    </Button>
                 </div>
                 <ul className='w-full'>
                     {users.map((user: any) => (
-                        <li key={user.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6]'>
+                        <li key={user.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
                             <div className='flex items-center w-full p-4'>
                                 <span> {getRoleIcon(user.role)} </span>
                                 <span> {user?.firstName} {user?.lastName} {user.email}  </span>

@@ -14,10 +14,10 @@ export default async function Page({ params }: UserParams) {
     const user = await getUserById(id);
 
     return (
-        <div className="">
+        <div>
             <div className='mb-6'>
                 <Link href="/dashboard/users">
-                    <div className="flex flex-row items-center hover:cursor-pointer size-fit hover:text-[#7d94b6] transition-all">
+                    <div className="flex flex-row items-center hover:cursor-pointer size-fit hover:text-slate-400 transition-all">
                         <HiArrowSmLeft className='text-4xl' />
                         <p>Back to users</p>
                     </div>

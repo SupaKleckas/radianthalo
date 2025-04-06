@@ -23,12 +23,12 @@ const PaginationNav: FC<PaginationNavProps> = ({
 }) => {
     const router = useRouter();
     const isPrev = towards === "previous";
-    const disabledClassName = isDisabled ? "opacity-50 cursor-not-allowed" : "";
+    const disabledClassName = isDisabled ? "opacity-50" : "";
 
     return (
         <Button
             onClick={() => router.push(href)}
-            className={`bg-gray-100 text-gray-500 hover:bg-gray-200 ${disabledClassName}`}
+            className={`bg-transparent text-slate-500 ${disabledClassName}`}
             aria-disabled={isDisabled}
             disabled={isDisabled}
         >
@@ -59,7 +59,7 @@ export function PaginationComponent({ pageAmount }: Readonly<PaginationProps>) {
                     />
                 </PaginationItem>
                 <PaginationItem>
-                    <span className="p-2 font-semibold text-gray-500">
+                    <span className="p-2 font-semibold text-slate-500">
                         Page {currentPage}
                     </span>
                 </PaginationItem>
