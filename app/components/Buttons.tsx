@@ -13,11 +13,11 @@ export function SubmitButton({ text, className }: ButtonProps) {
         <>
             {
                 pending ? (
-                    <Button disabled variant={"outline"} className={`${className ? className : "w-fit, bg-slate-700"}`}>
+                    <Button disabled variant={"outline"} className={`${className ? className : "w-fit, bg-slate-600"}`}>
                         Please wait...
                     </Button>
                 ) : (
-                    <Button type="submit" className={`${className ? className : "w-fit hover:cursor-pointer bg-slate-700, hover:bg-slate-800"}`}>
+                    <Button type="submit" className={`${className ? className : "w-fit hover:cursor-pointer bg-slate-700 hover:bg-slate-800"}`}>
                         {text}
                     </Button>
                 )

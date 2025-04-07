@@ -32,11 +32,11 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                 </div>
                 <ul className='w-full'>
                     {services.map((service: any) => (
-                        <li key={service.id} className='flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
-                            <div className='flex items-center space-x-[10%] w-full p-4'>
-                                <span className='flex items-center'> <HiOutlineTruck className='mr-2 text-2xl' /> {service?.title} </span>
-                                <span className='flex items-center'> <HiOutlineCash className='ml-2 text-2xl' /> {service?.price} €</span>
-                                <span className='flex items-center'> <HiOutlineClock className='ml-2 text-2xl' /> {service.duration} min</span>
+                        <li key={service.id} className='flex items-center p-2 justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
+                            <div className='flex lg:items-center flex-col lg:flex-row w-full text-base'>
+                                <span className='flex items-center lg:w-1/3'> <HiOutlineTruck className='text-2xl' /> {service?.title} </span>
+                                <span className='flex items-center lg:w-1/3'> <HiOutlineCash className='text-2xl' /> {service?.price} €</span>
+                                <span className='flex items-center lg:w-1/3'> <HiOutlineClock className='text-2xl' /> {service.duration} min</span>
                             </div>
                             <div className="flex flex-row">
                                 <Link href={`/dashboard/services/${service.id}`}>

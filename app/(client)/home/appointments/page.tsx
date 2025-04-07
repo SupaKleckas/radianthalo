@@ -7,18 +7,13 @@ import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/session";
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { groupByDate } from "@/app/lib/dateFunctions";
 
 interface SearchParamsProps {
     searchParams?: {
         page?: string;
         query?: string;
     };
-}
-
-function groupByDate(appointments: Appointment[]) {
-    return appointments.map(appointment =>
-        appointment.startTime
-    )
 }
 
 export default async function Page({ searchParams }: SearchParamsProps) {
@@ -50,16 +45,16 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                 <>
                     <h1 className="text-4xl mb-4"> My Appointments </h1>
                     <ScrollArea className="w-full">
-                        {dateGroups.map(day =>
-                            <div key={day.toString()} className="w-full px-4 mb-6">
-                                <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(day, "MMMM do, yyyy")}</h1>
+                        {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
+                            <div key={date} className="w-full px-4 mb-6">
+                                <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
                                 <ul>
-                                    {appointments.filter(p => p.startTime.getDay() === day.getDay()).map(appointment =>
-                                        <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-[#94B6CE] hover:bg-[#7d94b6]">
+                                    {appts.map(appointment =>
+                                        <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-[#7d94b6]">
                                             <Link href={`/dashboard/service/${appointment.id}`} className="w-full p-4">
-                                                <div className="flex items-center space-x-[10%]">
-                                                    <span className="flex items-center"> <HiOutlineCalendar /> {appointment.title}</span>
-                                                    <span className="flex items-center"> <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}</span>
+                                                <div className="flex items-center flex-col lg:flex-row space-x-6 text-base">
+                                                    <span className="flex items-center lg:w-1/2"> <HiOutlineCalendar /> {appointment.title}</span>
+                                                    <span className="flex items-center lg:w-1/2"> <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}</span>
                                                     {appointment.endTime < new Date() ?
                                                         <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
                                                         :

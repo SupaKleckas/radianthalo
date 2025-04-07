@@ -8,13 +8,13 @@ export default async function Page() {
 
     return (
         <>
-            <h1 className="flex justify-center text-3xl">All available services</h1>
+            <h1 className="flex justify-center text-3xl text-slate-800">All available services</h1>
             <div className="flex justify-center">
-                <ul className='grid w-[50%]'>
+                <ul className='grid w-[50%] text-slate-800'>
                     {services.map((service: any) => (
                         <li
                             key={service.id}
-                            className="flex flex-col rounded-lg mb-2 w-full outline-0 bg-[#94B6CE]"
+                            className="flex flex-col rounded-lg mb-2 w-full outline-0 bg-slate-300"
                         >
                             <div className="flex justify-between p-4">
                                 <span className="flex items-center text-2xl">
