@@ -29,12 +29,15 @@ export async function getServiceById(id: string) {
     });
 }
 
-export async function addService(title: string, price: number, duration: number) {
+export async function addService(title: string, price: number, duration: number, employeeIds: string[]) {
     await prisma.service.create({
         data: {
             title: title,
             price: price,
             duration: duration,
+            employees: {
+                connect: employeeIds.map((userId) => ({ userId })),
+            }
         }
     });
 

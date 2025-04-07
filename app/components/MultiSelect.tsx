@@ -46,22 +46,22 @@ export function MultiSelect({
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild className="border-slate-800 rounded p-4">
                 <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[480px] justify-between"
+                    className="w-full rounded p-4 justify-between "
                 >
                     <div className="flex gap-2 justify-start">
                         {selectedEmployees.length > 0
                             ? selectedEmployees.map((e) => label(e)).join(", ")
                             : "Select employees..."}
                     </div>
-                    <HiOutlineChevronDoubleDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <HiOutlineChevronDoubleDown className="ml-2 h-4 w-4 shrink-0 opacity-80 text-slate-800" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[300px] p-0">
                 <Command>
                     <CommandInput placeholder="Search employees..." />
                     <CommandEmpty>No employees found.</CommandEmpty>

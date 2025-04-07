@@ -4,6 +4,7 @@ import { editServiceByForm } from "@/app/actions/serviceActions";
 import { User } from "@prisma/client";
 import { Button } from "@/components/ui/button"
 import { MultiSelect } from "@/app/components/MultiSelect";
+import { Label } from "@/components/ui/label";
 
 type ServiceWithEmployees = {
     id: string;
@@ -18,30 +19,37 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
     const [selectedEmployees, setSelectedEmployees] = useState(service.employees.map((e: any) => e.userId)) || [];
 
     return (
-        <div className='w-full flex flex-col items-center justify-center'>
-            <div className="w-full flex flex-col items-center">
-                <form action={updateServiceAction} className="w-full flex flex-col items-center">
-                    <input type="text" name="title" defaultValue={service.title} className='w-[50%] p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none' />
+        <div className="flex justify-center">
+            <div className="w-[50%]">
+                <form action={updateServiceAction} className="flex flex-col w-full justify-center">
+                    <Label htmlFor='title' className='text-base text-slate-700'>Title</Label>
+                    <input type="text" id='title' name="title" defaultValue={service.title} className='w-full p-2 mb-4 border border-slate-800 rounded focus:outline-slate-400' />
                     {state?.errors?.title && <p className='text-red-500 text-sm'>{state.errors.title._errors[0]}</p>}
-                    <input type="number" name="price" defaultValue={service.price} className='w-[50%] p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none' />
+                    <Label htmlFor='price' className='text-base text-slate-700'>Price</Label>
+                    <input type="number" id='price' name="price" defaultValue={service.price} className='w-full p-2 mb-4 border border-slate-800 rounded focus:outline-slate-400' />
                     {state?.errors?.price && <p className='text-red-500 text-sm'>{state.errors.price._errors[0]}</p>}
-                    <input type="number" name="duration" defaultValue={service.duration} className='w-[50%] p-2 mt-4 mb-4 border border-[#325670] rounded focus:outline-none' />
+                    <Label htmlFor='duration' className='text-base text-slate-700'>Duration</Label>
+                    <input type="number" id='duration' name="duration" defaultValue={service.duration} className='w-full p-2 mb-4 border border-slate-800 rounded focus:outline-slate-400' />
                     {state?.errors?.duration && <p className='text-red-500 text-sm'>{state.errors.duration._errors[0]}</p>}
+                    <Label htmlFor='employees' className='text-base text-slate-700'>Employees</Label>
                     <MultiSelect
                         employees={employees}
                         selectedValues={selectedEmployees}
                         setSelectedValues={setSelectedEmployees}
                     />
                     <input
+                        id='employees'
                         type="hidden"
                         name="employeeIds"
                         value={JSON.stringify(selectedEmployees)}
                     />
                     {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
                     <input type="hidden" name="id" value={service.id} />
-                    <Button className="hover:cursor-pointer bg-slate-500 hover:bg-slate-600">Save</Button>
+                    <div className="flex justify-center">
+                        <Button className="hover:cursor-pointer w-fit bg-slate-700 hover:bg-slate-800 mt-4">Save</Button>
+                    </div>
                 </form>
             </div>
-        </div >
+        </div>
     );
 }

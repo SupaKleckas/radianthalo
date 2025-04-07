@@ -22,7 +22,10 @@ export async function addServiceByForm(state: any, formData: FormData) {
             errors: validationResult.error.format(),
         }
     }
-    await addService(validationResult.data.title, validationResult.data.price, validationResult.data.duration);
+
+    const employeeIds = formData.get('employeeIds') ? JSON.parse(formData.get('employeeIds') as string) : [];
+
+    await addService(validationResult.data.title, validationResult.data.price, validationResult.data.duration, employeeIds);
     redirect("/dashboard/services");
 }
 
