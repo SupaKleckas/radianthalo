@@ -10,7 +10,7 @@ export default async function Page() {
         <>
             <h1 className="flex justify-center text-3xl text-slate-800">All available services</h1>
             <div className="flex justify-center">
-                <ul className='grid w-[50%] text-slate-800'>
+                <ul className='grid grid-cols-1 md:grid-cols-2 w-[50%] text-slate-800'>
                     {services.map((service: any) => (
                         <li
                             key={service.id}

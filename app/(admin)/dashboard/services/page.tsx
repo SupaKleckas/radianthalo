@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 interface SearchParamsProps {
     searchParams?: {
         page?: string;
-        query?: string;
     };
 }
 

@@ -9,7 +9,6 @@ import { groupByDate } from "@/app/lib/dateFunctions";
 interface SearchParamsProps {
     searchParams?: {
         page?: string;
-        query?: string;
     };
 }
 
