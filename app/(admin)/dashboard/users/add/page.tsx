@@ -1,4 +1,4 @@
-import AddUserForm from "@/app/components/AddUserForm"
+import AddUserForm from "@/app/components/User/AddUserForm"
 import Link from "next/link";
 import { HiArrowSmLeft } from "react-icons/hi";
 

@@ -1,8 +1,8 @@
 import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
-import { getServiceById } from "@/app/actions/serviceDbActions";
-import { getEmployees } from "@/app/actions/userDbActions";
-import EditServiceForm from "@/app/components/EditServiceForm";
+import { getServiceById } from "@/app/actions/service/db";
+import { getEmployees } from "@/app/actions/user/db";
+import EditServiceForm from "@/app/components/Service/EditServiceForm";
 
 interface ServiceParams {
     params: {

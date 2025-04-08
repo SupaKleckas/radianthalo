@@ -1,5 +1,5 @@
-import { addServiceSchema, editServiceSchema } from "../lib/zod";
-import { addService, getServiceById, updateService } from "./serviceDbActions";
+import { addServiceSchema, editServiceSchema } from "../../lib/database/zod";
+import { addService, getServiceById, updateService } from "./db";
 import { redirect } from "next/navigation";
 
 export async function addServiceByForm(state: any, formData: FormData) {

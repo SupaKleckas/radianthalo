@@ -8,8 +8,8 @@ import { BookingCalendar } from "@/app/components/Booking/Calendar";
 import { TimeSelection } from "@/app/components/Booking/TimeSelection";
 import { EmployeeSelection } from "@/app/components/Booking/EmployeeSelectionAppointment";
 import { Service, Employee, User } from "@prisma/client";
-import { addAppointmentByBooking } from "@/app/actions/appointmentActions";
-import { SubmitButton } from "../Buttons";
+import { addAppointmentByBooking } from "@/app/actions/appointment/actions";
+import { SubmitButton } from "@/app/components/Buttons";
 
 export function Booking({ service, employees }: { service: Service, employees: (Employee & { user: User })[] }) {
     const now = new Date();

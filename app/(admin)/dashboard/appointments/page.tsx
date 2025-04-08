@@ -1,10 +1,10 @@
 import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
 import Link from "next/link";
 import { format } from "date-fns-tz"
-import { getAppointments } from "@/app/actions/appointmentDbActions";
+import { getAppointments } from "@/app/actions/appointment/db";
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Appointment } from "@prisma/client";
-import { groupByDate } from "@/app/lib/dateFunctions";
+import { groupByDate } from "@/app/lib/date/dateFunctions";
 
 interface SearchParamsProps {
     searchParams?: {

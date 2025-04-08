@@ -1,7 +1,7 @@
 import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
-import { AddServiceForm } from '@/app/components/AddServiceForm';
-import { getEmployees } from '@/app/actions/userDbActions';
+import { AddServiceForm } from '@/app/components/Service/AddServiceForm';
+import { getEmployees } from '@/app/actions/user/db';
 
 export default async function Page() {
     const employees = await getEmployees();

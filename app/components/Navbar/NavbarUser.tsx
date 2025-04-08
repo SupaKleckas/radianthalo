@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import React, { useState, useEffect } from 'react';
 import { HiMenu, HiX, HiLogout } from "react-icons/hi";
-import { logout } from "@/app/actions/loginActions"
+import { logout } from "@/app/actions/user/login/actions"
 import { ClientDashboardItems } from "@/app/components/Navbar/NavigationItems";
 import { Button } from "@/components/ui/button"
 

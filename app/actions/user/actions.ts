@@ -1,7 +1,7 @@
 "use server";
-import { addUserSchema, editUserSchema } from "@/app/lib/zod"
-import { saltAndHashPassword } from "@/app/lib/hash";
-import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/userDbActions"
+import { addUserSchema, editUserSchema } from "@/app/lib/database/zod"
+import { saltAndHashPassword } from "@/app/lib/auth/hash";
+import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/user/db"
 import { redirect } from "next/navigation";
 
 export async function addUserByForm(state: any, formData: FormData) {

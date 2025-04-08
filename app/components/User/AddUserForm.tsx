@@ -1,6 +1,6 @@
 "use client";
 import { useState, useActionState } from "react";
-import { addUserByForm } from "@/app/actions/userActions";
+import { addUserByForm } from "@/app/actions/user/actions";
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label";
 

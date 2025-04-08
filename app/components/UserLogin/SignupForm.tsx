@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
-import { signup } from "@/app/actions/signupActions";
+import { signup } from "@/app/actions/user/signup/actions";
 import { SubmitButton } from '../Buttons';
 
 interface SignupFormProps {
@@ -55,7 +55,7 @@ function SignupForm({ onClose }: SignupFormProps) {
             className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
-          <SubmitButton text="Sign up" className="w-full bg-slate-700" />
+          <SubmitButton text="Sign up" className="w-full bg-slate-700 mt-4" />
         </form>
       </div>
     </div>

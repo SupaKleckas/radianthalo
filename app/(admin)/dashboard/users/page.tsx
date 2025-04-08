@@ -1,7 +1,7 @@
 import { HiUser, HiUserAdd, HiIdentification, HiKey, HiPencil, HiMail } from "react-icons/hi";
 import Link from "next/link";
-import { deleteUser, getUsers } from "@/app/actions/userDbActions"
-import ConfirmationButton from "@/app/components/ConfirmationButton"
+import { deleteUser, getUsers } from "@/app/actions/user/db"
+import ConfirmationButton from "@/app/components/Confirmation/ConfirmationButton"
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Button } from "@/components/ui/button";
 

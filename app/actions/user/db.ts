@@ -1,13 +1,13 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import prisma from "../lib/db";
+import prisma from "../../lib/database/db";
 import { Role } from "@prisma/client";
 
 export async function getUsers(currPage: number) {
     const result = await prisma.user
         .paginate({})
         .withPages({
-            limit: 20,
+            limit: 10,
             page: currPage,
             includePageCount: true
         })

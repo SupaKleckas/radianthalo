@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "@/app/lib/session"
+import { decrypt } from "@/app/lib/auth/session"
 import { cookies } from "next/dist/server/request/cookies";
 
 const userRoutes = ["/home"];

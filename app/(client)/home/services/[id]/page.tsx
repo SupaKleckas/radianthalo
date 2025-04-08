@@ -1,6 +1,6 @@
-import { getServiceById } from "@/app/actions/serviceDbActions";
+import { getServiceById } from "@/app/actions/service/db";
 import { redirect } from "next/navigation";
-import { getEmployeesByService } from "@/app/actions/userDbActions";
+import { getEmployeesByService } from "@/app/actions/user/db";
 import { Booking } from "@/app/components/Booking/Booking";
 
 interface ServiceParams {

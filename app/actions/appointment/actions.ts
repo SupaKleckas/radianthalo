@@ -1,14 +1,13 @@
 "use server";
 import { Employee, User, Service } from "@prisma/client";
-import { getAppointmentForTimeSlots, addAppointment } from "./appointmentDbActions";
-import { getEmployeebyId, getClientById } from "./userDbActions";
-import { getUserIdFromSession } from "@/app/lib/session"
+import { getAppointmentForTimeSlots, addAppointment } from "@/app/actions/appointment/db";
+import { getEmployeebyId, getClientById } from "@/app/actions/user/db";
+import { getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
 import { redirect } from "next/navigation";
 
 export async function addAppointmentByBooking(employee: Employee & { user: User }, date: Date, time: string, service: Service, timeZone: string) {
     if (await getEmployeebyId(employee.userId) == null) {
-        console.log("employee check")
         return;
     }
 
@@ -35,7 +34,6 @@ export async function addAppointmentByBooking(employee: Employee & { user: User 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
-    console.log(dateUtc.toString())
     addAppointment(title, startTime, endTime, employee.userId, client.userId, service.id);
     redirect("/home/appointments");
 }
@@ -56,7 +54,7 @@ export async function getAvailableTimeSlots(employee: Employee, date: Date, time
     const startOfDay = new Date(date.setHours(workingHours.start, 0, 0, 0));
     const endOfDay = new Date(date.setHours(workingHours.end, 0, 0, 0));
 
-    const appointments = await getAppointmentForTimeSlots(employee, startOfDay, endOfDay);
+    const appointments: { startTime: Date; endTime: Date }[] = await getAppointmentForTimeSlots(employee, startOfDay, endOfDay);
 
     const availableSlots: string[] = [];
     let currentTime = new Date(startOfDay);

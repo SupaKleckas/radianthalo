@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Employee, User } from "@prisma/client";
 import { format } from "date-fns"
-import { getAvailableTimeSlots } from "../../actions/appointmentActions";
+import { getAvailableTimeSlots } from "@/app/actions/appointment/actions";
 import { Button } from "@/components/ui/button";
 import { fromZonedTime } from "date-fns-tz";
 

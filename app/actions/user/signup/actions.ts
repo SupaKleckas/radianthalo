@@ -1,8 +1,8 @@
 "use server";
 
-import { signupSchema } from "../lib/zod"
-import { saltAndHashPassword } from "../lib/hash";
-import { addUser, getUserByEmail } from "./userDbActions";
+import { signupSchema } from "../../../lib/database/zod"
+import { saltAndHashPassword } from "../../../lib/auth/hash";
+import { addUser, getUserByEmail } from "../db";
 import { redirect } from "next/navigation";
 
 export async function signup(state: any, formData: FormData) {

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { EmployeeDashboardItems } from "@/app/components/Navbar/NavigationItems";
 import { HiLogout, HiMenu, HiX } from "react-icons/hi";
-import { logout } from "@/app/actions/loginActions";
+import { logout } from "@/app/actions/user/login/actions";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"
 

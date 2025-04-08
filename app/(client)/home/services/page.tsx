@@ -1,4 +1,4 @@
-import { getAllServices } from "@/app/actions/serviceDbActions"
+import { getAllServices } from "@/app/actions/service/db"
 import { HiOutlineTruck, HiOutlineClock, HiOutlineCash } from "react-icons/hi";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export default async function Page() {
         <>
             <h1 className="flex justify-center text-3xl text-slate-800">All available services</h1>
             <div className="flex justify-center">
-                <ul className='grid grid-cols-1 md:grid-cols-2 w-[50%] text-slate-800'>
+                <ul className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-[100%] text-slate-800'>
                     {services.map((service: any) => (
                         <li
                             key={service.id}

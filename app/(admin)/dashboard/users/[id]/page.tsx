@@ -1,7 +1,7 @@
 import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
-import { getUserById } from "@/app/actions/userDbActions";
-import UserEditForm from "@/app/components/EditUserForm";
+import { getUserById } from "@/app/actions/user/db";
+import UserEditForm from "@/app/components/User/EditUserForm";
 
 interface UserParams {
     params: {

@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import prisma from "../lib/db";
+import prisma from "../../lib/database/db";
 
 export async function getAllServices() {
     return await prisma.service.findMany();
@@ -10,7 +10,7 @@ export async function getServices(currPage: number) {
     const result = await prisma.service
         .paginate({})
         .withPages({
-            limit: 20,
+            limit: 10,
             page: currPage,
             includePageCount: true
         })

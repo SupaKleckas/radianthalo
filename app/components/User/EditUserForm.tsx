@@ -1,6 +1,6 @@
 "use client";
 import { useState, useActionState } from "react";
-import { editUserByForm } from "@/app/actions/userActions";
+import { editUserByForm } from "@/app/actions/user/actions";
 import { User } from "@prisma/client";
 import { Button } from "@/components/ui/button"
 

@@ -1,7 +1,7 @@
 import { HiOutlineTruck, HiOutlineClock, HiOutlineCash, HiPencil } from "react-icons/hi";
 import Link from "next/link";
-import { deleteService, getServices } from "@/app/actions/serviceDbActions"
-import ConfirmationButton from "@/app/components/ConfirmationButton"
+import { deleteService, getServices } from "@/app/actions/service/db"
+import ConfirmationButton from "@/app/components/Confirmation/ConfirmationButton"
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Button } from "@/components/ui/button";
 

@@ -1,8 +1,8 @@
 "use server";
-import { loginSchema } from "../lib/zod"
-import { verifyPassword } from "../lib/hash";
-import { getUserByEmail } from "./userDbActions";
-import { createSession, deleteSession } from "../lib/session";
+import { loginSchema } from "../../../lib/database/zod"
+import { verifyPassword } from "../../../lib/auth/hash";
+import { getUserByEmail } from "../db";
+import { createSession, deleteSession } from "../../../lib/auth/session";
 import { redirect } from "next/navigation";
 
 export async function login(state: any, formData: FormData) {

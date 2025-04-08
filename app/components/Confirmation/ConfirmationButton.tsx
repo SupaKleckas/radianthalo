@@ -1,7 +1,7 @@
 "use client";
 import { HiTrash } from "react-icons/hi";
 import { useState } from "react";
-import ConfirmationWindow from "./ConfirmationWindow";
+import ConfirmationWindow from "@/app/components/Confirmation/ConfirmationWindow";
 
 interface Message {
     message: string

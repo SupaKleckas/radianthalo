@@ -1,5 +1,5 @@
 "use server";
-import prisma from "../lib/db";
+import prisma from "@/app/lib/database/db";
 import { Employee } from "@prisma/client";
 
 export async function getAppointments(currPage: number) {
@@ -10,7 +10,7 @@ export async function getAppointments(currPage: number) {
             }
         })
         .withPages({
-            limit: 20,
+            limit: 10,
             page: currPage,
             includePageCount: true
         })

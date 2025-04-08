@@ -1,6 +1,6 @@
 "use client";
 import { useActionState, useState } from "react";
-import { editServiceByForm } from "@/app/actions/serviceActions";
+import { editServiceByForm } from "@/app/actions/service/actions";
 import { User } from "@prisma/client";
 import { Button } from "@/components/ui/button"
 import { MultiSelect } from "@/app/components/MultiSelect";

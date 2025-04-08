@@ -1,7 +1,7 @@
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
 import SignupForm from '@/app/components/UserLogin/SignupForm';
-import { login } from "@/app/actions/loginActions";
+import { login } from "@/app/actions/user/login/actions";
 import { Button } from "@/components/ui/button";
 
 interface LoginFormProps {
