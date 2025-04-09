@@ -35,7 +35,32 @@ export async function getClientAppointmetns(currPage: number, clientId: string) 
             }
         })
         .withPages({
-            limit: 20,
+            limit: 10,
+            page: currPage,
+            includePageCount: true
+        })
+
+    return result;
+}
+
+export async function getEmployeeAppointmetns(currPage: number, employeeId: string) {
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+    const result = await prisma.appointment
+        .paginate({
+            where: {
+                employeeId: employeeId,
+                startTime: {
+                    gte: oneDayAgo
+                }
+            },
+            orderBy: {
+                startTime: "asc"
+            }
+        })
+        .withPages({
+            limit: 10,
             page: currPage,
             includePageCount: true
         })

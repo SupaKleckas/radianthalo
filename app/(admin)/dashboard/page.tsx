@@ -29,7 +29,7 @@ export default async function Page() {
         <div>
             <div className="text-slate-800 mb-6">
                 <h1 className="text-5xl">Dashboard</h1>
-                <h1 className="text-base opacity-60">Take a look at out analytics!</h1>
+                <h1 className="text-base opacity-60">Take a look at our analytics!</h1>
             </div>
             <GeneralData employees={employees} clients={clients} />
             <DataCharts apptsPerService={apptsPerService} apptsPerWeekday={apptsPerWeekday} />

@@ -27,18 +27,12 @@ export const adminItems: navItem[] = [
     },
     {
         id: 2,
-        title: "Reports",
-        href: "/dashboard/reports",
-        icon: HiOutlineCalculator
-    },
-    {
-        id: 3,
         title: "Services",
         href: "/dashboard/services",
         icon: HiOutlineTruck
     },
     {
-        id: 4,
+        id: 3,
         title: "Users",
         href: "/dashboard/users",
         icon: HiOutlineUser
@@ -54,12 +48,6 @@ export const employeeItems: navItem[] = [
     },
     {
         id: 1,
-        title: "Reports",
-        href: "/staff-dashboard/reports",
-        icon: HiOutlineCalculator
-    },
-    {
-        id: 2,
         title: "Schedule",
         href: "/staff-dashboard/schedule",
         icon: HiOutlineCalendar
