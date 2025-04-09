@@ -83,11 +83,6 @@ export const guestItems: navItem[] = [
     },
     {
         id: 1,
-        title: "Locations",
-        href: "/locations"
-    },
-    {
-        id: 2,
         title: "Services",
         href: "/services"
     }

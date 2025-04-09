@@ -1,4 +1,3 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Image from "next/image";
 
 export default function Page() {
@@ -18,8 +17,9 @@ export default function Page() {
           <Image
             src={"/salon-interior.jpg"}
             width={600}
-            height={600}
-            className="rounded-full object-cover"
+            height={400}
+            placeholder="empty"
+            className="rounded-2xl object-cover"
             alt="Picture of the salon interior" />
         </div>
       </div>
@@ -32,71 +32,59 @@ export default function Page() {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-slate-300">
-            <CardTitle className="flex ml-10 text-2xl">
+          <div>
+            <h1 className="flex font-bold text-3xl text-slate-800 m-6">
               Hair
-            </CardTitle>
-            <CardContent>
-              <Image
-                src="/hair.jpg"
-                alt="Picture of hair service"
-                width={400}
-                height={160}
-                unoptimized
-                className="w-full h-50 object-cover rounded-md"
-              />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-300">
-            <CardTitle className="flex ml-10 text-2xl">
+            </h1>
+            <Image
+              src="/hair.jpg"
+              alt="Picture of hair service"
+              width={600}
+              height={200}
+              quality={100}
+              className="w-full h-50 object-cover rounded-md"
+            />
+          </div>
+          <div>
+            <h1 className="flex font-bold text-3xl text-slate-800 m-6">
               Nails
-            </CardTitle>
-            <CardContent>
-              <Image
-                src="/nails.jpg"
-                alt="Picture of nail service."
-                width={400}
-                height={160}
-                unoptimized
-                className="w-full h-50 object-cover rounded-md"
-              />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-300">
-            <CardTitle className="flex ml-10 text-2xl">
+            </h1>
+            <Image
+              src="/nails.jpg"
+              alt="Picture of nail service."
+              width={600}
+              height={200}
+              quality={100}
+              className="w-full h-50 object-cover rounded-md"
+            />
+          </div>
+          <div>
+            <h1 className="flex font-bold text-3xl text-slate-800 m-6">
               Brows
-            </CardTitle>
-            <CardContent>
-              <Image
-                src="/brows.jpg"
-                alt="Picture of brows service"
-                width={400}
-                height={160}
-                unoptimized
-                className="w-full h-50 object-cover object-[60%_40%] rounded-md"
-              />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-300">
-            <CardTitle className="flex ml-10 text-2xl">
+            </h1>
+            <Image
+              src="/brows.jpg"
+              alt="Picture of brows service"
+              width={600}
+              height={200}
+              quality={100}
+              className="w-full h-50 object-cover object-[60%_40%] rounded-md"
+            />
+          </div>
+          <div>
+            <h1 className="flex font-bold text-3xl text-slate-800 m-6">
               Lashes
-            </CardTitle>
-            <CardContent>
-              <Image
-                src="/lashes.jpg"
-                alt="Picture of lashes service"
-                width={400}
-                height={160}
-                unoptimized
-                className="w-full h-50 object-cover rounded-md"
-              />
-            </CardContent>
-          </Card>
+            </h1>
+            <Image
+              src="/lashes.jpg"
+              alt="Picture of lashes service"
+              width={600}
+              height={200}
+              quality={100}
+              className="w-full h-50 object-cover rounded-md"
+            />
+          </div>
         </div>
-
       </div>
     </div>
   );
