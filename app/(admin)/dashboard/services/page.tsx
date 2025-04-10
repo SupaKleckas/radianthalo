@@ -1,9 +1,19 @@
-import { HiOutlineTruck, HiOutlineClock, HiOutlineCash, HiPencil } from "react-icons/hi";
+import { HiOutlineTruck, HiOutlineClock, HiOutlineCash, HiPencil, HiTrash } from "react-icons/hi";
 import Link from "next/link";
 import { deleteService, getServices } from "@/app/actions/service/db"
-import ConfirmationButton from "@/app/components/Confirmation/ConfirmationButton"
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface SearchParamsProps {
     searchParams?: {
@@ -18,9 +28,12 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     const pageAmount = meta?.pageCount;
 
     return (
-        <div className="flex flex-col items-center justify-center py-3">
-            <h1 className="text-4xl mb-4"> Services </h1>
-            <div className='w-full px-4'>
+        <div className="flex flex-col">
+            <div className="flex flex-col text-slate-800 gap-y-2">
+                <h1 className="text-5xl">Services</h1>
+                <h1 className="text-base opacity-60">Handle all services here.</h1>
+            </div>
+            <div className='w-full'>
                 <div className='flex justify-end mb-4'>
                     <Button className="bg-slate-700 hover:bg-slate-800">
                         <Link href="/dashboard/services/add" className='flex items-center'>
@@ -29,7 +42,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                         </Link>
                     </Button>
                 </div>
-                <ul className='w-full'>
+                <ul className='flex w-full flex-col items-center justify-center'>
                     {services.map((service: any) => (
                         <li key={service.id} className='flex items-center p-2 justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
                             <div className='flex lg:items-center flex-col lg:flex-row w-full text-base'>
@@ -41,9 +54,27 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                                 <Link href={`/dashboard/services/${service.id}`}>
                                     <HiPencil className="text-2xl hover:cursor-pointer hover:text-green-300 mr-2" />
                                 </Link>
-                                <form action={deleteService.bind(null, service.id)}>
-                                    <ConfirmationButton message={`Are you sure you want to delete service ${service.title.toLowerCase()}?`} />
-                                </form>
+                                <AlertDialog>
+                                    <AlertDialogTrigger>
+                                        <HiTrash className='text-2xl hover:cursor-pointer hover:text-red-500' />
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>{`Are you sure you want to delete service ${service.title}?`}</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete the service from the database.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel className="hover:cursor-pointer hover:bg-slate-300">Cancel</AlertDialogCancel>
+                                            <form action={deleteService.bind(null, service.id)}>
+                                                <AlertDialogAction asChild >
+                                                    <Button type="submit" className="bg-slate-700 hover:cursor-pointer">Continue</Button>
+                                                </AlertDialogAction>
+                                            </form>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </li>
                     ))}

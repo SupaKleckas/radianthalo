@@ -5,13 +5,21 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 
 interface ChartProps {
     apptsPerService: {
-        title: string;
-        count: number;
+        title: string
+        count: number
     }[],
     apptsPerWeekday: {
-        weekday: string;
+        weekday: string
         count: number
-    }[]
+    }[],
+    apptsPerEmployee: {
+        name: string
+        count: number
+    }[],
+    apptsPerMonth: {
+        month: string
+        count: number
+    }[],
     // ...
 }
 
@@ -33,8 +41,26 @@ const apptsPerWeekdayConfig = {
     },
 } satisfies ChartConfig
 
+const appointmentsPerEmployeeConfig = {
+    name: {
+        label: "Name",
+    },
+    count: {
+        label: "Count",
+    },
+} satisfies ChartConfig
 
-export default function DataCharts({ apptsPerService, apptsPerWeekday }: ChartProps) {
+const apptsPerMonthConfig = {
+    month: {
+        label: "Month",
+    },
+    count: {
+        label: "Count",
+    },
+} satisfies ChartConfig
+
+
+export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerEmployee, apptsPerMonth }: ChartProps) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* First Chart - apptsPerService*/}
@@ -79,22 +105,45 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday }: ChartPr
                     </ChartContainer>
                 </CardContent>
             </Card>
+            {/* Third Chart - apptsPerMonth */}
             <Card className="bg-slate-300">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
-                        Most Active Employees
+                        Appointments per Month
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    <ChartContainer config={apptsPerMonthConfig} className="min-h-[200px] max-h-[200px] w-full">
+                        <BarChart accessibilityLayer data={apptsPerMonth} margin={{ top: 20 }}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis dataKey="month" tickLine={false} axisLine={false} />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                            <Bar dataKey="count" radius={10} className="fill-slate-700" >
+                                <LabelList position="top" offset={8} dataKey="count" className="fill-slate-800" fontSize={12} />
+                            </ Bar>
+                        </BarChart>
+                    </ChartContainer>
                 </CardContent>
             </Card>
             <Card className="bg-slate-300">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
-                        Client Appointments per Month
+                        Top 5 Most Active Employees
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    <ChartContainer config={appointmentsPerEmployeeConfig} className="max-h-[200px] w-full">
+                        <BarChart data={apptsPerEmployee} layout="vertical" barSize={60} margin={{ right: 20 }}>
+                            <CartesianGrid horizontal={false} />
+                            <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} hide />
+                            <XAxis dataKey="count" type="number" hide />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                            <Bar dataKey="count" layout="vertical" className="fill-slate-700" radius={10}>
+                                <LabelList dataKey="name" position="insideLeft" offset={8} className="fill-slate-100" fontSize={14} />
+                                <LabelList dataKey="count" position="right" offset={8} className="fill-slate-700" fontSize={14} />
+                            </Bar>
+                        </BarChart>
+                    </ChartContainer>
                 </CardContent>
             </Card>
         </div>

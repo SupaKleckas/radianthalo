@@ -1,13 +1,13 @@
 "use server";
 import { Employee, User, Service } from "@prisma/client";
 import { getAppointmentForTimeSlots, addAppointment } from "@/app/actions/appointment/db";
-import { getEmployeebyId, getClientById } from "@/app/actions/user/db";
+import { getEmployeeById, getClientById } from "@/app/actions/user/db";
 import { getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
 import { redirect } from "next/navigation";
 
 export async function addAppointmentByBooking(employee: Employee & { user: User }, date: Date, time: string, service: Service, timeZone: string) {
-    if (await getEmployeebyId(employee.userId) == null) {
+    if (await getEmployeeById(employee.userId) == null) {
         return;
     }
 

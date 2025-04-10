@@ -24,7 +24,7 @@ export async function getEmployees() {
     )
 }
 
-export async function getEmployeebyId(id: string) {
+export async function getEmployeeById(id: string) {
     return await prisma.employee.findUnique({
         where: {
             userId: id
@@ -95,7 +95,57 @@ export async function addUser(email: string, hashedPassword: string, firstName: 
 
     if (role === "EMPLOYEE") {
         await prisma.employee.create({
-            data: { userId: user.id }
+            data: {
+                userId: user.id,
+                availibility: {
+                    createMany: {
+                        data: [
+                            {
+                                day: "Monday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Tuesday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Wednesday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Thursday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Friday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Saturday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Sunday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            }
+                        ]
+                    }
+                }
+            }
         });
     } else if (role === "USER") {
         await prisma.client.create({
@@ -123,7 +173,57 @@ export async function updateUser(id: string, email: string, firstName: string, l
         await prisma.employee.upsert({
             where: { userId: id },
             update: {},
-            create: { userId: id },
+            create: {
+                userId: id,
+                availibility: {
+                    createMany: {
+                        data: [
+                            {
+                                day: "Monday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Tuesday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Wednesday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Thursday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Friday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Saturday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            },
+                            {
+                                day: "Sunday",
+                                fromTime: "08:00",
+                                untilTime: "18:00",
+
+                            }
+                        ]
+                    }
+                }
+            },
         });
     } else if (role === "USER") {
         await prisma.employee.deleteMany({ where: { userId: id } });

@@ -6,7 +6,6 @@ import { PaginationComponent } from "@/app/components/Pagination";
 import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { groupByDate } from "@/app/lib/date/dateFunctions";
 
 interface SearchParamsProps {
@@ -34,9 +33,12 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     */
 
     return (
-        <div className="flex flex-col items-center justify-center py-3">
-            <h1 className="text-4xl mb-4"> My Schedule </h1>
-            <ScrollArea className="w-full">
+        <div>
+            <div className="text-slate-800 mb-6">
+                <h1 className="text-5xl">Your Schedule</h1>
+                <h1 className="text-base opacity-60">Take a look at your schedule!</h1>
+            </div>
+            <div>
                 {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
                     <div key={date} className="w-full px-4 mb-6">
                         <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
@@ -54,8 +56,8 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                         </ul>
                     </div>
                 )}
-            </ScrollArea>
-            <PaginationComponent pageAmount={pageAmount} />
+                <PaginationComponent pageAmount={pageAmount} />
+            </div>
         </div>
     );
 }

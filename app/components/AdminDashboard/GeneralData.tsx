@@ -1,15 +1,16 @@
 "use client";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { HiUser, HiIdentification } from "react-icons/hi";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { HiUser, HiIdentification, HiCash } from "react-icons/hi";
 
 interface DataProps {
     employees: number,
-    clients: number
+    clients: number,
+    earnings?: number
 }
 
-export default function GeneralData({ employees, clients }: DataProps) {
+export default function GeneralData({ employees, clients, earnings }: DataProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-3 gap-4 mb-4">
             {/* First Chart - Total Employees*/}
             <Card className="bg-slate-300 text-slate-800 p-3 max-h-[100px]">
                 <CardHeader className="p-0">
@@ -34,6 +35,23 @@ export default function GeneralData({ employees, clients }: DataProps) {
                     Total Clients
                 </CardContent>
             </Card>
+            {/* Third Chart - Total Earnings*/}
+            {
+                earnings ?
+                    <Card className="bg-slate-300 p-3 max-h-[100px]">
+                        <CardHeader className="p-0">
+                            <CardTitle className="text-slate-800 flex flex-row items-center text-xl gap-2">
+                                <HiCash />
+                                <h1>{earnings}</h1>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="opacity-[60%] text-sm p-0">
+                            Total Earnings
+                        </CardContent>
+                    </Card>
+                    :
+                    null
+            }
         </div>
     )
 }

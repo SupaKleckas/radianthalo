@@ -14,43 +14,45 @@ model User {
   firstName      String?
   lastName       String?
   role           Role      @default(USER)
-  Client         Client?
-  Employee       Employee?
+  client         Client?
+  employee       Employee?
 }
 
 model Client {
-  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   String        @id
-  reviews  Review[]
-  Schedule Appointment[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String        @id
+  reviews      Review[]
+  appointments Appointment[]
 }
 
 model Employee {
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String        @id
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String         @id
+  availibility Availability[]
   appointments Appointment[]
   services     Service[]
   reviews      Review[]
 }
 
 model Appointment {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   title      String
   startTime  DateTime
   endTime    DateTime
-  Employee   Employee @relation(fields: [employeeId], references: [userId])
-  employeeId String
-  Client     Client   @relation(fields: [clientId], references: [userId])
-  clientId   String
-  service    Service  @relation(fields: [serviceId], references: [id])
-  serviceId  String
+  employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: SetNull)
+  employeeId String?
+  client     Client?   @relation(fields: [clientId], references: [userId], onDelete: SetNull)
+  clientId   String?
+  service    Service?  @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceId  String?
 }
 
 model Service {
-  id          String        @id @default(cuid())
+  id          String          @id @default(cuid())
   title       String
   price       Float
   duration    Int
+  category    ServiceCategory @default(Hair)
   employees   Employee[]
   appointment Appointment[]
 }
@@ -60,14 +62,41 @@ model Review {
   title      String
   content    String
   rating     Int
-  author     Client   @relation(fields: [authorId], references: [userId])
-  authorId   String
-  employee   Employee @relation(fields: [employeeId], references: [userId])
-  employeeId String
+  client     Client   @relation(fields: [clientId], references: [userId], onDelete: SetDefault)
+  clientId   String   @default("DELETED")
+  employee   Employee @relation(fields: [employeeId], references: [userId], onDelete: SetDefault)
+  employeeId String   @default("DELETED")
+}
+
+model Availability {
+  id         String    @id @default(cuid())
+  day        Day
+  fromTime   String
+  untilTime  String
+  isActive   Boolean   @default(true)
+  employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: Cascade)
+  employeeId String?
 }
 
 enum Role {
   ADMIN
   USER
   EMPLOYEE
+}
+
+enum ServiceCategory {
+  Brows
+  Lashes
+  Hair
+  Nails
+}
+
+enum Day {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }

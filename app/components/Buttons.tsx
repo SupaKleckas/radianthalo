@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 
@@ -13,7 +14,7 @@ export function SubmitButton({ text, className }: ButtonProps) {
         <>
             {
                 pending ? (
-                    <Button disabled variant={"outline"} className={`${className ? className : "w-fit, bg-slate-600"}`}>
+                    <Button disabled variant={"outline"} className={`${className ? className : "w-fit, bg-slate-500"}`}>
                         Please wait...
                     </Button>
                 ) : (

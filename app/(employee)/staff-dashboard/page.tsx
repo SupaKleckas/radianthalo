@@ -1,7 +1,4 @@
-import DataCharts from "@/app/components/AdminDashboard/DataCharts";
 import GeneralData from "@/app/components/AdminDashboard/GeneralData";
-import getAppointmentsPerService from "@/app/lib/analytics/getAppointmentsPerService"
-import getAppointmentsPerWeekday from "@/app/lib/analytics/getAppointmentsPerWeekday";
 import { getClientCount, getEmployeeCount } from "@/app/lib/analytics/getClientEmployeeAmounts";
 
 export default async function Page() {

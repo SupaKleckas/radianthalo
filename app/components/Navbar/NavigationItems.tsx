@@ -1,6 +1,6 @@
 "use client";
 import { IconType } from "react-icons";
-import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineCalculator, HiOutlineHome } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineCalculator, HiOutlineHome, HiOutlineClipboardList } from "react-icons/hi";
 import Link from "next/link"
 import React from "react";
 import { usePathname } from "next/navigation";
@@ -51,6 +51,12 @@ export const employeeItems: navItem[] = [
         title: "Schedule",
         href: "/staff-dashboard/schedule",
         icon: HiOutlineCalendar
+    },
+    {
+        id: 2,
+        title: "Availibility",
+        href: "/staff-dashboard/availibility",
+        icon: HiOutlineClipboardList
     }
 ]
 

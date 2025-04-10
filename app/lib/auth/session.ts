@@ -57,3 +57,21 @@ export async function getUserIdFromSession(): Promise<string | null> {
 
     return null;
 }
+
+export async function getUserIdAndRoleFromSession(): Promise<{ userId: string; role: string; } | null> {
+    const cookie = await cookies();
+    const session = cookie.get("session")?.value;
+
+    if (!session) return null;
+
+    const payload = await decrypt(session);
+
+    if (payload && typeof payload.userId === "string" && typeof payload.role === "string") {
+        return {
+            userId: payload.userId,
+            role: payload.role
+        }
+    }
+
+    return null;
+}

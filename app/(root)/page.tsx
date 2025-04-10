@@ -24,7 +24,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="bg-slate-300 w-screen h-10" />
+      <div className="bg-slate-300 w-full h-10" />
 
       <div className="flex flex-col m-10 gap-y-6">
         <h1 className="text-5xl font-medium text-slate-800">
@@ -39,7 +39,7 @@ export default function Page() {
             <Image
               src="/hair.jpg"
               alt="Picture of hair service"
-              width={600}
+              width={500}
               height={200}
               quality={100}
               className="w-full h-50 object-cover rounded-md"
@@ -52,7 +52,7 @@ export default function Page() {
             <Image
               src="/nails.jpg"
               alt="Picture of nail service."
-              width={600}
+              width={500}
               height={200}
               quality={100}
               className="w-full h-50 object-cover rounded-md"
@@ -65,7 +65,7 @@ export default function Page() {
             <Image
               src="/brows.jpg"
               alt="Picture of brows service"
-              width={600}
+              width={500}
               height={200}
               quality={100}
               className="w-full h-50 object-cover object-[60%_40%] rounded-md"
@@ -78,7 +78,7 @@ export default function Page() {
             <Image
               src="/lashes.jpg"
               alt="Picture of lashes service"
-              width={600}
+              width={500}
               height={200}
               quality={100}
               className="w-full h-50 object-cover rounded-md"
