@@ -1,13 +1,15 @@
 "use client";
 
 import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns";
 
 interface CalendarParams {
-    selectedDate: Date;
-    setSelectedDate: (value: Date) => void;
+    selectedDate: Date
+    setSelectedDate: (value: Date) => void
+    unavailable: string[]
 }
 
-export function BookingCalendar({ selectedDate, setSelectedDate }: CalendarParams) {
+export function BookingCalendar({ selectedDate, setSelectedDate, unavailable }: CalendarParams) {
     const now = new Date();
     const maxSelectable = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate());
 
@@ -25,7 +27,8 @@ export function BookingCalendar({ selectedDate, setSelectedDate }: CalendarParam
                 disabled={(date) => {
                     const isPast = date.getTime() <= now.getTime();
                     const isTooFar = date > maxSelectable;
-                    return isPast || isTooFar;
+                    const isUnavailable = unavailable.includes(format(date, "EEEE"))
+                    return isPast || isTooFar || isUnavailable;
                 }}
             />
         </div>

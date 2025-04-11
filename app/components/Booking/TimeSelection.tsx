@@ -1,19 +1,19 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Employee, User } from "@prisma/client";
 import { format } from "date-fns"
 import { getAvailableTimeSlots } from "@/app/actions/appointment/actions";
 import { Button } from "@/components/ui/button";
-import { fromZonedTime } from "date-fns-tz";
 
 interface TimeParams {
     employee: Employee & { user: User };
     selectedDate: Date;
     selectedTime: string | null;
     setSelectedTime: (value: string | null) => void;
+    unavailable: boolean
 }
 
-export function TimeSelection({ employee, selectedDate, selectedTime, setSelectedTime }: TimeParams) {
+export function TimeSelection({ employee, selectedDate, selectedTime, setSelectedTime, unavailable }: TimeParams) {
     const [availableTimes, setAvailableTimes] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -23,13 +23,17 @@ export function TimeSelection({ employee, selectedDate, selectedTime, setSelecte
         setLoading(true);
         getAvailableTimeSlots({ userId: employee.userId }, selectedDate, Intl.DateTimeFormat().resolvedOptions().timeZone)
             .then((times) => {
-                setAvailableTimes(times);
-                if (times.length > 0) {
+                if (unavailable) {
+                    setAvailableTimes([]);
+                } else if (times.length > 0) {
+                    setAvailableTimes(times);
                     setSelectedTime(times[0])
+                } else {
+                    setAvailableTimes([]);
                 }
             })
             .finally(() => setLoading(false));
-    }, [employee, selectedDate]);
+    }, [employee, selectedDate, unavailable]);
 
     return (
         <div className="flex flex-col items-center gap-2 mt-4 mb-4">

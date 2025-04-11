@@ -5,6 +5,8 @@ import { getEmployeeById, getClientById } from "@/app/actions/user/db";
 import { getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
 import { redirect } from "next/navigation";
+import { getWorkingHoursFromAvailibility } from "@/app/lib/date/availability"
+import { Day } from "@prisma/client"
 
 export async function addAppointmentByBooking(employee: Employee & { user: User }, date: Date, time: string, service: Service, timeZone: string) {
     if (await getEmployeeById(employee.userId) == null) {
@@ -45,21 +47,22 @@ function addTimeToDate(date: Date, time: string): Date {
 }
 
 export async function getAvailableTimeSlots(employee: Employee, date: Date, timeZone: string) {
-    // Get from availibility?
-    const workingHours = { start: 8, end: 18 };
-
+    //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
-    const startOfDay = new Date(date.setHours(workingHours.start, 0, 0, 0));
-    const endOfDay = new Date(date.setHours(workingHours.end, 0, 0, 0));
+    const timeData = await getWorkingHoursFromAvailibility(employee.userId, format(date, "EEEE"), date);
 
-    const appointments: { startTime: Date; endTime: Date }[] = await getAppointmentForTimeSlots(employee, startOfDay, endOfDay);
+    if (timeData == undefined) {
+        return []
+    }
+
+    const appointments: { startTime: Date; endTime: Date }[] = await getAppointmentForTimeSlots(employee, timeData.startOfDay, timeData.endOfDay);
 
     const availableSlots: string[] = [];
-    let currentTime = new Date(startOfDay);
+    let currentTime = new Date(timeData.startOfDay);
 
-    while (currentTime < endOfDay) {
+    while (currentTime < timeData.endOfDay) {
         const nextTime = new Date(currentTime.getTime() + 30 * 60 * 1000);
         const isBlocked = appointments.some(({ startTime, endTime }) =>
             currentTime >= startTime && currentTime < endTime
