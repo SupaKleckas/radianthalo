@@ -1,6 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
+import { ServiceCategory } from "@prisma/client";
 
 export async function getAllServices() {
     return await prisma.service.findMany();
@@ -29,12 +30,13 @@ export async function getServiceById(id: string) {
     });
 }
 
-export async function addService(title: string, price: number, duration: number, employeeIds: string[]) {
+export async function addService(title: string, price: number, duration: number, category: ServiceCategory, employeeIds: string[]) {
     await prisma.service.create({
         data: {
             title: title,
             price: price,
             duration: duration,
+            category: category,
             employees: {
                 connect: employeeIds.map((userId) => ({ userId })),
             }
@@ -44,7 +46,7 @@ export async function addService(title: string, price: number, duration: number,
     revalidatePath("/dashboard/services");
 }
 
-export async function updateService(id: string, title: string, price: number, duration: number, employeeIds: string[]) {
+export async function updateService(id: string, title: string, price: number, duration: number, category: ServiceCategory, employeeIds: string[]) {
     const existingService = await prisma.service.findUnique({
         where: { id },
         include: { employees: true },
@@ -82,6 +84,7 @@ export async function updateService(id: string, title: string, price: number, du
             title: title,
             price: price,
             duration: duration,
+            category: category,
             employees: {
                 connect: employeesToConnect.map((userId) => ({ userId })),
                 disconnect: employeesToDisconnect.map((userId) => ({ userId })),

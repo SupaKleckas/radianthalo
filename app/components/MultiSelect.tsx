@@ -46,7 +46,7 @@ export function MultiSelect({
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild className="border-slate-800 rounded p-4">
+            <PopoverTrigger asChild className="">
                 <Button
                     variant="outline"
                     role="combobox"
@@ -58,7 +58,7 @@ export function MultiSelect({
                             ? selectedEmployees.map((e) => label(e)).join(", ")
                             : "Select employees..."}
                     </div>
-                    <HiOutlineChevronDoubleDown className="ml-2 h-4 w-4 shrink-0 opacity-80 text-slate-800" />
+                    <HiOutlineChevronDoubleDown className="shrink-0 opacity-30" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-0">

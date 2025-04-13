@@ -1,6 +1,7 @@
 import { addServiceSchema, editServiceSchema } from "../../lib/database/zod";
 import { addService, getServiceById, updateService } from "./db";
 import { redirect } from "next/navigation";
+import { ServiceCategory } from "@prisma/client";
 
 export async function addServiceByForm(state: any, formData: FormData) {
     if (formData.get('price') === '' || formData.get('duration') === '') {
@@ -24,8 +25,9 @@ export async function addServiceByForm(state: any, formData: FormData) {
     }
 
     const employeeIds = formData.get('employeeIds') ? JSON.parse(formData.get('employeeIds') as string) : [];
+    const category = formData.get('category') as ServiceCategory;
 
-    await addService(validationResult.data.title, validationResult.data.price, validationResult.data.duration, employeeIds);
+    await addService(validationResult.data.title, validationResult.data.price, validationResult.data.duration, category, employeeIds);
     redirect("/dashboard/services");
 }
 
@@ -58,7 +60,8 @@ export async function editServiceByForm(state: any, formData: FormData) {
     }
 
     const employeeIds = formData.get('employeeIds') ? JSON.parse(formData.get('employeeIds') as string) : [];
+    const category = formData.get('category') as ServiceCategory;
 
-    updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration, employeeIds);
+    updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration, category, employeeIds);
     redirect("/dashboard/services");
 }
