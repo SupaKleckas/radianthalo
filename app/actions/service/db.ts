@@ -7,6 +7,28 @@ export async function getAllServices() {
     return await prisma.service.findMany();
 }
 
+export async function getPopularServices() {
+    return await prisma.service.findMany({
+        select: {
+            id: true,
+            title: true,
+            duration: true,
+            price: true,
+            _count: {
+                select: {
+                    appointment: true
+                }
+            }
+        },
+        orderBy: {
+            appointment: {
+                _count: 'desc'
+            }
+        },
+        take: 4
+    });
+}
+
 export async function getServices(currPage: number) {
     const result = await prisma.service
         .paginate({})

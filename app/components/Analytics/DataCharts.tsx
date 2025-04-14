@@ -20,7 +20,6 @@ interface ChartProps {
         month: string
         count: number
     }[],
-    // ...
 }
 
 const apptsPerServiceConfig = {

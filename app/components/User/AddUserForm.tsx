@@ -82,6 +82,7 @@ export default function AddUserForm() {
                     </Select>
                     {state?.errors?.role && <p className='text-red-500 text-sm'>{state.errors.role._errors[0]}</p>}
                     {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    <Input type="hidden" name="role" value={role} />
                     <div className='flex justify-center'>
                         <Button type='submit' className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>
                             Add user

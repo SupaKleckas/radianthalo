@@ -1,11 +1,23 @@
 import prisma from "@/app/lib/database/db";
 
-export default async function getAppointmentsPerMonth() {
-    const data = await prisma.appointment.findMany({
-        select: {
-            startTime: true
-        }
-    })
+export default async function getAppointmentsPerMonth(employeeId?: string) {
+    let data;
+    if (employeeId) {
+        data = await prisma.appointment.findMany({
+            where: {
+                employeeId: employeeId
+            },
+            select: {
+                startTime: true
+            }
+        });
+    } else {
+        data = await prisma.appointment.findMany({
+            select: {
+                startTime: true
+            }
+        });
+    }
 
     const monthCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -20,8 +32,6 @@ export default async function getAppointmentsPerMonth() {
         month: monthLabels[index],
         count: count
     }))
-
-    console.log(result)
 
     return result
 }

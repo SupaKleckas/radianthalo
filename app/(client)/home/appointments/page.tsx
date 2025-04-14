@@ -7,7 +7,7 @@ import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { groupByDate } from "@/app/lib/date/dateFunctions";
+import { groupByDate } from "@/app/lib/grouping/groupByDate";
 
 interface SearchParamsProps {
     searchParams?: {
@@ -34,20 +34,20 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     */
 
     return (
-        <div className="flex flex-col p-4">
-            {appointments.length == 0 ?
-                <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">
-                    <h1> No recent or upcoming appointments?</h1>
-                    <Link href="/home/services" className="text-1xl hover:cursor-pointer hover:text-slate-600"> Book an appointment now! </Link>
-                </div>
-                :
-                <>
-                    <div className="flex flex-col mb-4 gap-y-2">
-                        <h1 className="text-4xl text-slate-800"> My Appointments </h1>
-                        <h1 className="text-2xl text-slate-500"> Check out your recent and upcoming appointments here!</h1>
+        <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
+            <div className="flex flex-col p-4">
+                {appointments.length == 0 ?
+                    <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">
+                        <h1> No recent or upcoming appointments?</h1>
+                        <Link href="/home/services" className="text-1xl hover:cursor-pointer hover:text-slate-600"> Book an appointment now! </Link>
                     </div>
+                    :
+                    <>
+                        <div className="flex flex-col mb-4 gap-y-2">
+                            <h1 className="text-4xl md:text-6xl font-bold text-slate-800"> My Appointments </h1>
+                            <h1 className="text-xl md:text-2xl text-slate-500"> Check out your recent and upcoming appointments here!</h1>
+                        </div>
 
-                    <ScrollArea className="w-full">
                         {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
                             <div key={date} className="w-full mb-6">
                                 <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
@@ -74,10 +74,10 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                             </div>
 
                         )}
-                    </ScrollArea>
-                    <PaginationComponent pageAmount={pageAmount} />
-                </>
-            }
-        </div>
+                        <PaginationComponent pageAmount={pageAmount} />
+                    </>
+                }
+            </div>
+        </ScrollArea>
     );
 }

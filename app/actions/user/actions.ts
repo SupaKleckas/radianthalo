@@ -5,6 +5,7 @@ import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/
 import { redirect } from "next/navigation";
 
 export async function addUserByForm(state: any, formData: FormData) {
+    console.log(formData.get("role"));
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {

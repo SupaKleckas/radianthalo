@@ -92,12 +92,12 @@ export async function addAppointment(title: string, startTime: Date, endTime: Da
             title: title,
             startTime: startTime,
             endTime: endTime,
-            Employee: {
+            employee: {
                 connect: {
                     userId: employeeId
                 }
             },
-            Client: {
+            client: {
                 connect: {
                     userId: clientId
                 }

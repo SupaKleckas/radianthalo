@@ -54,6 +54,7 @@ export default function UserEditForm({ user }: { user: User }) {
                     </Select>
                     {state?.errors?.role && <p className='text-red-500 text-sm'>{state.errors.role._errors[0]}</p>}
                     {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    <Input type="hidden" name="role" value={formData.role ?? ''} />
                     <Input type="hidden" name="id" value={user.id} />
                     <div className='flex justify-center'>
                         <Button className="bg-slate-700 w-fit mt-2 hover:bg-slate-800 hover:cursor-pointer">Save</Button>

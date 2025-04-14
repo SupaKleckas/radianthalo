@@ -6,7 +6,7 @@ import { PaginationComponent } from "@/app/components/Pagination";
 import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
-import { groupByDate } from "@/app/lib/date/dateFunctions";
+import { groupByDate } from "@/app/lib/grouping/groupByDate";
 
 interface SearchParamsProps {
     searchParams?: {

@@ -45,7 +45,7 @@ export function FrequentlyAskedQuestions() {
                         <AccordionTrigger className="text-xl md:text-2xl text-slate-800">
                             {item.question}
                         </AccordionTrigger>
-                        <AccordionContent className="text-base md:text-xl  text-slate-700">
+                        <AccordionContent className="text-base md:text-xl text-slate-700">
                             {item.content}
                         </AccordionContent>
                     </AccordionItem>

@@ -3,7 +3,7 @@ import { FrequentlyAskedQuestions } from "@/app/components/FAQ/Items";
 export default function Page() {
   return (
     <div>
-      <div className="flex flex-col m-10 mb-2 gap-y-6">
+      <div className="flex flex-col mb-2 gap-y-6 m-8">
         <h1 className="text-4xl md:text-7xl font-bold text-slate-800">
           Got questions?
         </h1>

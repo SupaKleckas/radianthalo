@@ -1,6 +1,7 @@
 "server-only";
 import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 const secret = process.env.JWT_SECRET;
 const encodedSecret = new TextEncoder().encode(secret);
@@ -51,8 +52,6 @@ export async function getUserIdFromSession(): Promise<string | null> {
     const cookie = await cookies();
     const session = cookie.get("session")?.value;
 
-    if (!session) return null;
-
     const payload = await decrypt(session);
     if (payload && typeof payload.userId === "string") {
         return payload.userId;
@@ -64,9 +63,6 @@ export async function getUserIdFromSession(): Promise<string | null> {
 export async function getUserIdAndRoleFromSession(): Promise<{ userId: string; role: string; } | null> {
     const cookie = await cookies();
     const session = cookie.get("session")?.value;
-
-    if (!session) return null;
-
     const payload = await decrypt(session);
 
     if (payload && typeof payload.userId === "string" && typeof payload.role === "string") {

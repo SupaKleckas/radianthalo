@@ -57,7 +57,7 @@ export function Booking({ service, employees }: { service: Service, employees: (
                             <BookingCalendar selectedDate={date} setSelectedDate={setDate} unavailable={unavailable} />
                         </div>
                         <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 md:block hidden" />
-                        <Separator orientation="horizontal" className="w-full h-[4px] bg-slate-500 md:hidden block" />
+                        <Separator orientation="horizontal" className="w-f-ull h-[4px] bg-slate-500 md:hidden block" />
                         <div className="flex-1 mt-5 mb-5 md:mt-0">
                             {selectedEmployee && (
                                 <TimeSelection employee={selectedEmployee} selectedDate={date} selectedTime={time} setSelectedTime={setTime} unavailable={unavailable.includes(format(date, "EEEE"))} />
