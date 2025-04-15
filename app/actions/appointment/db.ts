@@ -111,3 +111,29 @@ export async function addAppointment(title: string, startTime: Date, endTime: Da
     });
 
 }
+
+export async function addTempAppointment(title: string, startTime: Date, endTime: Date, employeeId: string, clientId: string, serviceId: string) {
+    // await prisma.appointment.create({
+    //     data: {
+    //         title: title,
+    //         startTime: startTime,
+    //         endTime: endTime,
+    //         employee: {
+    //             connect: {
+    //                 userId: employeeId
+    //             }
+    //         },
+    //         client: {
+    //             connect: {
+    //                 userId: clientId
+    //             }
+    //         },
+    //         service: {
+    //             connect: {
+    //                 id: serviceId
+    //             }
+    //         }
+    //     }
+    // });
+
+}

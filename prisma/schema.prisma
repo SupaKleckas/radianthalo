@@ -78,6 +78,18 @@ model Availability {
   employeeId String?
 }
 
+model TemporaryAppointment {
+  id         String   @id @default(cuid())
+  employeeId String
+  serviceId  String
+  date       DateTime
+  time       String
+  timezone   String
+  createdAt  DateTime
+  expiresAt  DateTime
+  status     Status   @default(Pending)
+}
+
 enum Role {
   ADMIN
   USER
@@ -99,4 +111,10 @@ enum Day {
   Friday
   Saturday
   Sunday
+}
+
+enum Status {
+  Pending
+  Confirmed
+  Expired
 }
