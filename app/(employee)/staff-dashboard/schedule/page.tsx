@@ -38,6 +38,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                 <h1 className="text-5xl">Your Schedule</h1>
                 <h1 className="text-base opacity-60">Take a look at your schedule!</h1>
             </div>
+            <PaginationComponent pageAmount={pageAmount} />
             <div>
                 {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
                     <div key={date} className="w-full px-4 mb-6">
@@ -45,18 +46,19 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                         <ul>
                             {appts.map(appointment =>
                                 <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-[#7d94b6]">
-                                    <Link href={`/dashboard/service/${appointment.id}`} className="w-full p-4">
+                                    {/* <Link href={`/dashboard/service/${appointment.id}`} className="w-full p-4"> */}
+                                    <div className="w-full p-4">
                                         <div className="flex items-center flex-col lg:flex-row space-x-6 text-base">
                                             <span className="flex items-center lg:w-1/2"> <HiOutlineCalendar /> {appointment.title}</span>
                                             <span className="flex items-center lg:w-1/2"> <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}</span>
                                         </div>
-                                    </Link>
+                                    </div>
+                                    {/* </Link> */}
                                 </li>
                             )}
                         </ul>
                     </div>
                 )}
-                <PaginationComponent pageAmount={pageAmount} />
             </div>
         </div>
     );

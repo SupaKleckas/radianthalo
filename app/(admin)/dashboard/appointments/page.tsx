@@ -27,6 +27,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     <h1 className="text-5xl">Appointments</h1>
                     <h1 className="text-base opacity-60">Have a look at all appointments.</h1>
                 </div>
+                <PaginationComponent pageAmount={pageAmount} />
                 {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
                     <div key={date} className="w-full px-4 mb-6 items-center justify-center">
                         <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
@@ -44,7 +45,6 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                         </ul>
                     </div>
                 )}
-                <PaginationComponent pageAmount={pageAmount} />
             </div>
         </ScrollArea>
     );

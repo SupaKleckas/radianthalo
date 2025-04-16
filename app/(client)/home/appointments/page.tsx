@@ -8,10 +8,12 @@ import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { groupByDate } from "@/app/lib/grouping/groupByDate";
+import Message from "@/app/components/Notifications/Message";
 
 interface SearchParamsProps {
     searchParams?: {
         page?: string;
+        status?: string
     };
 }
 
@@ -35,6 +37,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
 
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
+            <Message type="success" message="Appointment booked successfully!" />
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">
@@ -47,7 +50,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                             <h1 className="text-4xl md:text-6xl font-bold text-slate-800"> My Appointments </h1>
                             <h1 className="text-xl md:text-2xl text-slate-500"> Check out your recent and upcoming appointments here!</h1>
                         </div>
-
+                        <PaginationComponent pageAmount={pageAmount} />
                         {dateGroups.map(([date, appts]: [string, Appointment[]]) =>
                             <div key={date} className="w-full mb-6">
                                 <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
@@ -72,9 +75,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                                     )}
                                 </ul>
                             </div>
-
                         )}
-                        <PaginationComponent pageAmount={pageAmount} />
                     </>
                 }
             </div>

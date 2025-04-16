@@ -11,30 +11,30 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 
-
 export default async function Home() {
     const services = await getAllServices();
     const getMostPopularServices = await getPopularServices();
 
     return (
         <div className="flex flex-col gap-y-6">
-            <h1 className="text-3xl md:text-5xl font-bold text-slate-800">Welcome! Check out our most popular services!</h1>
-            <div className="flex flex-col md:flex-row justify-between mb-4 md:mb-8 gap-y-4">
+            <h1 className="text-3xl md:text-6xl font-bold text-slate-800">Welcome to Radiant Halo Lounge!</h1>
+            <h1 className="text-2xl md:text-4xl text-slate-500">Check out our most popular services!</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-between mb-4 md:mb-8 gap-6">
                 {getMostPopularServices.map((service) => (
-                    <Link key={service.id} href={`/home/services/${service.id}`} className="w-full md:w-1/5">
+                    <Link key={service.id} href={`/home/services/${service.id}`} className="">
                         <Card className="bg-gradient-to-r from-slate-100 to-slate-400 hover:scale-105 transition-transform duration-300 shadow-lg">
                             <CardHeader >
                                 <span className="flex w-fit bg-yellow-500 text-white text-xs px-2 py-1 rounded-full shadow-md">
                                     ⭐ Popular
                                 </span>
-                                <div className="flex flex-row items-center gap-x-2 text-2xl">
+                                <div className="flex flex-row items-center gap-x-2 text-xl lg:text-2xl">
                                     <HiOutlineTruck></HiOutlineTruck>{service.title}
                                 </div>
                             </CardHeader>
                             <CardDescription>
-                                <div className="flex flex-row items-center ml-6 gap-x-6 text-xl">
-                                    <p className="flex flex-row items-center"><HiOutlineClock></HiOutlineClock>{service.duration}</p>
-                                    <p className="flex flex-row items-center"><HiOutlineCash></HiOutlineCash>{service.price} €</p>
+                                <div className="flex flex-row items-center ml-6 gap-x-6">
+                                    <p className="flex flex-row items-center text-base lg:text-xl"><HiOutlineClock></HiOutlineClock>{service.duration} min</p>
+                                    <p className="flex flex-row items-center text-base lg:text-xl "><HiOutlineCash></HiOutlineCash>{service.price} €</p>
                                 </div>
                             </CardDescription>
                         </Card>
@@ -54,7 +54,7 @@ export default async function Home() {
                                 </CardHeader>
                                 <CardDescription>
                                     <div className="flex flex-row items-center ml-6 gap-x-6 text-xl">
-                                        <p className="flex flex-row items-center"><HiOutlineClock></HiOutlineClock>{service.duration}</p>
+                                        <p className="flex flex-row items-center"><HiOutlineClock></HiOutlineClock>{service.duration} min</p>
                                         <p className="flex flex-row items-center"><HiOutlineCash></HiOutlineCash>{service.price} €</p>
                                     </div>
                                 </CardDescription>

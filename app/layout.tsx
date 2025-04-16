@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lexend_Zetta, Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner"
 
 const lexendZetta = Lexend_Zetta({
   variable: "--font-lexend-zetta",
@@ -13,7 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Radiant Halo",
+  title: "Radiant Halo Lounge",
   description: "Beauty salon reservation system"
 };
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${lexendZetta.variable} ${inter.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

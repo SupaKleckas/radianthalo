@@ -37,7 +37,7 @@ export async function addAppointmentByBooking(employee: Employee & { user: User 
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
     addAppointment(title, startTime, endTime, employee.userId, client.userId, service.id);
-    redirect("/home/appointments");
+    redirect("/home/appointments?status=success");
 }
 
 function addTimeToDate(date: Date, time: string): Date {

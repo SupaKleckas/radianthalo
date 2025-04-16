@@ -44,7 +44,8 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                             </Link>
                         </Button>
                     </div>
-                    <ul className='flex w-full flex-col items-center justify-center'>
+                    <PaginationComponent pageAmount={pageAmount} />
+                    <ul className='flex w-full flex-col items-center justify-center mt-4'>
                         {services.map((service: any) => (
                             <li key={service.id} className='flex items-center p-2 justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
                                 <div className='flex lg:items-center flex-col lg:flex-row w-full text-base'>
@@ -82,7 +83,6 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                         ))}
                     </ul>
                 </div>
-                <PaginationComponent pageAmount={pageAmount} />
             </div>
         </ScrollArea>
     );
