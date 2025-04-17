@@ -233,7 +233,11 @@ export async function updateUser(id: string, email: string, firstName: string, l
             update: {},
             create: { userId: id },
         });
+    } else if (role === "ADMIN") {
+        await prisma.client.deleteMany({ where: { userId: id } });
+        await prisma.employee.deleteMany({ where: { userId: id } });
     }
+    
     revalidatePath(`/dashboard/users/${id}`);
 }
 

@@ -17,7 +17,10 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     useEffect(() => {
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth < 1024);
-        };
+            if (window.innerWidth >= 1024) {
+              setMenuOpen(false);
+            }
+          };
 
         handleResize();
 
@@ -67,7 +70,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
                 {menuOpen ? (
                     <div className="absolute top-[70px] h-[calc(100vh-70px)] w-[50%] bg-slate-400" >
-                        <nav className="grid items-start px-2">
+                        <nav className="grid items-start px-2 text-2xl">
                             <AdminDashboardItems />
                         </nav>
                     </div>

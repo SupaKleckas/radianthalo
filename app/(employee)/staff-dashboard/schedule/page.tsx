@@ -7,6 +7,7 @@ import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
 import { groupByDate } from "@/app/lib/grouping/groupByDate";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SearchParamsProps {
     searchParams?: {
@@ -33,6 +34,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     */
 
     return (
+        <ScrollArea className="h-[80vh] w-full rounded-md pr-4">
         <div>
             <div className="text-slate-800 mb-6">
                 <h1 className="text-5xl">Your Schedule</h1>
@@ -61,5 +63,6 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                 )}
             </div>
         </div>
+        </ScrollArea>
     );
 }

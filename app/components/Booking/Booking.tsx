@@ -41,6 +41,7 @@ export function Booking({ service, employees }: { service: Service, employees: (
                 addAppointmentByBooking(selectedEmployee, date, time, service, Intl.DateTimeFormat().resolvedOptions().timeZone);
             }
         } else if (paymentMethod === "card") {
+            // Not implemented yet
             console.log("Card selected");
         }
     };
@@ -88,6 +89,7 @@ export function Booking({ service, employees }: { service: Service, employees: (
                 :
                 <div className="w-full justify-center">
                     <Card className="max-w-[1100px] w-full mx-auto bg-slate-300 text-slate-800">
+                        <form action={handlePaymentSelection}>
                         <button onClick={() => setNext(false)} className=" flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">
                             <HiArrowSmLeft className='text-4xl' />Go back
                         </button>
@@ -104,9 +106,10 @@ export function Booking({ service, employees }: { service: Service, employees: (
                                 </span>
                             </RadioGroup>
                             <div className="flex justify-end col-start-5">
-                                <Button className="w-fit bg-slate-700 hover:cursor-pointer" onClick={handlePaymentSelection}>Book now!</Button>
+                            <SubmitButton text="Book now!" />
                             </div>
                         </CardContent>
+                        </form>
                     </Card>
                 </div>
             }
