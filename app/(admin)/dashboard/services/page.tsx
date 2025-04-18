@@ -4,6 +4,7 @@ import { deleteService, getServices } from "@/app/actions/service/db"
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Service } from "@prisma/client"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -46,7 +47,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     </div>
                     <PaginationComponent pageAmount={pageAmount} />
                     <ul className='flex w-full flex-col items-center justify-center mt-4'>
-                        {services.map((service: any) => (
+                        {services.map((service: Service) => (
                             <li key={service.id} className='flex items-center p-2 justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
                                 <div className='flex lg:items-center flex-col lg:flex-row w-full text-base'>
                                     <span className='flex items-center lg:w-1/3'> <HiOutlineTruck className='text-2xl' /> {service?.title} </span>

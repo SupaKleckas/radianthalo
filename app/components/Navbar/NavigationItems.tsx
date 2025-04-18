@@ -1,6 +1,6 @@
 "use client";
 import { IconType } from "react-icons";
-import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineCalculator, HiOutlineHome, HiOutlineClipboardList } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineHome, HiOutlineClipboardList } from "react-icons/hi";
 import Link from "next/link"
 import React from "react";
 import { usePathname } from "next/navigation";

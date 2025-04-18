@@ -4,6 +4,7 @@ import { deleteUser, getUsers } from "@/app/actions/user/db";
 import { PaginationComponent } from "@/app/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { User } from "@prisma/client";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -60,7 +61,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     </div>
                     <PaginationComponent pageAmount={pageAmount} />
                     <ul className='flex w-full flex-col items-center justify-center mt-4'>
-                        {users.map((user: any) => (
+                        {users.map((user: User) => (
                             <li key={user.id} className='flex items-center p-2 justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500'>
                                 <div className='flex lg:items-center w-full space-x-2 flex-col lg:flex-row text-base'>
                                     <span className="flex flex-row items-center lg:w-1/2"> {getRoleIcon(user.role)} {user?.firstName} {user?.lastName} </span>

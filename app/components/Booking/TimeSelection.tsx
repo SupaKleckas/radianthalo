@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Employee, User } from "@prisma/client";
 import { format } from "date-fns"
 import { getAvailableTimeSlots } from "@/app/actions/appointment/actions";

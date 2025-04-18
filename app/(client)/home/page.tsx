@@ -1,14 +1,11 @@
 import { getAllServices, getPopularServices } from "@/app/actions/service/db";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader } from "@/components/ui/card"
 import { HiOutlineTruck, HiOutlineClock, HiOutlineCash } from "react-icons/hi";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from "@/components/ui/carousel"
 
 export default async function Home() {

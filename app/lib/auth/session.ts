@@ -1,7 +1,6 @@
 "server-only";
 import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 const secret = process.env.JWT_SECRET;
 const encodedSecret = new TextEncoder().encode(secret);

@@ -6,7 +6,6 @@ import { getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
 import { redirect } from "next/navigation";
 import { getWorkingHoursFromAvailibility } from "@/app/lib/date/availability"
-import { Day } from "@prisma/client"
 
 export async function addAppointmentByBooking(employee: Employee & { user: User }, date: Date, time: string, service: Service, timeZone: string) {
     if (await getEmployeeById(employee.userId) == null) {

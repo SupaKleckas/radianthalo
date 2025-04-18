@@ -1,7 +1,5 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { notFound } from "next/navigation";
-import { Availability } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 interface Props {
