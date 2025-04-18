@@ -27,7 +27,7 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL("/", req.nextUrl));
         }
 
-        if (path === "/") {
+        if (path === "/" || path === "/faq" || path === "/services") {
             switch (session.role) {
                 case "ADMIN":
                     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));

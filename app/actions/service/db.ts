@@ -29,9 +29,20 @@ export async function getPopularServices() {
     });
 }
 
-export async function getServices(currPage: number) {
+export async function getServices(currPage: number, query?: string) {
+    const searchTerm = query
+        ? {
+            OR: [
+                { title: { contains: query, mode: 'insensitive' as const } },
+            ]
+        }
+        : {};
+
+
     const result = await prisma.service
-        .paginate({})
+        .paginate({
+            where: searchTerm,
+        })
         .withPages({
             limit: 10,
             page: currPage,

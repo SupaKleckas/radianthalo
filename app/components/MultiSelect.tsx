@@ -70,7 +70,7 @@ export function MultiSelect({
                             {employees.map((employee) => (
                                 <CommandItem
                                     key={employee.id}
-                                    value={employee.id}
+                                    value={label(employee)}
                                     onSelect={() => {
                                         handleSetValue(employee.id);
                                     }}>

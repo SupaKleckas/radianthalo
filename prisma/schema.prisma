@@ -50,7 +50,7 @@ model Appointment {
 model Service {
   id          String          @id @default(cuid())
   title       String
-  price       Float
+  price       Int
   duration    Int
   category    ServiceCategory @default(Hair)
   employees   Employee[]

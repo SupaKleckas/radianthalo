@@ -2,9 +2,18 @@
 import prisma from "@/app/lib/database/db";
 import { Employee } from "@prisma/client";
 
-export async function getAppointments(currPage: number) {
+export async function getAppointments(currPage: number, query?: string) {
+    const searchTerm = query
+        ? {
+            OR: [
+                { title: { contains: query, mode: 'insensitive' as const } },
+            ]
+        }
+        : {};
+
     const result = await prisma.appointment
         .paginate({
+            where: searchTerm,
             orderBy: {
                 startTime: "asc"
             }

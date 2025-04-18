@@ -17,5 +17,6 @@ export function groupByCategory(services: Service[]) {
     }
 
     const grouped = Object.entries(serviceGroups);
-    return grouped;
+    const result = new Map(grouped);
+    return result;
 }

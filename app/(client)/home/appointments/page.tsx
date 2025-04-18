@@ -2,7 +2,7 @@ import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
 import Link from "next/link";
 import { format } from "date-fns-tz"
 import { getClientAppointmetns } from "@/app/actions/appointment/db";
-import { PaginationComponent } from "@/app/components/Pagination";
+import { PaginationComponent } from "@/app/components/Page/Pagination";
 import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
 
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
-            <Message type="success" message="Appointment booked successfully!" />
+            {params?.status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">

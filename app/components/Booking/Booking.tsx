@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { HiOutlineClock, HiOutlineCash, HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { BookingCalendar } from "@/app/components/Booking/Calendar";
 import { TimeSelection } from "@/app/components/Booking/TimeSelection";
@@ -87,29 +87,61 @@ export function Booking({ service, employees }: { service: Service, employees: (
                     </Card>
                 </div>
                 :
-                <div className="w-full justify-center">
+                <div className="w-full flex justify-center px-4">
                     <Card className="max-w-[1100px] w-full mx-auto bg-slate-300 text-slate-800">
-                        <form action={handlePaymentSelection}>
-                        <button onClick={() => setNext(false)} className=" flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">
-                            <HiArrowSmLeft className='text-4xl' />Go back
-                        </button>
-                        <CardContent className="">
-                            <h1 className="text-4xl text-slate-800 mb-4">You will be paying by...</h1>
-                            <RadioGroup className="flex flex-col " onValueChange={setPaymentMethod} defaultValue="cash">
-                                <span className="flex flex-row gap-4 items-center">
-                                    <RadioGroupItem id="cash" value="cash">Cash</RadioGroupItem>
-                                    <Label htmlFor="cash" className="text-2xl">Cash</Label>
-                                </span>
-                                <span className="flex flex-row gap-4 items-center" >
-                                    <RadioGroupItem id="card" value="card">Card</RadioGroupItem>
-                                    <Label htmlFor="card" className="text-2xl">Online payment</Label>
-                                </span>
-                            </RadioGroup>
-                            <div className="flex justify-end col-start-5">
-                            <SubmitButton text="Book now!" />
+                        <CardHeader className="pb-4">
+                            <button
+                                onClick={() => setNext(false)}
+                                className="flex items-center gap-2 text-slate-600 hover:text-slate-800 hover:cursor-pointer transition-colors"
+                            >
+                                <HiArrowSmLeft className="text-2xl" />
+                                <span className="text-lg font-medium">Go back</span>
+                            </button>
+                        </CardHeader>
+
+                        <CardContent className="space-y-6">
+                            <div className="space-y-2">
+                                <h1 className="text-3xl font-bold text-slate-800">Select Payment Method</h1>
+                                <p className="text-slate-600">Choose how you'd like to pay for your appointment.</p>
                             </div>
+
+                            <form action={handlePaymentSelection} className="space-y-6">
+                                <RadioGroup
+                                    className="space-y-4"
+                                    onValueChange={setPaymentMethod}
+                                    defaultValue="cash"
+                                >
+                                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-slate-400 hover:border-slate-500 transition-colors">
+                                        <RadioGroupItem
+                                            id="cash"
+                                            value="cash"
+                                            className="h-6 w-6 text-slate-900"
+                                        />
+                                        <Label htmlFor="cash" className="text-xl font-medium cursor-pointer w-full">
+                                            Pay with Cash
+                                        </Label>
+                                    </div>
+
+                                    <div className="flex items-center space-x-4 p-4 rounded-lg border border-slate-400 hover:border-slate-500 transition-colors">
+                                        <RadioGroupItem
+                                            id="card"
+                                            value="card"
+                                            className="h-6 w-6 text-slate-900"
+                                        />
+                                        <Label htmlFor="card" className="text-xl font-medium cursor-pointer w-full">
+                                            Pay Online
+                                        </Label>
+                                    </div>
+                                </RadioGroup>
+
+                                <div className="flex justify-end">
+                                    <SubmitButton
+                                        text="Confirm Booking"
+                                        className="w-fit bg-slate-700 hover:cursor-pointer transition-colors"
+                                    />
+                                </div>
+                            </form>
                         </CardContent>
-                        </form>
                     </Card>
                 </div>
             }

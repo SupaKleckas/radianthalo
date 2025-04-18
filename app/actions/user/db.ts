@@ -1,16 +1,33 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
-import { Role } from "@prisma/client";
+import { Role, Prisma } from "@prisma/client";
 
-export async function getUsers(currPage: number) {
+export async function getUsers(currPage: number, query?: string, role?: string) {
+    // Create base where clause with proper typing
+    const searchTerm: Prisma.UserWhereInput = {
+        AND: [
+            query
+                ? {
+                    OR: [
+                        { firstName: { contains: query, mode: 'insensitive' as const } },
+                        { lastName: { contains: query, mode: 'insensitive' as const } },
+                        { email: { contains: query, mode: 'insensitive' as const } },
+                    ]
+                }
+                : {},
+            role ? { role } : {},
+        ].filter(Boolean) as Prisma.UserWhereInput[]
+    };
     const result = await prisma.user
-        .paginate({})
+        .paginate({
+            where: searchTerm,
+        })
         .withPages({
             limit: 10,
             page: currPage,
             includePageCount: true
-        })
+        });
 
     return result;
 }
@@ -237,7 +254,7 @@ export async function updateUser(id: string, email: string, firstName: string, l
         await prisma.client.deleteMany({ where: { userId: id } });
         await prisma.employee.deleteMany({ where: { userId: id } });
     }
-    
+
     revalidatePath(`/dashboard/users/${id}`);
 }
 
