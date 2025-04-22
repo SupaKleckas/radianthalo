@@ -3,7 +3,7 @@ import { HiOutlineClock, HiOutlineCash } from "react-icons/hi";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ServiceCategory } from "@prisma/client";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 
 interface Params {
     isGuest: boolean,
@@ -14,15 +14,18 @@ interface Params {
         price: number;
         duration: number;
         category: ServiceCategory;
-    }[]>
+    }[]>,
 }
 
 export default function Services({ isGuest, serviceCategories, groupedServices }: Params) {
+    const pathname = usePathname()
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get('category');
     const chosenCategory = categoryParam && Object.values(ServiceCategory).includes(categoryParam as ServiceCategory) ? categoryParam as ServiceCategory : null;
 
     const currentServices = chosenCategory ? groupedServices.get(chosenCategory) : null;
+
+    console.log(pathname.split('/')[1])
 
     return (
         <div className={`${isGuest ? "m-10" : ""}`}>
@@ -56,7 +59,9 @@ export default function Services({ isGuest, serviceCategories, groupedServices }
                                             <HiOutlineClock className="mr-2 text-xl md:text-2xl" /> {service.duration} min
                                         </span>
                                         <span className="flex items-center ml-4">
-                                            <Button variant={"link"} className="text-base md:text-1xl hover:cursor-pointer hover:text-slate-600"> View reviews </Button>
+                                            <Link href={`${isGuest ? `/reviews?service=${service.title}` : `/${pathname.split('/')[1]}/reviews?service=${service.title}`}`}>
+                                                <Button variant={"link"} className="text-base md:text-1xl hover:cursor-pointer hover:text-slate-600"> View reviews </Button>
+                                            </Link>
                                         </span>
                                     </div>
                                 </li>

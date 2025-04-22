@@ -1,6 +1,6 @@
 "use client";
 import { IconType } from "react-icons";
-import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineHome, HiOutlineClipboardList } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineTruck, HiOutlineCalendar, HiOutlineHome, HiOutlineClipboardList, HiOutlinePencilAlt } from "react-icons/hi";
 import Link from "next/link"
 import React from "react";
 import { usePathname } from "next/navigation";
@@ -37,6 +37,12 @@ export const adminItems: navItem[] = [
         href: "/dashboard/users",
         icon: HiOutlineUser
     },
+    {
+        id: 4,
+        title: "Reviews",
+        href: "/dashboard/reviews",
+        icon: HiOutlinePencilAlt
+    },
 ]
 
 export const employeeItems: navItem[] = [
@@ -57,7 +63,13 @@ export const employeeItems: navItem[] = [
         title: "Availibility",
         href: "/staff-dashboard/availibility",
         icon: HiOutlineClipboardList
-    }
+    },
+    {
+        id: 3,
+        title: "Reviews",
+        href: "/staff-dashboard/reviews",
+        icon: HiOutlinePencilAlt
+    },
 ]
 
 export const clientItems: navItem[] = [
@@ -78,7 +90,13 @@ export const clientItems: navItem[] = [
         title: "All services",
         href: "/home/services",
         icon: HiOutlineTruck
-    }
+    },
+    {
+        id: 3,
+        title: "Reviews",
+        href: "/home/reviews",
+        icon: HiOutlinePencilAlt
+    },
 ]
 
 export const guestItems: navItem[] = [
@@ -91,7 +109,12 @@ export const guestItems: navItem[] = [
         id: 1,
         title: "Services",
         href: "/services"
-    }
+    },
+    {
+        id: 2,
+        title: "Reviews",
+        href: "/reviews"
+    },
 ]
 
 export function AdminDashboardItems() {

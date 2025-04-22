@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { groupByDate } from "@/app/lib/grouping/groupByDate";
 import Message from "@/app/components/Notifications/Message";
+import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
 
 interface SearchParamsProps {
     searchParams?: {
@@ -35,9 +36,12 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     before.setHours(before.getHours() - 10)
     */
 
+
+
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
             {params?.status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
+            {params?.status == "review-success" ? <Message type="success" message="Review submitted successfully!" /> : null}
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">
@@ -55,24 +59,35 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                             <div key={date} className="w-full mb-6">
                                 <h1 className="text-2xl w-full mb-4 border-b-2 border-slate-700 border-">{format(new Date(date), "MMMM do, yyyy")}</h1>
                                 <ul>
-                                    {appts.map(appointment =>
-                                        <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-[#7d94b6]">
-                                            <Link href={`/dashboard/service/${appointment.id}`} className="w-full p-4">
-                                                <div className="flex items-center flex-col lg:flex-row space-x-6 text-base">
-                                                    <span className="flex items-center lg:w-1/2"> <HiOutlineCalendar /> {appointment.title}</span>
-                                                    <span className="flex items-center justify-between lg:w-1/2">
-                                                        <div className="flex items-center">
-                                                            <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}
-                                                        </div>
-                                                        {appointment.endTime < new Date() ?
-                                                            <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
-                                                            :
-                                                            null}
-                                                    </span>
+                                    {appts.map(async (appointment) => {
+                                        const canReview = appointment.endTime < new Date() &&
+                                            await canLeaveReview(
+                                                userId,
+                                                appointment.employeeId,
+                                                appointment.serviceId
+                                            );
+
+                                        return (
+                                            <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-[#7d94b6]">
+                                                <div className="w-full p-4">
+                                                    <div className="flex items-center flex-col lg:flex-row space-x-6 text-base">
+                                                        <span className="flex items-center lg:w-1/2"> <HiOutlineCalendar /> {appointment.title}</span>
+                                                        <span className="flex items-center justify-between lg:w-1/2">
+                                                            <div className="flex items-center">
+                                                                <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}
+                                                            </div>
+                                                            {canReview ?
+                                                                <Link href={`/home/appointments/review?id=${appointment.id}`}>
+                                                                    <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
+                                                                </Link>
+                                                                :
+                                                                null}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </Link>
-                                        </li>
-                                    )}
+                                            </li>
+                                        )
+                                    })}
                                 </ul>
                             </div>
                         )}

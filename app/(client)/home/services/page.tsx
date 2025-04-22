@@ -8,6 +8,8 @@ export default async function Page() {
     const groupedServices = groupByCategory(await getAllServices());
 
     return (
-        <Services isGuest={false} serviceCategories={serviceCategories} groupedServices={groupedServices} />
+        <div className="m-8">
+            <Services isGuest={false} serviceCategories={serviceCategories} groupedServices={groupedServices} />
+        </div>
     )
 }

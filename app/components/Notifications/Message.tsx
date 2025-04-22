@@ -33,3 +33,24 @@ export default function Message({ type = "default", message }: Params) {
 
     return null;
 }
+
+export function MessageFunction({ type = "default", message }: Params) {
+    if (!message) return;
+
+    switch (type) {
+        case "success":
+            toast.success(message);
+            break;
+        case "error":
+            toast.error(message);
+            break;
+        case "warning":
+            toast.warning(message);
+            break;
+        case "info":
+            toast.info(message);
+            break;
+        default:
+            toast(message);
+    }
+}

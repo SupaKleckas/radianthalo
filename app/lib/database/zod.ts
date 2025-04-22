@@ -70,3 +70,10 @@ export const editServiceSchema = object({
     .min(0, "Price must be greater than 0.")
     .int("Duration must be an integer (minutes)."),
 });
+
+export const addReviewSchema = object({
+  rating: number({ required_error: "Please fill in this field." })
+    .min(1, "Please fill in this field."),
+  content: string()
+    .max(500, "Provide up to 500 symbols only."),
+});

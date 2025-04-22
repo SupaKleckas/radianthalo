@@ -78,7 +78,7 @@ export async function getEmployeeAppointmetns(currPage: number, employeeId: stri
 }
 
 export async function getAppointmentById(id: string) {
-    return await prisma.service.findUnique({
+    return await prisma.appointment.findUnique({
         where: {
             id: id
         }

@@ -4,7 +4,6 @@ import prisma from "../../lib/database/db";
 import { Role, Prisma } from "@prisma/client";
 
 export async function getUsers(currPage: number, query?: string, role?: string) {
-    // Create base where clause with proper typing
     const searchTerm: Prisma.UserWhereInput = {
         AND: [
             query

@@ -4,7 +4,11 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from 'use-debounce';
 
-export function Search() {
+interface Params {
+    placeholder?: string
+}
+
+export function Search({ placeholder }: Params) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
@@ -24,8 +28,8 @@ export function Search() {
         <div className="relative flex flex-1">
             <Input
                 id="search"
-                className="w-[20%] rounded pl-10 text-sm focus-visible:ring-[1px]"
-                placeholder={"Search..."}
+                className="w-full lg:w-[30%] rounded pl-10 text-sm focus-visible:ring-[1px]"
+                placeholder={`${placeholder ? placeholder : "Search..."}`}
                 onChange={(e) => {
                     handleSearch(e.target.value);
                 }}
