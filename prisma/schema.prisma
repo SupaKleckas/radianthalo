@@ -11,51 +11,80 @@ model User {
   id             String    @id @default(cuid())
   email          String    @unique
   hashedPassword String
-  firstName      String?
-  lastName       String?
+  firstName      String
+  lastName       String
   role           Role      @default(USER)
   client         Client?
   employee       Employee?
 }
 
 model Client {
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String        @id
-  reviews      Review[]
-  appointments Appointment[]
+  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String                 @id
+  reviews              Review[]
+  appointments         Appointment[]
+  TemporaryAppointment TemporaryAppointment[]
 }
 
 model Employee {
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String         @id
-  availibility Availability[]
-  appointments Appointment[]
-  services     Service[]
-  reviews      Review[]
+  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String                 @id
+  availibility         Availability[]
+  appointments         Appointment[]
+  services             Service[]
+  reviews              Review[]
+  TemporaryAppointment TemporaryAppointment[]
 }
 
 model Appointment {
-  id         String    @id @default(cuid())
-  title      String
-  startTime  DateTime
-  endTime    DateTime
+  id        String   @id @default(cuid())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+
   employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: SetNull)
   employeeId String?
-  client     Client?   @relation(fields: [clientId], references: [userId], onDelete: SetNull)
-  clientId   String?
-  service    Service?  @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-  serviceId  String?
+
+  client   Client? @relation(fields: [clientId], references: [userId], onDelete: SetNull)
+  clientId String?
+
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceId String?
+}
+
+model TemporaryAppointment {
+  id        String        @id @default(cuid())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  status    PaymentStatus @default(PENDING_PAYMENT)
+
+  employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: SetNull)
+  employeeId String?
+
+  client   Client? @relation(fields: [clientId], references: [userId], onDelete: SetNull)
+  clientId String?
+
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  serviceId String?
+
+  createdAt DateTime @default(now())
 }
 
 model Service {
-  id          String          @id @default(cuid())
-  title       String
-  price       Int
-  duration    Int
-  category    ServiceCategory @default(Hair)
-  employees   Employee[]
-  appointment Appointment[]
-  Review      Review[]
+  id       String          @id @default(cuid())
+  title    String
+  price    Int
+  duration Int
+  category ServiceCategory @default(Hair)
+
+  stripeProductId String? @unique
+  stripePriceId   String? @unique
+
+  employees            Employee[]
+  appointment          Appointment[]
+  Review               Review[]
+  TemporaryAppointment TemporaryAppointment[]
 }
 
 model Review {
@@ -105,4 +134,9 @@ enum Day {
   Friday
   Saturday
   Sunday
+}
+
+enum PaymentStatus {
+  PENDING_PAYMENT
+  SUCCESS
 }

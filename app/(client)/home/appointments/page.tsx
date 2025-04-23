@@ -36,8 +36,6 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     before.setHours(before.getHours() - 10)
     */
 
-
-
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
             {params?.status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}

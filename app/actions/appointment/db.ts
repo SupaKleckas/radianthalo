@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { Employee } from "@prisma/client";
+import { Employee, PaymentStatus } from "@prisma/client";
 
 export async function getAppointments(currPage: number, query?: string) {
     const searchTerm = query
@@ -119,4 +119,37 @@ export async function addAppointment(title: string, startTime: Date, endTime: Da
         }
     });
 
+}
+
+export async function addTemporaryAppointment(title: string, startTime: Date, endTime: Date, employeeId: string, clientId: string, serviceId: string) {
+    return await prisma.temporaryAppointment.create({
+        data: {
+            title: title,
+            startTime: startTime,
+            endTime: endTime,
+            status: PaymentStatus.PENDING_PAYMENT,
+            createdAt: new Date(),
+            employee: {
+                connect: {
+                    userId: employeeId
+                }
+            },
+            client: {
+                connect: {
+                    userId: clientId
+                }
+            },
+            service: {
+                connect: {
+                    id: serviceId
+                }
+            }
+        }
+    });
+}
+
+export async function deleteTemporaryAppointment(id: string) {
+    await prisma.temporaryAppointment.delete({
+        where: { id: id }
+    })
 }

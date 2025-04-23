@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
 import { ServiceCategory } from "@prisma/client";
+import { stripe } from "@/lib/stripe";
 
 export async function getAllServices() {
     return await prisma.service.findMany();
@@ -64,7 +65,7 @@ export async function getServiceById(id: string) {
 }
 
 export async function addService(title: string, price: number, duration: number, category: ServiceCategory, employeeIds: string[]) {
-    await prisma.service.create({
+    const service = await prisma.service.create({
         data: {
             title: title,
             price: price,
@@ -73,6 +74,22 @@ export async function addService(title: string, price: number, duration: number,
             employees: {
                 connect: employeeIds.map((userId) => ({ userId })),
             }
+        }
+    });
+
+    const stripeService = await stripe.products.create({
+        name: service.title,
+        default_price_data: {
+            currency: 'EUR',
+            unit_amount: Math.round(price * 100),
+        }
+    });
+
+    await prisma.service.update({
+        where: { id: service.id },
+        data: {
+            stripeProductId: stripeService.id,
+            stripePriceId: stripeService.default_price as string
         }
     });
 
@@ -85,7 +102,7 @@ export async function updateService(id: string, title: string, price: number, du
         include: { employees: true },
     });
 
-    if (!existingService) {
+    if (!existingService || !existingService.stripeProductId) {
         revalidatePath("/dashboard/services");
         return
     }
@@ -109,7 +126,7 @@ export async function updateService(id: string, title: string, price: number, du
         return
     }
 
-    await prisma.service.update({
+    const service = await prisma.service.update({
         where: {
             id: id
         },
@@ -124,10 +141,33 @@ export async function updateService(id: string, title: string, price: number, du
             }
         }
     })
+
+    const newPrice = await stripe.prices.create({
+        product: existingService.stripeProductId,
+        unit_amount: Math.round(price * 100),
+        currency: 'EUR',
+    });
+
+    await stripe.products.update(
+        service.id,
+        {
+            name: service.title,
+            default_price: newPrice.id,
+        }
+    );
+
     revalidatePath("/dashboard/services");
 }
 
 export async function deleteService(id: string): Promise<void> {
     await prisma.service.delete({ where: { id: id } });
+
+    await stripe.products.update(
+        id,
+        {
+            active: false
+        }
+    );
+
     revalidatePath("/dashboard/services");
 }

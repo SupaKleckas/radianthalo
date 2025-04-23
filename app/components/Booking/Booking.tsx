@@ -8,13 +8,13 @@ import { BookingCalendar } from "@/app/components/Booking/Calendar";
 import { TimeSelection } from "@/app/components/Booking/TimeSelection";
 import { EmployeeSelection } from "@/app/components/Booking/EmployeeSelectionAppointment";
 import { Service, Employee, User } from "@prisma/client";
-import { addAppointmentByBooking } from "@/app/actions/appointment/actions";
 import { SubmitButton } from "@/app/components/Buttons";
 import { getUnavailableWeekdays } from "@/app/lib/date/availability";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { handleBooking } from "@/app/actions/appointment/actions";
 
 export function Booking({ service, employees }: { service: Service, employees: (Employee & { user: User })[] }) {
     const now = new Date();
@@ -35,14 +35,12 @@ export function Booking({ service, employees }: { service: Service, employees: (
         }
     }, [selectedEmployee]);
 
-    const handlePaymentSelection = () => {
-        if (paymentMethod === "cash") {
-            if (selectedEmployee && time) {
-                addAppointmentByBooking(selectedEmployee, date, time, service, Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const handlePaymentSelection = async () => {
+        if (selectedEmployee && time) {
+            const res = await handleBooking(paymentMethod, selectedEmployee, date, time, service, Intl.DateTimeFormat().resolvedOptions().timeZone);
+            if (res?.redirectUrl) {
+                window.location.href = res.redirectUrl;
             }
-        } else if (paymentMethod === "card") {
-            // Not implemented yet
-            console.log("Card selected");
         }
     };
 
