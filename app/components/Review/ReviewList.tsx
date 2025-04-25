@@ -5,6 +5,8 @@ import { Search } from "@/app/components/Page/Search";
 import { Suspense } from "react";
 import { getReviews } from "@/app/actions/review/db";
 import { ReviewFilters } from "@/app/components/Review/ReviewFilters";
+import { getRatingCounts, getAverageRating } from "@/app/lib/analytics/getRatingAnalytics";
+import { RatingChart } from "@/app/components/Analytics/RatingChart";
 
 interface SearchParamsProps {
     searchParams?: {
@@ -21,7 +23,7 @@ interface SearchParamsProps {
 export default async function ReviewList({ searchParams, staffView }: SearchParamsProps) {
     const params = await searchParams;
 
-    const query = params?.query || '';
+    const query = params?.query || "";
     const service = params?.service || "";
     const category = params?.category || "";
     const employee = params?.employee || "";
@@ -31,6 +33,8 @@ export default async function ReviewList({ searchParams, staffView }: SearchPara
     const [reviews, meta] = await getReviews(currPage, query, service, category, client, employee);
     const pageAmount = meta?.pageCount;
 
+    const ratingsAnalytics = await getRatingCounts();
+    const average = await getAverageRating();
 
     return (
         <ScrollArea className="h-[80vh] w-full rounded-md pr-4">
@@ -39,10 +43,15 @@ export default async function ReviewList({ searchParams, staffView }: SearchPara
                     <div className="flex flex-col text-slate-800 gap-y-2 mb-4">
                         <h1 className="text-5xl">Reviews</h1>
                         <h1 className="text-base opacity-60">Browse all salon reviews.</h1>
-                    </div> : <div className="flex flex-col text-slate-800 gap-y-2">
+                    </div>
+                    :
+                    <div className="flex flex-col text-slate-800 gap-y-2">
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-800">Browse reviews!</h1>
                     </div>}
                 <div className='w-full'>
+                    <div className="flex justify-start mt-8 mb-8">
+                        <RatingChart reviews={ratingsAnalytics} average={average} />
+                    </div>
                     <div className='flex flex-col md:flex-row w-full justify-between gap-6 mb-4 mt-4'>
                         <Search placeholder="Search by content, service, or name..." />
                         <ReviewFilters />

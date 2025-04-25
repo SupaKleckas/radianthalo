@@ -1,0 +1,88 @@
+import { getAppointmentById } from "@/app/actions/appointment/db";
+import { redirect } from "next/navigation";
+import { format } from "date-fns"
+import { getUserById } from "@/app/actions/user/db";
+import { Separator } from "@/components/ui/separator"
+import { HiArrowSmLeft } from "react-icons/hi";
+import Link from "next/link";
+import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
+import { getUserIdAndRoleFromSession, getUserIdFromSession } from "@/app/lib/auth/session";
+import { Button } from "@/components/ui/button";
+
+
+interface AppointmentParams {
+    params: {
+        id: string;
+    };
+}
+
+export default async function Page({ params }: AppointmentParams) {
+    const { id } = await params;
+
+    const client = await getUserIdAndRoleFromSession();
+
+    if (!id || !client?.userId || client.role != "USER") {
+        redirect("/home/appointments");
+    }
+
+    const appt = await getAppointmentById(id);
+
+    if (!appt || !appt.employeeId) {
+        redirect("/home/appointments");
+    }
+
+    const employee = await getUserById(appt.employeeId);
+
+    const canReview = await canLeaveReview(client.userId, employee?.id, appt.serviceId)
+
+    return (
+        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center w-[60%]">
+                <Link className="mb-6" href="/home/appointments">
+                    <div className="flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">
+                        <HiArrowSmLeft className='text-4xl' />
+                        <p>Back to appointments</p>
+                    </div>
+                </Link>
+
+                <h1 className="flex justify-center text-2xl md:text-4xl text-slate-800 font-semibold mb-8">Thank you for booking with Radiant Halo Lounge!</h1>
+
+                <div className="flex flex-col justify-between lg:grid" style={{ gridTemplateColumns: '1fr 1px 1fr 1px 1fr' }}>
+                    <div className="flex flex-col gap-y-4 items-center min-h-[150px]">
+                        <p className="text-slate-500">Service</p>
+                        <p className="">{appt.title}</p>
+                    </div>
+
+                    <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
+                    <Separator orientation="horizontal" className="w-full h-[4px] bg-slate-500 lg:hidden block" />
+
+                    <div className="flex flex-col gap-y-4 items-center min-h-[150px] mt-6 md:mt-0">
+                        <p className="text-slate-500">Time</p>
+                        <p>{format(appt.startTime, "MMMM do, yyyy")} {format(appt.startTime, "HH:mm")} - {format(appt.endTime, "HH:mm")}</p>
+                    </div>
+
+                    <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
+                    <Separator orientation="horizontal" className="w-full h-[4px] bg-slate-500 lg:hidden block" />
+
+                    <div className="flex flex-col gap-y-4 items-center min-h-[150px] mt-6 md:mt-0">
+                        <p className="text-slate-500">Service provider</p>
+                        <p>{employee?.firstName + " " + employee?.lastName}</p>
+                    </div>
+                </div>
+                <div className="flex justify-end gap-x-4">
+                    {canReview && appt.endTime < new Date() ?
+                        <Link href={`/home/appointments/review?id=${appt.id}`}>
+                            <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
+                        </Link>
+                        :
+                        // TODO: implement
+                        <Button>
+                            Cancel Appointment
+                        </Button>}
+
+                </div>
+
+            </div>
+        </div>
+    )
+}

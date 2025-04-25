@@ -1,7 +1,7 @@
 import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
 import Link from "next/link";
 import { format } from "date-fns-tz"
-import { getClientAppointmetns } from "@/app/actions/appointment/db";
+import { getClientAppointments } from "@/app/actions/appointment/db";
 import { PaginationComponent } from "@/app/components/Page/Pagination";
 import { Appointment } from "@prisma/client";
 import { getUserIdFromSession } from "@/app/lib/auth/session";
@@ -26,7 +26,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
 
     const params = await searchParams;
     const currPage = Number(params?.page) || 1;
-    const [appointments, meta] = await getClientAppointmetns(currPage, userId);
+    const [appointments, meta] = await getClientAppointments(currPage, userId);
     const pageAmount = meta?.pageCount;
     const dateGroups = groupByDate(appointments);
 
@@ -74,12 +74,17 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                                                             <div className="flex items-center">
                                                                 <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}
                                                             </div>
-                                                            {canReview ?
-                                                                <Link href={`/home/appointments/review?id=${appointment.id}`}>
-                                                                    <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
+                                                            <div>
+                                                                {canReview ?
+                                                                    <Link href={`/home/appointments/review?id=${appointment.id}`}>
+                                                                        <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
+                                                                    </Link>
+                                                                    :
+                                                                    null}
+                                                                <Link href={`/home/appointments/${appointment.id}`}>
+                                                                    <Button variant={"ghost"} className="text-1xl hover:cursor-pointer "> View appointment </Button>
                                                                 </Link>
-                                                                :
-                                                                null}
+                                                            </div>
                                                         </span>
                                                     </div>
                                                 </div>

@@ -65,12 +65,12 @@ export async function addTemporaryAppointmentByBooking(employee: Employee & { us
         return;
     }
 
-    const title = `${service.title} on ${format(dateUtc, "MMMM do, yyyy")} at ${time}`;
+    // const title = `${service.title} on ${format(dateUtc, "MMMM do, yyyy")} at ${time}`;
 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
-    return await addTemporaryAppointment(title, startTime, endTime, employee.userId, client.userId, service.id);
+    return await addTemporaryAppointment(service.title, startTime, endTime, employee.userId, client.userId, service.id);
 }
 
 function addTimeToDate(date: Date, time: string): Date {

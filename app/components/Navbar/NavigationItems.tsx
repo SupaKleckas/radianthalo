@@ -60,8 +60,8 @@ export const employeeItems: navItem[] = [
     },
     {
         id: 2,
-        title: "Availibility",
-        href: "/staff-dashboard/availibility",
+        title: "Availability",
+        href: "/staff-dashboard/availability",
         icon: HiOutlineClipboardList
     },
     {

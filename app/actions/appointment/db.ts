@@ -27,7 +27,7 @@ export async function getAppointments(currPage: number, query?: string) {
     return result;
 }
 
-export async function getClientAppointmetns(currPage: number, clientId: string) {
+export async function getClientAppointments(currPage: number, clientId: string) {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
@@ -52,29 +52,37 @@ export async function getClientAppointmetns(currPage: number, clientId: string) 
     return result;
 }
 
-export async function getEmployeeAppointmetns(currPage: number, employeeId: string) {
-    const oneDayAgo = new Date();
-    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+export async function getEmployeeAppointments(employeeId: string) {
+    // const oneDayAgo = new Date();
+    // oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
-    const result = await prisma.appointment
-        .paginate({
-            where: {
-                employeeId: employeeId,
-                startTime: {
-                    gte: oneDayAgo
-                }
-            },
-            orderBy: {
-                startTime: "asc"
-            }
-        })
-        .withPages({
-            limit: 10,
-            page: currPage,
-            includePageCount: true
-        })
+    // const result = await prisma.appointment
+    //     .paginate({
+    //         where: {
+    //             employeeId: employeeId,
+    //             startTime: {
+    //                 gte: oneDayAgo
+    //             }
+    //         },
+    //         orderBy: {
+    //             startTime: "asc"
+    //         }
+    //     })
+    //     .withPages({
+    //         limit: 10,
+    //         page: currPage,
+    //         includePageCount: true
+    //     })
 
-    return result;
+    // return result;
+
+    const result = await prisma.appointment.findMany({
+        where: {
+            employeeId: employeeId,
+        }
+    })
+
+    return result
 }
 
 export async function getAppointmentById(id: string) {
