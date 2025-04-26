@@ -6,18 +6,22 @@ import { Separator } from "@/components/ui/separator"
 import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
 import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
-import { getUserIdAndRoleFromSession, getUserIdFromSession } from "@/app/lib/auth/session";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button";
+import Message from "@/app/components/Notifications/Message";
 
-
-interface AppointmentParams {
+interface SearchParamsProps {
     params: {
-        id: string;
+        id: string,
+    };
+    searchParams?: {
+        status?: string
     };
 }
 
-export default async function Page({ params }: AppointmentParams) {
+export default async function Page({ params, searchParams }: SearchParamsProps) {
     const { id } = await params;
+    const status = await searchParams;
 
     const client = await getUserIdAndRoleFromSession();
 
@@ -34,9 +38,11 @@ export default async function Page({ params }: AppointmentParams) {
     const employee = await getUserById(appt.employeeId);
 
     const canReview = await canLeaveReview(client.userId, employee?.id, appt.serviceId)
+    const canReschedule = appt.endTime >= new Date() && new Date(appt.startTime).getTime() - new Date().getTime() > 24 * 60 * 60 * 1000;
 
     return (
         <div className="flex flex-col justify-center items-center">
+            {status?.status == "reschedule-success" ? <Message type="success" message="Appointment rescheduled succesfully!" /> : null}
             <div className="flex flex-col justify-center w-[60%]">
                 <Link className="mb-6" href="/home/appointments">
                     <div className="flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">
@@ -70,19 +76,22 @@ export default async function Page({ params }: AppointmentParams) {
                     </div>
                 </div>
                 <div className="flex justify-end gap-x-4">
-                    {canReview && appt.endTime < new Date() ?
+                    {appt.endTime < new Date() && canReview ?
                         <Link href={`/home/appointments/review?id=${appt.id}`}>
                             <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
                         </Link>
                         :
-                        // TODO: implement
-                        <Button>
-                            Cancel Appointment
-                        </Button>}
-
+                        null
+                    }
+                    {canReschedule ?
+                        <Link href={`/home/appointments/reschedule?id=${appt.id}`}>
+                            <Button className="bg-slate-700 hover:cursor-pointer">Reschedule Appointment</Button>
+                        </Link>
+                        :
+                        null
+                    }
                 </div>
-
             </div>
-        </div>
+        </div >
     )
 }

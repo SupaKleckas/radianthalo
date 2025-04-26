@@ -7,8 +7,8 @@ import { Separator } from "@/components/ui/separator"
 import { BookingCalendar } from "@/app/components/Booking/Calendar";
 import { TimeSelection } from "@/app/components/Booking/TimeSelection";
 import { EmployeeSelection } from "@/app/components/Booking/EmployeeSelectionAppointment";
-import { Service, Employee, User } from "@prisma/client";
-import { SubmitButton } from "@/app/components/Buttons";
+import { Service, User } from "@prisma/client";
+import { SubmitButton } from "@/app/components/UI/Buttons";
 import { getUnavailableWeekdays } from "@/app/lib/date/availability";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { handleBooking } from "@/app/actions/appointment/actions";
 
-export function Booking({ service, employees }: { service: Service, employees: (Employee & { user: User })[] }) {
+export function Booking({ service, employees }: { service: Service, employees: User[] }) {
     const now = new Date();
     const [selectedEmployee, setSelectedEmployee] = useState(employees.length > 0 ? employees[0] : null);
     const [date, setDate] = useState<Date>(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
@@ -28,7 +28,7 @@ export function Booking({ service, employees }: { service: Service, employees: (
     useEffect(() => {
         if (selectedEmployee) {
             const fetchAvailability = async () => {
-                const unavailableWeekdays = await getUnavailableWeekdays(selectedEmployee.userId);
+                const unavailableWeekdays = await getUnavailableWeekdays(selectedEmployee.id);
                 setUnavailable(unavailableWeekdays || []);
             };
             fetchAvailability();
@@ -75,7 +75,8 @@ export function Booking({ service, employees }: { service: Service, employees: (
                             <Separator orientation="horizontal" className="w-f-ull h-[4px] bg-slate-500 lg:hidden block" />
                             <div className="flex-1 mt-5 mb-5 lg:mt-0">
                                 {selectedEmployee && (
-                                    <TimeSelection employee={selectedEmployee} selectedDate={date} selectedTime={time} setSelectedTime={setTime} unavailable={unavailable.includes(format(date, "EEEE"))} />
+                                    <TimeSelection employee={selectedEmployee} selectedDate={date} selectedTime={time} setSelectedTime={setTime}
+                                        unavailable={unavailable.includes(format(date, "EEEE"))} />
                                 )}
                             </div>
                             <div className="flex justify-end col-start-5">

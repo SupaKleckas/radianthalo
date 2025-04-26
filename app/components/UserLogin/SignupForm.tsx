@@ -2,7 +2,7 @@
 import React, { useState, useActionState } from 'react';
 import { HiX } from "react-icons/hi";
 import { signup } from "@/app/actions/user/signup/actions";
-import { SubmitButton } from '../Buttons';
+import { SubmitButton } from '../UI/Buttons';
 
 interface SignupFormProps {
   onClose: () => void;

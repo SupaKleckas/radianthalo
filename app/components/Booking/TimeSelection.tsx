@@ -1,16 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Employee, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { format } from "date-fns"
 import { getAvailableTimeSlots } from "@/app/actions/appointment/actions";
 import { Button } from "@/components/ui/button";
 
 interface TimeParams {
-    employee: Employee & { user: User };
+    employee: User;
     selectedDate: Date;
     selectedTime: string | null;
     setSelectedTime: (value: string | null) => void;
-    unavailable: boolean
+    unavailable: boolean,
 }
 
 export function TimeSelection({ employee, selectedDate, selectedTime, setSelectedTime, unavailable }: TimeParams) {
@@ -21,7 +21,7 @@ export function TimeSelection({ employee, selectedDate, selectedTime, setSelecte
         if (!employee || !selectedDate) return;
 
         setLoading(true);
-        getAvailableTimeSlots({ userId: employee.userId }, selectedDate, Intl.DateTimeFormat().resolvedOptions().timeZone)
+        getAvailableTimeSlots({ userId: employee.id }, selectedDate, Intl.DateTimeFormat().resolvedOptions().timeZone)
             .then((times) => {
                 if (unavailable) {
                     setAvailableTimes([]);

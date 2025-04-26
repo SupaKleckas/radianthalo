@@ -104,7 +104,7 @@ export async function getAppointmentForTimeSlots(employee: Employee, startOfDay:
 }
 
 export async function addAppointment(title: string, startTime: Date, endTime: Date, employeeId: string, clientId: string, serviceId: string) {
-    await prisma.appointment.create({
+    return await prisma.appointment.create({
         data: {
             title: title,
             startTime: startTime,
@@ -159,5 +159,24 @@ export async function addTemporaryAppointment(title: string, startTime: Date, en
 export async function deleteTemporaryAppointment(id: string) {
     await prisma.temporaryAppointment.delete({
         where: { id: id }
+    })
+}
+
+export async function deleteAppointment(id: string) {
+    await prisma.appointment.delete({
+        where: { id: id }
+    })
+}
+
+export async function updateAppointment(id: string, startTime: Date, endTime: Date, employeeId: string) {
+    return await prisma.appointment.update({
+        where: {
+            id: id
+        },
+        data: {
+            startTime: startTime,
+            endTime: endTime,
+            employeeId: employeeId,
+        }
     })
 }

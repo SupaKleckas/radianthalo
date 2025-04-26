@@ -8,20 +8,20 @@ export async function GET(request: Request) {
     const sessionId = searchParams.get('session_id');
 
     if (!sessionId) {
-        return NextResponse.redirect('/home/services?status=failed');
+        return NextResponse.redirect('/home/services');
     }
 
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId)
 
         if (session.payment_status !== 'paid') {
-            return NextResponse.redirect('/home/services?status=failed');
+            return NextResponse.redirect('/home/services');
         }
 
         const tempAppointmentId = session.metadata?.tempAppointmentId;
 
         if (!tempAppointmentId) {
-            return NextResponse.redirect('/home/services?status=failed');
+            return NextResponse.redirect('/home/services');
         }
 
         const tempAppointment = await prisma.temporaryAppointment.findUnique({
@@ -29,16 +29,16 @@ export async function GET(request: Request) {
         })
 
         if (!tempAppointment || !tempAppointment.clientId || !tempAppointment.employeeId || !tempAppointment.serviceId) {
-            return NextResponse.redirect('/home/services?status=failed');
+            return NextResponse.redirect('/home/services');
         }
 
-        addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId);
+        const appt = await addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId);
 
         deleteTemporaryAppointment(tempAppointment.id);
 
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments?status=success`);
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments/${appt.id}`);
 
     } catch (error) {
-        return NextResponse.redirect('/home/services?status=failed');
+        return NextResponse.redirect('/home/services');
     }
 }

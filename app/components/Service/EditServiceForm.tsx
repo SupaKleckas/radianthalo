@@ -3,7 +3,7 @@ import { useActionState, useState } from "react";
 import { editServiceByForm } from "@/app/actions/service/actions";
 import { User, ServiceCategory } from "@prisma/client";
 import { Button } from "@/components/ui/button"
-import { MultiSelect } from "@/app/components/MultiSelect";
+import { MultiSelect } from "@/app/components/UI/MultiSelect";
 import { Label } from "@/components/ui/label";
 import {
     Select,

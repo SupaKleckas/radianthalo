@@ -30,16 +30,11 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     const pageAmount = meta?.pageCount;
     const dateGroups = groupByDate(appointments);
 
-    /* left for testing purposes later
-    const before = new Date();
-    before.setDate(before.getDate() + 1)
-    before.setHours(before.getHours() - 10)
-    */
-
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
             {params?.status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
             {params?.status == "review-success" ? <Message type="success" message="Review submitted successfully!" /> : null}
+            {params?.status == "cancel-success" ? <Message type="success" message="You successfully cancelled the appointment." /> : null}
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">

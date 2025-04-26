@@ -4,9 +4,9 @@ import { Employee, User } from "@prisma/client"
 import { HiUser } from "react-icons/hi";
 
 interface SelectionParams {
-    selectionContent: (Employee & { user: User })[];
-    selectedValue: (Employee & { user: User }) | null;
-    setSelectedValue: (value: (Employee & { user: User })) => void;
+    selectionContent: User[];
+    selectedValue: User | null;
+    setSelectedValue: (value: User) => void;
 }
 
 export function EmployeeSelection({ selectionContent, selectedValue, setSelectedValue }: SelectionParams) {
@@ -14,9 +14,9 @@ export function EmployeeSelection({ selectionContent, selectedValue, setSelected
         <div className="flex flex-row items-center gap-5">
             <HiUser className="text-3xl" />
             <Select
-                value={selectedValue ? selectedValue.userId : ""}
-                onValueChange={(userId) => {
-                    const selectedEmployee = selectionContent.find((employee) => employee.userId === userId);
+                value={selectedValue ? selectedValue.id : ""}
+                onValueChange={(id) => {
+                    const selectedEmployee = selectionContent.find((employee) => employee.id === id);
                     if (selectedEmployee) {
                         setSelectedValue(selectedEmployee);
                     }
@@ -27,8 +27,8 @@ export function EmployeeSelection({ selectionContent, selectedValue, setSelected
                 </SelectTrigger>
                 <SelectContent>
                     {selectionContent.map((employee) => (
-                        <SelectItem key={employee.userId} value={employee.userId}>
-                            {employee.user.firstName} {employee.user.lastName}
+                        <SelectItem key={employee.id} value={employee.id}>
+                            {employee.firstName} {employee.lastName}
                         </SelectItem>
                     ))}
                 </SelectContent>

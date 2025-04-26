@@ -50,16 +50,15 @@ export async function getEmployeeById(id: string) {
 }
 
 export async function getEmployeesByService(serviceId: string) {
-    return await prisma.employee.findMany({
+    return await prisma.user.findMany({
         where: {
-            services: {
-                some: {
-                    id: serviceId
+            employee: {
+                services: {
+                    some: {
+                        id: serviceId
+                    }
                 }
             }
-        },
-        include: {
-            user: true
         }
     })
 }

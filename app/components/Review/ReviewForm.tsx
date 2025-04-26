@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Appointment, Service, User } from "@prisma/client";
+import { Service, User } from "@prisma/client";
 import { useState } from "react";
 import { StarRating } from "./StarRating";
 import { MessageFunction } from "@/app/components/Notifications/Message"
@@ -12,13 +12,12 @@ import { addReviewAction } from "@/app/actions/review/actions";
 import { HiUser } from "react-icons/hi";
 
 interface Params {
-    apt: Appointment,
     service: Service,
     employee: User,
     clientId: string
 }
 
-export default function ReviewForm({ apt, service, employee, clientId }: Params) {
+export default function ReviewForm({ service, employee, clientId }: Params) {
     const [rating, setRating] = useState(0);
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
