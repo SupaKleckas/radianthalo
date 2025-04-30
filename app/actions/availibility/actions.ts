@@ -3,7 +3,7 @@ import { getAvailability, updateAvailability } from "@/app/actions/availibility/
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { logout } from "@/app/actions/user/login/actions";
 import { addTimeOff } from "@/app/actions/availibility/db";
-import adjustToUTC from "@/app/lib/date/adjustTimes";
+import { adjustToUTC } from "@/app/lib/date/adjustTimes";
 import { getUserById } from "../user/db";
 import { getEmployeeAppointmentsInInterval } from "../appointment/db";
 import { sendTimeOffAnnounement } from "@/app/lib/email/sendTimeOffAnnoucement";
