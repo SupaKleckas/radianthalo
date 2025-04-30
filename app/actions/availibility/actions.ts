@@ -2,6 +2,12 @@
 import { getAvailability, updateAvailability } from "@/app/actions/availibility/db";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { logout } from "@/app/actions/user/login/actions";
+import { addTimeOff } from "@/app/actions/availibility/db";
+import adjustToUTC from "@/app/lib/date/adjustTimes";
+import { getUserById } from "../user/db";
+import { getEmployeeAppointmentsInInterval } from "../appointment/db";
+import { sendTimeOffAnnounement } from "@/app/lib/email/sendTimeOffAnnoucement";
+import { redirect } from "next/navigation";
 
 export async function getEmployeeAvailability() {
     const user = await getUserIdAndRoleFromSession();
@@ -35,4 +41,30 @@ export async function updateAvailabilityAction(formData: FormData) {
         });
 
     await updateAvailability({ availabilityData });
+}
+
+export async function addTemporaryLeave(fromDate: Date, toDate: Date, timeZone: string) {
+    const userInfo = await getUserIdAndRoleFromSession();
+
+    if (!userInfo || userInfo.role != "EMPLOYEE") {
+        logout();
+        return;
+    }
+
+    const user = await getUserById(userInfo.userId);
+
+    if (!user) {
+        return;
+    }
+
+    fromDate = adjustToUTC(fromDate, timeZone);
+    toDate = adjustToUTC(toDate, timeZone);
+
+    await addTimeOff(fromDate, toDate, user);
+
+    const apptsToEmail = await getEmployeeAppointmentsInInterval(fromDate, toDate, user.id);
+    await sendTimeOffAnnounement(apptsToEmail, user);
+
+
+    redirect("/staff-dashboard/availability?status=success");
 }

@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/app/lib/database/db";
 import { revalidatePath } from "next/cache";
+import { User } from "@prisma/client";
 
 interface Props {
     availabilityData: {
@@ -40,4 +41,14 @@ export async function updateAvailability({ availabilityData }: Props) {
         }))
     );
     revalidatePath("/staff-dashboard/availability");
+}
+
+export async function addTimeOff(fromDate: Date, toDate: Date, user: User) {
+    await prisma.timeOff.create({
+        data: {
+            startDate: fromDate,
+            endDate: toDate,
+            employeeId: user.id
+        }
+    })
 }

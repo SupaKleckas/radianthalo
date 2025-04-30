@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { Employee, PaymentStatus } from "@prisma/client";
+import { Employee } from "@prisma/client";
 
 export async function getAppointments(currPage: number, query?: string) {
     const searchTerm = query
@@ -53,29 +53,6 @@ export async function getClientAppointments(currPage: number, clientId: string) 
 }
 
 export async function getEmployeeAppointments(employeeId: string) {
-    // const oneDayAgo = new Date();
-    // oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-
-    // const result = await prisma.appointment
-    //     .paginate({
-    //         where: {
-    //             employeeId: employeeId,
-    //             startTime: {
-    //                 gte: oneDayAgo
-    //             }
-    //         },
-    //         orderBy: {
-    //             startTime: "asc"
-    //         }
-    //     })
-    //     .withPages({
-    //         limit: 10,
-    //         page: currPage,
-    //         includePageCount: true
-    //     })
-
-    // return result;
-
     const result = await prisma.appointment.findMany({
         where: {
             employeeId: employeeId,
@@ -135,7 +112,7 @@ export async function addTemporaryAppointment(title: string, startTime: Date, en
             title: title,
             startTime: startTime,
             endTime: endTime,
-            status: PaymentStatus.PENDING_PAYMENT,
+            status: "PENDING_PAYMENT",
             createdAt: new Date(),
             employee: {
                 connect: {
@@ -179,4 +156,31 @@ export async function updateAppointment(id: string, startTime: Date, endTime: Da
             employeeId: employeeId,
         }
     })
+}
+
+export async function getEmployeeAppointmentsInInterval(fromDate: Date, toDate: Date, employeeId: string) {
+    return await prisma.appointment.findMany({
+        where: {
+            employeeId: employeeId,
+            startTime: {
+                gte: fromDate,
+                lte: toDate
+            },
+        },
+        include: {
+            client: {
+                include: {
+                    user: {
+                        select: {
+                            email: true,
+                            firstName: true,
+                            lastName: true,
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+
 }

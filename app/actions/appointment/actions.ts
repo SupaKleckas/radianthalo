@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { sendAppointmentSuccessEmail } from "@/app/lib/email/sendAppointmentSuccessEmail";
 import { sendRescheduleSuccessEmail } from "@/app/lib/email/sendRescheduleSuccessEmail";
 import { sendCancelSuccessEmail } from "@/app/lib/email/sendCancelSuccessEmail";
+import { adjustToUTC, addTimeToDate } from "@/app/lib/date/adjustTimes";
 
 export async function addAppointmentByBooking(employee: User, date: Date, time: string, service: Service, timeZone: string) {
     if (await getEmployeeById(employee.id) == null) {
@@ -34,12 +35,10 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
         return;
     }
 
-    const title = `${service.title} on ${format(dateUtc, "MMMM do, yyyy")} at ${time}`;
-
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
-    const appt = await addAppointment(title, startTime, endTime, employee.id, user.id, service.id);
+    const appt = await addAppointment(service.title, startTime, endTime, employee.id, user.id, service.id);
 
     try {
         await sendAppointmentSuccessEmail(user, appt);
@@ -56,8 +55,7 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
         return;
     }
 
-    const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
-    const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
+    const dateUtc = adjustToUTC(date, timeZone)
 
     if (dateUtc <= new Date()) {
         return;
@@ -79,14 +77,9 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
     return await addTemporaryAppointment(service.title, startTime, endTime, employee.id, client.userId, service.id);
 }
 
-function addTimeToDate(date: Date, time: string): Date {
-    const [hours, minutes] = time.split(":").map(Number);
-    date.setHours(hours, minutes, 0, 0);
-    return date;
-}
+
 
 export async function getAvailableTimeSlots(employee: Employee, date: Date, timeZone: string) {
-    //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 

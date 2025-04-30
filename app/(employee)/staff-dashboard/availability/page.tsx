@@ -5,15 +5,18 @@ import { times } from "@/app/lib/date/times";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectTrigger, SelectValue, SelectItem } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
+import TemporaryLeaveForm from "@/app/components/Availability/TemporaryLeaveForm";
+import Message from "@/app/components/Notifications/Message";
 
-export default async function Page() {
+interface SearchParamsProps {
+    searchParams?: {
+        status?: string
+    };
+}
+
+export default async function Page({ searchParams }: SearchParamsProps) {
     const data = await getEmployeeAvailability();
+    const params = await searchParams;
 
     return (
         <div>
@@ -21,7 +24,7 @@ export default async function Page() {
                 <h1 className="text-5xl">Availability</h1>
                 <h1 className="text-base opacity-60">Handle your availability here!</h1>
             </div>
-
+            {params?.status == "success" ? <Message type="success" message="Time off submitted successfully!" /> : null}
             <div className="flex flex-col gap-y-4">
                 <Card className="bg-slate-300">
                     <form action={updateAvailabilityAction}>
@@ -31,7 +34,7 @@ export default async function Page() {
                                     <h1> Something went wrong! Try again later... </h1>
                                     :
                                     data.map((availability) => (
-                                        <div key={availability.id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-center gap-4">
+                                        <div key={availability.id} className="grid grid-cols-1 lg:grid-cols-3 items-center gap-4">
                                             <input type="hidden" name={`id-${availability.id}`} value={availability.id} />
                                             <div className="flex items-center gap-x-4 text-3xl text-slate-700">
                                                 <Switch name={`isActive-${availability.id}`} defaultChecked={availability.isActive} className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-slate-200" />
@@ -76,22 +79,7 @@ export default async function Page() {
                         </CardFooter>
                     </form>
                 </Card>
-
-                <Card className="bg-slate-300">
-                    <CardHeader>
-                        <h1 className="text-slate-800 text-3xl">Temporary leave</h1>
-
-                    </CardHeader>
-                    <form>
-                        <CardContent className="flex flex-row gap-x-4">
-                            <p>datepicker1</p>
-                            <p>datepicker2</p>
-                        </CardContent>
-                        <CardFooter className="flex justify-end mt-4">
-                            <SubmitButton text="Submit" />
-                        </CardFooter>
-                    </form>
-                </Card>
+                <TemporaryLeaveForm />
             </div>
         </div>
     );

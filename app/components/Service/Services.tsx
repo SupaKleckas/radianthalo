@@ -25,8 +25,6 @@ export default function Services({ isGuest, serviceCategories, groupedServices }
 
     const currentServices = chosenCategory ? groupedServices.get(chosenCategory) : null;
 
-    console.log(pathname.split('/')[1])
-
     return (
         <div className={`${isGuest ? "m-10" : ""}`}>
             <h1 className="mb-6 text-5xl md:text-7xl font-bold text-slate-800">We offer treatments for...</h1>

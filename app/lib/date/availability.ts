@@ -64,3 +64,25 @@ export async function getUnavailableWeekdays(employeeId: string | null) {
 
     return result
 }
+
+export async function getEmployeeTimeOff(employeeId: string) {
+    if (!employeeId) return [];
+
+    const timeOffData = await prisma.timeOff.findMany({
+        where: {
+            employeeId: employeeId,
+        }
+    });
+
+    const dates: string[] = [];
+    for (const timeOff of timeOffData) {
+        let current = new Date(timeOff.startDate);
+        const end = new Date(timeOff.endDate);
+
+        while (current <= end) {
+            dates.push(current.toISOString().split('T')[0]);
+            current.setDate(current.getDate() + 1);
+        }
+    }
+    return dates;
+}

@@ -18,9 +18,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth < 1024);
             if (window.innerWidth >= 1024) {
-              setMenuOpen(false);
+                setMenuOpen(false);
             }
-          };
+        };
 
         handleResize();
 

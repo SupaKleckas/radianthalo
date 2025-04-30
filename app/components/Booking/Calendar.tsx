@@ -6,10 +6,11 @@ import { format } from "date-fns";
 interface CalendarParams {
     selectedDate: Date
     setSelectedDate: (value: Date) => void
-    unavailable: string[]
+    unavailableWeekday: string[],
+    unavailableDay: string[]
 }
 
-export function BookingCalendar({ selectedDate, setSelectedDate, unavailable }: CalendarParams) {
+export function BookingCalendar({ selectedDate, setSelectedDate, unavailableWeekday, unavailableDay }: CalendarParams) {
     const now = new Date();
     const maxSelectable = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate());
 
@@ -27,7 +28,7 @@ export function BookingCalendar({ selectedDate, setSelectedDate, unavailable }: 
                 disabled={(date) => {
                     const isPast = date.getTime() <= now.getTime();
                     const isTooFar = date > maxSelectable;
-                    const isUnavailable = unavailable.includes(format(date, "EEEE"))
+                    const isUnavailable = unavailableWeekday.includes(format(date, "EEEE")) || unavailableDay.includes(format(date, "yyyy-MM-dd"))
                     return isPast || isTooFar || isUnavailable;
                 }}
             />

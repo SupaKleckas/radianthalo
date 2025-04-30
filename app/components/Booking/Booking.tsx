@@ -9,7 +9,7 @@ import { TimeSelection } from "@/app/components/Booking/TimeSelection";
 import { EmployeeSelection } from "@/app/components/Booking/EmployeeSelectionAppointment";
 import { Service, User } from "@prisma/client";
 import { SubmitButton } from "@/app/components/UI/Buttons";
-import { getUnavailableWeekdays } from "@/app/lib/date/availability";
+import { getEmployeeTimeOff, getUnavailableWeekdays } from "@/app/lib/date/availability";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label"
@@ -21,7 +21,8 @@ export function Booking({ service, employees }: { service: Service, employees: U
     const [selectedEmployee, setSelectedEmployee] = useState(employees.length > 0 ? employees[0] : null);
     const [date, setDate] = useState<Date>(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
     const [time, setTime] = useState<string | null>(null);
-    const [unavailable, setUnavailable] = useState<string[]>([]);
+    const [unavailableWeekday, setUnavailableWeekday] = useState<string[]>([]);
+    const [unavailableDay, setUnavailableDay] = useState<string[]>([]);
     const [next, setNext] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("cash");
 
@@ -29,7 +30,9 @@ export function Booking({ service, employees }: { service: Service, employees: U
         if (selectedEmployee) {
             const fetchAvailability = async () => {
                 const unavailableWeekdays = await getUnavailableWeekdays(selectedEmployee.id);
-                setUnavailable(unavailableWeekdays || []);
+                const unavailableDays = await getEmployeeTimeOff(selectedEmployee.id);
+                setUnavailableWeekday(unavailableWeekdays || []);
+                setUnavailableDay(unavailableDays || []);
             };
             fetchAvailability();
         }
@@ -69,14 +72,14 @@ export function Booking({ service, employees }: { service: Service, employees: U
                             <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
                             <Separator orientation="horizontal" className="w-full h-[4px] bg-slate-500 lg:hidden block" />
                             <div className="flex-1 mt-5 mb-5 lg:mt-0">
-                                <BookingCalendar selectedDate={date} setSelectedDate={setDate} unavailable={unavailable} />
+                                <BookingCalendar selectedDate={date} setSelectedDate={setDate} unavailableWeekday={unavailableWeekday} unavailableDay={unavailableDay} />
                             </div>
                             <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
                             <Separator orientation="horizontal" className="w-f-ull h-[4px] bg-slate-500 lg:hidden block" />
                             <div className="flex-1 mt-5 mb-5 lg:mt-0">
                                 {selectedEmployee && (
                                     <TimeSelection employee={selectedEmployee} selectedDate={date} selectedTime={time} setSelectedTime={setTime}
-                                        unavailable={unavailable.includes(format(date, "EEEE"))} />
+                                        unavailable={unavailableWeekday.includes(format(date, "EEEE")) || unavailableDay.includes(format(date, "yyyy-MM-dd"))} />
                                 )}
                             </div>
                             <div className="flex justify-end col-start-5">
