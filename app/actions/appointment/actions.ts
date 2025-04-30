@@ -1,19 +1,21 @@
 "use server";
 import { Employee, User, Service, Appointment } from "@prisma/client";
-import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment } from "@/app/actions/appointment/db";
-import { getEmployeeById, getClientById } from "@/app/actions/user/db";
-import { getUserIdFromSession } from "@/app/lib/auth/session"
+import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById } from "@/app/actions/appointment/db";
+import { getEmployeeById, getClientById, getUserById } from "@/app/actions/user/db";
+import { getUserIdAndRoleFromSession, getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
 import { getWorkingHoursFromAvailibility } from "@/app/lib/date/availability"
 import { goToPayment } from "@/app/lib/payment/goToPayment";
 import { redirect } from "next/navigation";
+import { sendAppointmentSuccessEmail } from "@/app/lib/email/sendAppointmentSuccessEmail";
+import { sendRescheduleSuccessEmail } from "@/app/lib/email/sendRescheduleSuccessEmail";
+import { sendCancelSuccessEmail } from "@/app/lib/email/sendCancelSuccessEmail";
 
 export async function addAppointmentByBooking(employee: User, date: Date, time: string, service: Service, timeZone: string) {
     if (await getEmployeeById(employee.id) == null) {
         return;
     }
 
-    //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
@@ -21,13 +23,14 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
         return;
     }
 
-    const userId = await getUserIdFromSession();
-    if (!userId) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
         return;
     }
 
-    const client = await getClientById(userId);
-    if (!client) {
+    const user = await getUserById(userInfo.userId);
+
+    if (!user) {
         return;
     }
 
@@ -36,8 +39,14 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
+    const appt = await addAppointment(title, startTime, endTime, employee.id, user.id, service.id);
 
-    const appt = await addAppointment(title, startTime, endTime, employee.id, client.userId, service.id);
+    try {
+        await sendAppointmentSuccessEmail(user, appt);
+    }
+    catch (e) {
+        console.log(e)
+    }
 
     return ({ redirectUrl: `/home/appointments/${appt.id}` });
 }
@@ -47,7 +56,6 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
         return;
     }
 
-    //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
@@ -64,8 +72,6 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
     if (!client) {
         return;
     }
-
-    // const title = `${service.title} on ${format(dateUtc, "MMMM do, yyyy")} at ${time}`;
 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
@@ -122,16 +128,23 @@ export async function handleBooking(paymentMethod: string, employee: User, date:
 }
 
 export async function deleteAppointmentAction(id: string) {
-    const userId = await getUserIdFromSession();
-    if (!userId) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
         return;
     }
 
-    const client = await getClientById(userId);
-    if (!client) {
+    const user = await getUserById(userInfo.userId);
+
+    if (!user) {
+        return;
+    }
+    const cancelled = await getAppointmentById(id);
+
+    if (!cancelled) {
         return;
     }
     await deleteAppointment(id);
+    await sendCancelSuccessEmail(user, cancelled);
     redirect(`/home/appointments?status=cancel-success`)
 }
 
@@ -140,7 +153,6 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
         return;
     }
 
-    //Converting time to UTC
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
@@ -148,13 +160,14 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
         return;
     }
 
-    const userId = await getUserIdFromSession();
-    if (!userId) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
         return;
     }
 
-    const client = await getClientById(userId);
-    if (!client || appt.clientId != client.userId || appt.serviceId != service.id) {
+    const user = await getUserById(userInfo.userId);
+
+    if (!user) {
         return;
     }
 
@@ -162,5 +175,6 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
     const updated = await updateAppointment(appt.id, startTime, endTime, employee.id);
-    redirect(`/home/appointments/${updated.id}?status=reschedule-success`)
+    await sendRescheduleSuccessEmail(user, updated);
+    redirect(`/home/appointments/${updated.id}?status=reschedule-success`);
 }

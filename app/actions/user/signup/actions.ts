@@ -4,6 +4,7 @@ import { signupSchema } from "../../../lib/database/zod"
 import { saltAndHashPassword } from "../../../lib/auth/hash";
 import { addUser, getUserByEmail } from "../db";
 import { redirect } from "next/navigation";
+import { sendRegistrationSuccessEmail } from "@/app/lib/email/sendRegistrationSuccessEmail";
 
 export async function signup(state: any, formData: FormData) {
     const validationResult = signupSchema.safeParse(Object.fromEntries(formData));
@@ -23,7 +24,7 @@ export async function signup(state: any, formData: FormData) {
     }
 
     const hashed = await saltAndHashPassword(validationResult.data.password);
-    await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName);
-
-    redirect("/");
+    const user = await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName);
+    await sendRegistrationSuccessEmail(user);
+    redirect("/?status=signup-success");
 }

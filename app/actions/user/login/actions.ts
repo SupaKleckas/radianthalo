@@ -36,7 +36,16 @@ export async function login(state: any, formData: FormData) {
 
     await createSession(user.id, user.role);
 
-    redirect("/");
+    switch (user.role) {
+        case "ADMIN":
+            redirect("/dashboard")
+        case "USER":
+            redirect("/home")
+        case "EMPLOYEE":
+            redirect("/staff-dashboard")
+        default:
+            redirect("/");
+    }
 }
 
 export async function logout() {

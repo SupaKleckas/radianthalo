@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { TimeSelection } from "../Booking/TimeSelection";
 import { BookingCalendar } from "../Booking/Calendar";
-import { format } from "date-fns";
+import { formatInTimeZone, format } from "date-fns-tz";
 import { EmployeeSelection } from "../Booking/EmployeeSelectionAppointment";
 import { getUnavailableWeekdays } from "@/app/lib/date/availability";
 import { SubmitButton } from "../UI/Buttons";
@@ -27,9 +27,8 @@ import {
 import { deleteAppointmentAction, updateAppointmentAction } from "@/app/actions/appointment/actions";
 
 export default function RescheduleSelection({ appt, serviceEmployees, currEmployee, service }: { appt: Appointment, serviceEmployees: User[], currEmployee: User, service: Service }) {
-    const now = new Date();
     const [selectedEmployee, setSelectedEmployee] = useState(currEmployee);
-    const [date, setDate] = useState<Date>(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
+    const [date, setDate] = useState<Date>(new Date(appt.startTime.getFullYear(), appt.startTime.getMonth(), appt.startTime.getDate() + 1));
     const [time, setTime] = useState<string | null>(null);
     const [unavailable, setUnavailable] = useState<string[]>([]);
 
@@ -58,7 +57,7 @@ export default function RescheduleSelection({ appt, serviceEmployees, currEmploy
                 <div className="flex-1 mb-5">
                     <h1 className="text-3xl py-2 mb-4 font-semibold">{appt.title}</h1>
                     <span className="flex items-center font-medium text-2xl mb-5">
-                        <HiOutlineClock /> {format(appt.startTime, "HH:mm")} - {format(appt.endTime, "HH:mm")}
+                        <HiOutlineClock /> {formatInTimeZone(appt.startTime, 'UTC', "HH:mm")} - {formatInTimeZone(appt.endTime, 'UTC', "HH:mm")}
                     </span>
                     <EmployeeSelection selectionContent={serviceEmployees} selectedValue={selectedEmployee} setSelectedValue={setSelectedEmployee} />
                 </div>

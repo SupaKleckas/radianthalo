@@ -36,5 +36,4 @@ export default async function Page({ searchParams }: SearchParamsProps) {
     return (
         <RescheduleSelection appt={appt} serviceEmployees={employees} currEmployee={employee} service={service} />
     )
-
 }

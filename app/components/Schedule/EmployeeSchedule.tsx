@@ -72,7 +72,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
     return (
         <div className="p-4 h-[500px]">
             <div className="flex justify-between m-4">
-                <Button onClick={() => setDate(moment().toDate())} className={`bg-transparent text-slate-800 hover:bg-slate-200 hover:cursor-pointer`}>
+                <Button onClick={() => setDate(moment().toDate())} className={`bg-transparent rounded-none text-slate-800 hover:bg-slate-200 hover:cursor-pointer`}>
                     Go to today
                 </Button>
                 <div className="flex flex-row items-center gap-x-4">

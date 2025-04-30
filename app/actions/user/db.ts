@@ -167,6 +167,7 @@ export async function addUser(email: string, hashedPassword: string, firstName: 
             data: { userId: user.id }
         });
     }
+    return user;
 }
 
 export async function updateUser(id: string, email: string, firstName: string, lastName: string, role: Role) {
