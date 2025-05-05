@@ -8,7 +8,7 @@ export default async function middleware(req: NextRequest) {
     const cookie = (await cookies()).get('session')?.value;
     const session = await decrypt(cookie);
 
-    if (!session?.userId || !session?.role) {
+    if (!session || !session.userId || !session.role) {
         if (path.startsWith("/home") || path.startsWith("/dashboard") || path.startsWith("/staff-dashboard")) {
             return NextResponse.redirect(new URL("/", req.nextUrl));
         }

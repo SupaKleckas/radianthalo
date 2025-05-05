@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
+import { stripe } from '@/app/lib/stripe/stripe'
 import prisma from '@/app/lib/database/db'
 import { addAppointment, deleteTemporaryAppointment } from '@/app/actions/appointment/db'
+import { PaymentMethod } from '@prisma/client'
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -32,7 +33,7 @@ export async function GET(request: Request) {
             return NextResponse.redirect('/home/services');
         }
 
-        const appt = await addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId);
+        const appt = await addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId, PaymentMethod.Online);
 
         deleteTemporaryAppointment(tempAppointment.id);
 

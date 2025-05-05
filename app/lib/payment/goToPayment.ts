@@ -1,5 +1,5 @@
 "use server";
-import { stripe } from "@/lib/stripe"
+import { stripe } from "@/app/lib/stripe/stripe"
 import { User, Service } from "@prisma/client";
 import { addTemporaryAppointmentByBooking } from "@/app/actions/appointment/actions";
 import { redirect } from "next/navigation";

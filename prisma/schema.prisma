@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URL")
 }
 
 model User {
@@ -43,6 +43,8 @@ model Appointment {
   startTime DateTime
   endTime   DateTime
 
+  paymentMethod PaymentMethod @default(Cash)
+
   employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: SetNull)
   employeeId String?
 
@@ -58,7 +60,6 @@ model TemporaryAppointment {
   title     String
   startTime DateTime
   endTime   DateTime
-  status    String   @default("PENDING_PAYMENT")
 
   employee   Employee? @relation(fields: [employeeId], references: [userId], onDelete: SetNull)
   employeeId String?
@@ -143,4 +144,9 @@ enum Day {
   Friday
   Saturday
   Sunday
+}
+
+enum PaymentMethod {
+  Online
+  Cash
 }

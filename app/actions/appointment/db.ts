@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { Employee } from "@prisma/client";
+import { Employee, PaymentMethod } from "@prisma/client";
 
 export async function getAppointments(currPage: number, query?: string) {
     const searchTerm = query
@@ -80,12 +80,13 @@ export async function getAppointmentForTimeSlots(employee: Employee, startOfDay:
     });
 }
 
-export async function addAppointment(title: string, startTime: Date, endTime: Date, employeeId: string, clientId: string, serviceId: string) {
+export async function addAppointment(title: string, startTime: Date, endTime: Date, employeeId: string, clientId: string, serviceId: string, paymentMethod: PaymentMethod) {
     return await prisma.appointment.create({
         data: {
             title: title,
             startTime: startTime,
             endTime: endTime,
+            paymentMethod: paymentMethod,
             employee: {
                 connect: {
                     userId: employeeId
@@ -112,7 +113,6 @@ export async function addTemporaryAppointment(title: string, startTime: Date, en
             title: title,
             startTime: startTime,
             endTime: endTime,
-            status: "PENDING_PAYMENT",
             createdAt: new Date(),
             employee: {
                 connect: {
@@ -181,6 +181,16 @@ export async function getEmployeeAppointmentsInInterval(fromDate: Date, toDate: 
             }
         }
     })
+}
 
-
+export async function deleteExpiredTemporaryAppointments() {
+    const oneDayOld = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const deleted = await prisma.temporaryAppointment.deleteMany({
+        where: {
+            createdAt: {
+                lte: oneDayOld
+            }
+        }
+    })
+    console.log(`Deleted ${deleted.count} expired temporary appointments.`);
 }

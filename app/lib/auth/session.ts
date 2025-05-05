@@ -16,7 +16,7 @@ export async function deleteSession() {
 }
 
 export async function createSession(userId: string, role: string) {
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // one day
     const session = await encrypt({ userId, expiresAt, role });
 
     (await cookies()).set("session", session, {
@@ -37,13 +37,13 @@ export async function encrypt(payload: SessionPayload) {
 export async function decrypt(session: string | undefined = "") {
     try {
         if (session == undefined) {
-            return
+            return undefined;
         }
         const { payload } = await jwtVerify(session, encodedSecret, { algorithms: ["HS256"] });
         return payload;
     }
     catch (error) {
-        // console.error("Failed to verify session:", error)
+        return undefined;
     }
 }
 

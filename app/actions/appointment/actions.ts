@@ -1,6 +1,6 @@
 "use server";
-import { Employee, User, Service, Appointment } from "@prisma/client";
-import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById } from "@/app/actions/appointment/db";
+import { Employee, User, Service, Appointment, PaymentMethod } from "@prisma/client";
+import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById, deleteExpiredTemporaryAppointments } from "@/app/actions/appointment/db";
 import { getEmployeeById, getClientById, getUserById } from "@/app/actions/user/db";
 import { getUserIdAndRoleFromSession, getUserIdFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
@@ -12,7 +12,7 @@ import { sendRescheduleSuccessEmail } from "@/app/lib/email/sendRescheduleSucces
 import { sendCancelSuccessEmail } from "@/app/lib/email/sendCancelSuccessEmail";
 import { adjustToUTC, addTimeToDate } from "@/app/lib/date/adjustTimes";
 
-export async function addAppointmentByBooking(employee: User, date: Date, time: string, service: Service, timeZone: string) {
+export async function addAppointmentByBooking(employee: User, date: Date, time: string, service: Service, timeZone: string, paymentMethod: PaymentMethod) {
     if (await getEmployeeById(employee.id) == null) {
         return;
     }
@@ -38,7 +38,7 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
-    const appt = await addAppointment(service.title, startTime, endTime, employee.id, user.id, service.id);
+    const appt = await addAppointment(service.title, startTime, endTime, employee.id, user.id, service.id, paymentMethod);
 
     try {
         await sendAppointmentSuccessEmail(user, appt);
@@ -113,7 +113,7 @@ export async function getAvailableTimeSlots(employee: Employee, date: Date, time
 export async function handleBooking(paymentMethod: string, employee: User, date: Date, time: string, service: Service, timeZone: string) {
     if (paymentMethod === "cash") {
         if (employee && time) {
-            return addAppointmentByBooking(employee, date, time, service, timeZone);
+            return addAppointmentByBooking(employee, date, time, service, timeZone, PaymentMethod.Cash);
         }
     } else if (paymentMethod === "card") {
         return goToPayment(employee, date, time, service, timeZone);
@@ -170,4 +170,12 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
     const updated = await updateAppointment(appt.id, startTime, endTime, employee.id);
     await sendRescheduleSuccessEmail(user, updated);
     redirect(`/home/appointments/${updated.id}?status=reschedule-success`);
+}
+
+export async function deleteExpiredTemporaryAppointmentsAction() {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        return;
+    }
+    deleteExpiredTemporaryAppointments();
 }

@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
 import { ServiceCategory } from "@prisma/client";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/app/lib/stripe/stripe";
 
 export async function getAllServices() {
     return await prisma.service.findMany();

@@ -31,8 +31,8 @@ interface SearchParamsProps {
 export default async function Page({ searchParams }: SearchParamsProps) {
     const params = await searchParams;
 
-    const query = params?.query || ''
-    const role = searchParams?.role || "";
+    const query = params?.query || "";
+    const role = params?.role || "";
 
     const currPage = Number(params?.page) || 1;
     const [users, meta] = await getUsers(currPage, query, role);
