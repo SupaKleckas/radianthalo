@@ -1,6 +1,6 @@
 "use client";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Employee, User } from "@prisma/client"
+import { User } from "@prisma/client"
 import { HiUser } from "react-icons/hi";
 
 interface SelectionParams {

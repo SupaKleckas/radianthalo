@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { EmployeeDashboardItems } from "@/app/components/Navbar/NavigationItems";
-import { HiLogout, HiMenu, HiX } from "react-icons/hi";
+import { HiLogout, HiMenu, HiUser, HiX } from "react-icons/hi";
 import { logout } from "@/app/actions/user/login/actions";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"
+import { redirect } from "next/navigation";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -33,7 +34,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <div className="min-h-screen w-full grid md:grid-cols-[26%_1fr]">
+            <div className="min-h-screen w-full grid md:grid-cols-[20%_1fr]">
                 <div className="hidden md:block bg-slate-400">
                     <div className="flex h-full max-h-screen flex-col flex-col-gap">
                         <div className="flex items-center md:h-[70px] bg-slate-400 lg:px-6">
@@ -43,7 +44,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         </div>
 
                         <div className="flex-1 bg-slate-400">
-                            <nav className="grid items-start px-2 md:text-1xl lg:px-4 lg:text-3xl">
+                            <nav className="grid items-start px-2 text-base lg:text-xl xl:px-4 xl:text-2xl">
                                 <EmployeeDashboardItems />
                             </nav>
                         </div>
@@ -57,9 +58,15 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         ) : (
                             <HiMenu className='text-3xl cursor-pointer md:hidden' onClick={toggleMenu} />
                         )}
-                        <Button onClick={() => logout()} className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>
-                            {isSmallScreen ? <HiLogout className="text-2xl" /> : "Logout"}
-                        </Button>
+                        <div className="flex flex-row gap-x-4">
+                            <Button onClick={() => redirect("/staff-dashboard/account")} variant={"ghost"} className="hover:cursor-pointer h-auto w-auto">
+                                <HiUser className="text-slate-800" />
+                            </Button>
+                            <Button onClick={() => logout()} className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>
+                                {isSmallScreen ? <HiLogout className="text-2xl" /> : "Logout"}
+                            </Button>
+                        </div>
+
                     </header>
 
                     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -70,7 +77,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
                 {menuOpen ? (
                     <div className="absolute top-[70px] h-[calc(100vh-70px)] w-[50%] bg-slate-400" >
-                        <nav className="grid items-start px-2 text-2xl">
+                        <nav className="grid items-start px-2 text-xl">
                             <EmployeeDashboardItems />
                         </nav>
                     </div>

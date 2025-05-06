@@ -9,7 +9,7 @@ export default async function Page() {
         return;
     }
 
-    const events = await getEvents(userId, Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const events = await getEvents(userId);
 
     return (
         <ScrollArea className="h-[80vh] w-full rounded-md pr-4">

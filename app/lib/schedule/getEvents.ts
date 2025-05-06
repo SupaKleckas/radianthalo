@@ -2,7 +2,7 @@ import { getEmployeeAppointments } from "@/app/actions/appointment/db";
 import { getServiceById } from "@/app/actions/service/db";
 import { getUserById } from "@/app/actions/user/db";
 
-export async function getEvents(userId: string, timeZone: string) {
+export async function getEvents(userId: string) {
     const appointments = await getEmployeeAppointments(userId);
 
     const events = await Promise.all(

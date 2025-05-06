@@ -6,18 +6,17 @@ import { getUserById } from "@/app/actions/user/db";
 import RescheduleSelection from "@/app/components/Rescheduling/RescheduleSelection";
 import { getEmployeesByService } from "@/app/actions/user/db";
 
-interface SearchParamsProps {
-    searchParams?: {
-        id?: string;
-    };
-}
+export type paramsType = Promise<{
+    id?: string
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-    const params = await searchParams;
-    if (!params?.id) {
+export default async function Page(props: { params: paramsType }) {
+    const { id } = await props.params;
+
+    if (!id) {
         redirect("/home/appointments")
     }
-    const appt = await getAppointmentById(params.id);
+    const appt = await getAppointmentById(id);
     const user = await getUserIdAndRoleFromSession();
 
     if (!user || user.userId != appt?.clientId || !appt || !appt.serviceId || !appt.employeeId) {

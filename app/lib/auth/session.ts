@@ -42,7 +42,7 @@ export async function decrypt(session: string | undefined = "") {
         const { payload } = await jwtVerify(session, encodedSecret, { algorithms: ["HS256"] });
         return payload;
     }
-    catch (error) {
+    catch {
         return undefined;
     }
 }

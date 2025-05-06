@@ -3,16 +3,17 @@ import { HiX } from "react-icons/hi";
 import SignupForm from '@/app/components/UserLogin/SignupForm';
 import { login } from "@/app/actions/user/login/actions";
 import { Button } from "@/components/ui/button";
+import { LoginFormState } from '@/app/lib/states/states';
 
 interface LoginFormProps {
   onClose: () => void;
 }
 
-function LoginForm({ onClose }: LoginFormProps) {
+export default function LoginForm({ onClose }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
-  const [state, loginAction] = useActionState(login, undefined);
+  const [state, loginAction] = useActionState<LoginFormState, FormData>(login, {});
 
   const toggleSignupForm = () => {
     setIsSignupFormOpen(!isSignupFormOpen);
@@ -32,7 +33,7 @@ function LoginForm({ onClose }: LoginFormProps) {
             onChange={e => setEmail(e.target.value)}
             className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
-          {state?.errors?.email && <p className='text-red-500 text-sm'>{state.errors.email._errors}</p>}
+          {state?._errors?.email && <p className='text-red-500 text-sm'>{state._errors.email[0]}</p>}
           <input
             type='password'
             name='password'
@@ -41,14 +42,13 @@ function LoginForm({ onClose }: LoginFormProps) {
             onChange={e => setPassword(e.target.value)}
             className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
-          {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors}</p>}
-          {state?.password?._errors && <p className='text-red-500 text-sm'>{state.password._errors}</p>}
+          {state?._errors?.password && <p className='text-red-500 text-sm'>{state._errors.password[0]}</p>}
           <Button type='submit' className='bg-slate-700 px-5 py-2 mt-4 w-full hover:bg-slate-800 hover:cursor-pointer'>
             Login
           </Button>
         </form>
         <span className='flex flex-row items-center mt-4 text-slate-800'>
-          <p>Don't have an account?</p>
+          <p>Create account</p>
           <Button onClick={toggleSignupForm} variant='link' className='text-slate-800 text-base hover:underline hover:cursor-pointer'>Sign up</Button>
         </span>
       </div>
@@ -56,5 +56,3 @@ function LoginForm({ onClose }: LoginFormProps) {
     </div>
   );
 }
-
-export default LoginForm;

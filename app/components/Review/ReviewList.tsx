@@ -8,7 +8,7 @@ import { ReviewFilters } from "@/app/components/Review/ReviewFilters";
 import { getRatingCounts, getAverageRating } from "@/app/lib/analytics/getRatingAnalytics";
 import { RatingChart } from "@/app/components/Analytics/RatingChart";
 
-interface SearchParamsProps {
+interface Props {
     searchParams?: {
         page?: string,
         query?: string,
@@ -20,7 +20,7 @@ interface SearchParamsProps {
     staffView?: boolean
 }
 
-export default async function ReviewList({ searchParams, staffView }: SearchParamsProps) {
+export default async function ReviewList({ searchParams, staffView }: Props) {
     const params = await searchParams;
 
     const query = params?.query || "";
@@ -49,14 +49,17 @@ export default async function ReviewList({ searchParams, staffView }: SearchPara
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-800">Browse reviews!</h1>
                     </div>}
                 <div className='w-full'>
-                    <div className="flex justify-start mt-8 mb-8">
-                        <RatingChart reviews={ratingsAnalytics} average={average} />
-                    </div>
-                    <div className='flex flex-col md:flex-row w-full justify-between gap-6 mb-4 mt-4'>
-                        <Search placeholder="Search by content, service, or name..." />
-                        <ReviewFilters />
-                    </div>
-                    <PaginationComponent pageAmount={pageAmount} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <div className="flex justify-start mt-8 mb-8">
+                            <RatingChart reviews={ratingsAnalytics} average={average} />
+                        </div>
+                        <div className='flex flex-col md:flex-row w-full justify-between gap-6 mb-4 mt-4'>
+                            <Search placeholder="Search by content, service, or name..." />
+                            <ReviewFilters />
+                        </div>
+
+                        <PaginationComponent pageAmount={pageAmount} />
+                    </Suspense>
                     <Suspense fallback={<div className="text-center py-4">Loading reviews...</div>}>
                         {reviews.length === 0 && (
                             <div className="text-center mt-8 text-slate-600">

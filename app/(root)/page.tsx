@@ -2,18 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import Message from "@/app/components/Notifications/Message";
 
-interface SearchParamsProps {
-  searchParams?: {
-    status?: string
-  };
-}
+export type paramsType = Promise<{
+  status?: string
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-  const params = await searchParams;
+export default async function Page(props: { params: paramsType }) {
+  const { status } = await props.params;
 
   return (
     <div className="flex flex-col">
-      {params?.status == "signup-success" ? <Message type="success" message="You have been successfully registered in our system! Please login to your account." /> : null}
+      {status == "signup-success" ? <Message type="success" message="You have been successfully registered in our system! Please login to your account." /> : null}
       <div className="flex flex-row justify-center md:justify-between m-10 gap-y-6">
         <div className="flex flex-col gap-y-6">
           <h1 className="text-6xl font-bold text-slate-800">

@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { AddUserFormState } from "@/app/lib/states/states";
 
 export default function AddUserForm() {
     const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ export default function AddUserForm() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [role, setRole] = useState<Role>(Role.USER);
-    const [state, addUserAction] = useActionState(addUserByForm, undefined);
+    const [state, addUserAction] = useActionState<AddUserFormState, FormData>(addUserByForm, {});
 
     return (
         <div className='flex justify-center'>
@@ -35,7 +36,7 @@ export default function AddUserForm() {
                         onChange={e => setEmail(e.target.value)}
                         className='w-full'
                     />
-                    {state?.errors?.email && <p className='text-red-500 text-sm'>{state.errors.email._errors[0]}</p>}
+                    {state?._errors?.email && <p className='text-red-500 text-sm'>{state._errors.email[0]}</p>}
                     <Label htmlFor='password' className='text-base text-slate-700'>Password</Label>
                     <Input
                         type='password'
@@ -46,7 +47,7 @@ export default function AddUserForm() {
                         onChange={e => setPassword(e.target.value)}
                         className='w-full'
                     />
-                    {state?.errors?.password && <p className='text-red-500 text-sm'>{state.errors.password._errors[0]}</p>}
+                    {state?._errors?.password && <p className='text-red-500 text-sm'>{state._errors.password[0]}</p>}
                     <Label htmlFor='firstName' className='text-base text-slate-700'>First Name</Label>
                     <Input
                         type='firstName'
@@ -57,7 +58,7 @@ export default function AddUserForm() {
                         onChange={e => setFirstName(e.target.value)}
                         className='w-full'
                     />
-                    {state?.errors?.firstName && <p className='text-red-500 text-sm'>{state.errors.firstName._errors[0]}</p>}
+                    {state?._errors?.firstname && <p className='text-red-500 text-sm'>{state._errors.firstname[0]}</p>}
                     <Label htmlFor='lastName' className='text-base text-slate-700'>Last Name</Label>
                     <Input
                         type='lastName'
@@ -68,7 +69,7 @@ export default function AddUserForm() {
                         onChange={e => setLastName(e.target.value)}
                         className='w-full'
                     />
-                    {state?.errors?.lastName && <p className='text-red-500 text-sm'>{state.errors.lastName._errors[0]}</p>}
+                    {state?._errors?.lastname && <p className='text-red-500 text-sm'>{state._errors.lastname[0]}</p>}
                     <Label htmlFor='role' className='text-base text-slate-700'>Role</Label>
                     <Select value={role} onValueChange={(value) => setRole(value as Role)}>
                         <SelectTrigger className="w-full" defaultValue={Role.USER}>
@@ -80,8 +81,7 @@ export default function AddUserForm() {
                             <SelectItem value={`${Role.ADMIN}`}>{Role.ADMIN}</SelectItem>
                         </SelectContent>
                     </Select>
-                    {state?.errors?.role && <p className='text-red-500 text-sm'>{state.errors.role._errors[0]}</p>}
-                    {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    {state?._errors?.role && <p className='text-red-500 text-sm'>{state._errors.role[0]}</p>}
                     <Input type="hidden" name="role" value={role} />
                     <div className='flex justify-center'>
                         <Button type='submit' className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>

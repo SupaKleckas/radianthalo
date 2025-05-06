@@ -11,30 +11,28 @@ import { groupByDate } from "@/app/lib/grouping/groupByDate";
 import Message from "@/app/components/Notifications/Message";
 import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
 
-interface SearchParamsProps {
-    searchParams?: {
-        page?: string;
-        status?: string
-    };
-}
+export type paramsType = Promise<{
+    page?: string;
+    status?: string
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
+export default async function Page(props: { params: paramsType }) {
+    const { page, status } = await props.params;
     const userId = await getUserIdFromSession();
     if (!userId) {
         return;
     }
 
-    const params = await searchParams;
-    const currPage = Number(params?.page) || 1;
+    const currPage = Number(page) || 1;
     const [appointments, meta] = await getClientAppointments(currPage, userId);
     const pageAmount = meta?.pageCount;
     const dateGroups = groupByDate(appointments);
 
     return (
         <ScrollArea className="h-[70vh] md:h-[80vh] w-full rounded-md pr-4">
-            {params?.status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
-            {params?.status == "review-success" ? <Message type="success" message="Review submitted successfully!" /> : null}
-            {params?.status == "cancel-success" ? <Message type="success" message="You successfully cancelled the appointment." /> : null}
+            {status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
+            {status == "review-success" ? <Message type="success" message="Review submitted successfully!" /> : null}
+            {status == "cancel-success" ? <Message type="success" message="You successfully cancelled the appointment." /> : null}
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">

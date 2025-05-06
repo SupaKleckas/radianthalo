@@ -69,7 +69,7 @@ export default function DataCharts({ apptsPerMonth, mostBookedService }: ChartPr
                             <XAxis dataKey="count" type="number" hide />
                             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                             <Bar dataKey="count" layout="vertical" className="fill-slate-700" radius={10}>
-                                <LabelList dataKey="title" position="insideLeft" offset={8} className="fill-slate-100" fontSize={14} />
+                                <LabelList dataKey="title" position="insideLeft" offset={8} className=" text-xs lg:fill-slate-100 fill-transparent" fontSize={14} />
                                 <LabelList dataKey="count" position="right" offset={8} className="fill-slate-700" fontSize={14} />
                             </Bar>
                         </BarChart>

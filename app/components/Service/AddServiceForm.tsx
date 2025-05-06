@@ -13,6 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
+import { AddServiceFormState } from '@/app/lib/states/states';
 
 interface AddServiceFormProps {
     employees: User[];
@@ -22,7 +23,7 @@ export function AddServiceForm({ employees }: AddServiceFormProps) {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState<number | ''>('');
     const [duration, setDuration] = useState<number | ''>('');
-    const [state, addServiceAction] = useActionState(addServiceByForm, undefined);
+    const [state, addServiceAction] = useActionState<AddServiceFormState, FormData>(addServiceByForm, {});
     const [servicecategory, setServiceCategory] = useState<ServiceCategory>(ServiceCategory.Hair);
     const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
 
@@ -50,7 +51,7 @@ export function AddServiceForm({ employees }: AddServiceFormProps) {
                         onChange={e => setTitle(e.target.value)}
                         className='w-full'
                     />
-                    {state?.errors?.title && <p className='text-red-500 text-sm'>{state.errors.title._errors[0]}</p>}
+                    {state?._errors?.title && <p className='text-red-500 text-sm'>{state._errors.title[0]}</p>}
                     <Label htmlFor='price' className='text-base text-slate-700'>Price</Label>
                     <Input
                         type='number'
@@ -61,7 +62,7 @@ export function AddServiceForm({ employees }: AddServiceFormProps) {
                         onChange={handlePriceChange}
                         className='w-full'
                     />
-                    {state?.errors?.price && <p className='text-red-500 text-sm'>{state.errors.price._errors[0]}</p>}
+                    {state?._errors?.price && <p className='text-red-500 text-sm'>{state._errors.price[0]}</p>}
                     <Label htmlFor='duration' className='text-base text-slate-700'>Duration</Label>
                     <Input
                         type='number'
@@ -72,7 +73,7 @@ export function AddServiceForm({ employees }: AddServiceFormProps) {
                         onChange={handleDurationChange}
                         className='w-full'
                     />
-                    {state?.errors?.duration && <p className='text-red-500 text-sm'>{state.errors.duration._errors[0]}</p>}
+                    {state?._errors?.duration && <p className='text-red-500 text-sm'>{state._errors.duration[0]}</p>}
                     <Label htmlFor='category' className='text-base text-slate-700'>Category</Label>
                     <Select value={servicecategory} onValueChange={(value) => setServiceCategory(value as ServiceCategory)}>
                         <SelectTrigger className="w-full" defaultValue={ServiceCategory.Hair}>
@@ -98,7 +99,7 @@ export function AddServiceForm({ employees }: AddServiceFormProps) {
                         name="employeeIds"
                         value={JSON.stringify(selectedEmployees)}
                     />
-                    {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    {state?._errors?.employees && <p className='text-red-500 text-sm'>{state._errors.employees[0]}</p>}
                     <div className='flex justify-center mt-4'>
                         <Button type='submit' className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>
                             Add service

@@ -2,15 +2,17 @@ import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
 import { getUserById } from "@/app/actions/user/db";
 import UserEditForm from "@/app/components/User/EditUserForm";
+import { redirect } from "next/navigation";
 
-interface UserParams {
-    params: {
-        id: string;
-    };
-}
+export type paramsType = Promise<{ id: string }>;
 
-export default async function Page({ params }: UserParams) {
-    const { id } = await params;
+export default async function Page(props: { params: paramsType }) {
+    const { id } = await props.params;
+
+    if (!id) {
+        redirect("/dashboard/users");
+    }
+
     const user = await getUserById(id);
 
     return (

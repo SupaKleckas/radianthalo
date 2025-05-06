@@ -22,19 +22,15 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-interface SearchParamsProps {
-    searchParams?: {
-        page?: string,
-        query?: string
-    };
-}
+export type paramsType = Promise<{
+    page?: string;
+    query?: string;
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-    const params = await searchParams;
+export default async function Page(props: { params: paramsType }) {
+    const { page, query } = await props.params;
 
-    const query = params?.query || "";
-
-    const currPage = Number(params?.page) || 1;
+    const currPage = Number(page) || 1;
     const [appointments, meta] = await getAppointments(currPage, query);
     const pageAmount = meta?.pageCount;
     const dateGroups = groupByDate(appointments);
@@ -46,33 +42,35 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     <h1 className="text-5xl">Appointments</h1>
                     <h1 className="text-base opacity-60">Have a look at all appointments.</h1>
                 </div>
-                <div className="flex flex-col md:flex-row gap-y-4 justify-between">
-                    <Search />
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant={"outline"} className="hover:cursor-pointer hover:bg-slate-300 text-slate-800">
-                                Clear expired records
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>{`Are you sure you want to clear all expired records?`}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action will delete all expired temporary appointment records from the database.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel className="hover:cursor-pointer hover:bg-slate-300">Cancel</AlertDialogCancel>
-                                <form action={deleteExpiredTemporaryAppointmentsAction}>
-                                    <AlertDialogAction asChild >
-                                        <Button type="submit" className="bg-slate-700 hover:cursor-pointer">Continue</Button>
-                                    </AlertDialogAction>
-                                </form>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </div>
-                <PaginationComponent pageAmount={pageAmount} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <div className="flex flex-col md:flex-row gap-y-4 justify-between">
+                        <Search />
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant={"outline"} className="hover:cursor-pointer hover:bg-slate-300 text-slate-800">
+                                    Clear expired records
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>{`Are you sure you want to clear all expired records?`}</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action will delete all expired temporary appointment records from the database.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel className="hover:cursor-pointer hover:bg-slate-300">Cancel</AlertDialogCancel>
+                                    <form action={deleteExpiredTemporaryAppointmentsAction}>
+                                        <AlertDialogAction asChild >
+                                            <Button type="submit" className="bg-slate-700 hover:cursor-pointer">Continue</Button>
+                                        </AlertDialogAction>
+                                    </form>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
+                    <PaginationComponent pageAmount={pageAmount} />
+                </Suspense>
                 <Suspense fallback={<div className="text-center py-4">Loading appointments...</div>}>
                     {appointments.length === 0 && (
                         <div className="text-center mt-8 text-slate-600">

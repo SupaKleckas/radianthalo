@@ -7,19 +7,19 @@ import { HiArrowSmLeft } from "react-icons/hi";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface SearchParamsProps {
-    params: {
-        id: string,
-    };
-}
+export type paramsType = Promise<{ id: string }>;
 
-export default async function Page({ params }: SearchParamsProps) {
-    const { id } = await params;
+export default async function Page(props: { params: paramsType }) {
+    const { id } = await props.params;
+
+    if (!id) {
+        redirect("/dashboard/appointments");
+    }
 
     const appt = await getAppointmentById(id);
 
     if (!appt) {
-        redirect("/home/appointments");
+        redirect("/dashboard/appointments");
     }
 
     let employee, client;

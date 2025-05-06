@@ -6,6 +6,7 @@ import { logout } from "@/app/actions/user/login/actions";
 import EmployeeDataCharts from "@/app/components/Analytics/EmployeeDataCharts";
 import getAppointmentsPerMonth from "@/app/lib/analytics/getAppointmentsPerMonth";
 import getEmployeePopularService from "@/app/lib/analytics/getEmployeePopularService";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function Page() {
     const employees = await getEmployeeCount();
@@ -23,13 +24,13 @@ export default async function Page() {
     const mostBookedServices = await getEmployeePopularService(user.userId);
 
     return (
-        <div>
+        <ScrollArea className="h-[80vh] w-full rounded-md pr-4">
             <div className="text-slate-800 mb-6">
                 <h1 className="text-5xl">Dashboard</h1>
                 <h1 className="text-base opacity-60">Take a look at our analytics!</h1>
             </div>
             <GeneralData employees={employees} clients={clients} employeeEarnings={earnings} />
             <EmployeeDataCharts apptsPerMonth={apptsPerMonth} mostBookedService={mostBookedServices} />
-        </div>
+        </ScrollArea>
     );
 }

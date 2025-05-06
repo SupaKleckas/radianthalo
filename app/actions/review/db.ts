@@ -1,7 +1,6 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { Appointment, Review } from "@prisma/client";
-import { Role, ServiceCategory, Prisma } from "@prisma/client";
+import { ServiceCategory } from "@prisma/client";
 
 export async function getReviews(currPage: number, query?: string, service?: string, category?: string, client?: string, employee?: string) {
     const searchTerm = query
@@ -99,7 +98,7 @@ export async function getReviews(currPage: number, query?: string, service?: str
 }
 
 export async function addReview(rating: number, content: string, clientId: string, employeeId: string, serviceId: string) {
-    const review = await prisma.review.create({
+    await prisma.review.create({
         data: {
             rating: rating,
             content: content,

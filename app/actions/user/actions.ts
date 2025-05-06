@@ -1,22 +1,27 @@
 "use server";
-import { addUserSchema, editUserSchema } from "@/app/lib/database/zod"
+import { addUserSchema, editUserSchema, editPasswordSchema, editAccountSchema } from "@/app/lib/database/zod"
 import { saltAndHashPassword } from "@/app/lib/auth/hash";
-import { addUser, getUserByEmail, getUserById, updateUser } from "@/app/actions/user/db"
+import { addUser, getUserByEmail, getUserById, updateUser, updateUserDetails, updateUserPassword } from "@/app/actions/user/db"
 import { redirect } from "next/navigation";
+import { EditAccountState, EditPasswordState, AddUserFormState, EditUserFormState } from "@/app/lib/states/states";
 
-export async function addUserByForm(state: any, formData: FormData) {
+export async function addUserByForm(state: AddUserFormState, formData: FormData) {
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
         return {
-            errors: validationResult.error.format(),
-        }
+            _errors: {
+                email: validationResult.error.format().email?._errors,
+                password: validationResult.error.format().password?._errors,
+                firstname: validationResult.error.format().firstName?._errors,
+                lastname: validationResult.error.format().lastName?._errors,
+                role: validationResult.error.format().role?._errors,
+            }
+        };
     }
 
     if (await getUserByEmail(validationResult.data.email) != null) {
-        return {
-            _errors: ["Email already exists."]
-        }
+        return { _errors: { role: ["Something went wrong. Try again later."] } }
     }
 
     const hashed = await saltAndHashPassword(validationResult.data.password);
@@ -24,21 +29,99 @@ export async function addUserByForm(state: any, formData: FormData) {
     redirect("/dashboard/users");
 }
 
-export async function editUserByForm(state: any, formData: FormData) {
+export async function editUserByForm(state: EditUserFormState, formData: FormData) {
     const validationResult = editUserSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
         return {
-            errors: validationResult.error.format(),
+            _errors: {
+                email: validationResult.error.format().email?._errors,
+                firstname: validationResult.error.format().firstName?._errors,
+                lastname: validationResult.error.format().lastName?._errors,
+                role: validationResult.error.format().role?._errors,
+            }
         }
     }
 
     if (await getUserById(validationResult.data.id) == null) {
         return {
-            _errors: ["ID doesn't exist."]
+            _errors: { role: ["Something went wrong. Try again later."] }
         }
     }
 
     await updateUser(validationResult.data.id, validationResult.data.email, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.role);
     redirect("/dashboard/users");
+}
+
+export async function editPasswordAction(state: EditPasswordState, formData: FormData): Promise<EditPasswordState> {
+    const data = {
+        newPassword: formData.get("newPassword"),
+        confirmPassword: formData.get("confirmPassword"),
+    };
+
+    const validationResult = editPasswordSchema.safeParse(data);
+
+    if (!validationResult.success) {
+        return {
+            _errors: {
+                newPassword: validationResult.error.format().newPassword?._errors,
+                confirmPassword: validationResult.error.format().confirmPassword?._errors,
+            }
+        };
+    }
+    const { newPassword } = validationResult.data;
+    const userId = formData.get("userid") as string;
+
+    const user = getUserById(userId)
+
+    if (!user) {
+        return { _errors: { confirmPassword: ["Something went wrong. Try again later."] } }
+    }
+
+    const hashed = await saltAndHashPassword(newPassword);
+    await updateUserPassword(userId, hashed);
+    redirect("/dashboard/account?status=password-success");
+}
+
+export async function editAccountAction(state: EditAccountState, formData: FormData): Promise<EditAccountState> {
+    const data = {
+        firstName: formData.get("firstname"),
+        lastName: formData.get("lastname"),
+        email: formData.get("email")
+    };
+
+    const validationResult = editAccountSchema.safeParse(data);
+
+    if (!validationResult.success) {
+        return {
+            _errors: {
+                firstName: validationResult.error.format().firstName?._errors,
+                lastName: validationResult.error.format().lastName?._errors,
+                email: validationResult.error.format().email?._errors,
+            }
+        };
+    }
+
+    const userId = formData.get("userid") as string;
+
+    const user = await getUserById(userId)
+
+    if (!user) {
+        return {
+            _errors:
+                { email: ["Something went wrong. Try again later."] }
+        }
+    }
+
+    await updateUserDetails(userId, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.email);
+    switch (user.role) {
+        case "ADMIN":
+            redirect("/dashboard/account?status=detail-success");
+        case "USER":
+            redirect("/home/account?status=detail-success");
+        case "EMPLOYEE":
+            redirect("/staff-dashboard/account?status=detail-success");
+        default:
+            redirect("/");
+    }
 }

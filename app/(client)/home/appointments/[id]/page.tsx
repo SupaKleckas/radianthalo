@@ -10,18 +10,13 @@ import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button";
 import Message from "@/app/components/Notifications/Message";
 
-interface SearchParamsProps {
-    params: {
-        id: string,
-    };
-    searchParams?: {
-        status?: string
-    };
-}
+export type paramsType = Promise<{
+    id?: string;
+    status?: string
+}>;
 
-export default async function Page({ params, searchParams }: SearchParamsProps) {
-    const { id } = await params;
-    const status = await searchParams;
+export default async function Page(props: { params: paramsType }) {
+    const { id, status } = await props.params;
 
     const client = await getUserIdAndRoleFromSession();
 
@@ -42,7 +37,7 @@ export default async function Page({ params, searchParams }: SearchParamsProps) 
 
     return (
         <div className="flex flex-col justify-center items-center">
-            {status?.status == "reschedule-success" ? <Message type="success" message="Appointment rescheduled succesfully!" /> : null}
+            {status == "reschedule-success" ? <Message type="success" message="Appointment rescheduled succesfully!" /> : null}
             <div className="flex flex-col justify-center w-[60%]">
                 <Link className="mb-6" href="/home/appointments">
                     <div className="flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">

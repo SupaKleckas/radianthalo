@@ -261,3 +261,27 @@ export async function deleteUser(id: string): Promise<void> {
     await prisma.user.delete({ where: { id: id } });
     revalidatePath('/dashboard/users');
 }
+
+export async function updateUserPassword(id: string, password: string) {
+    await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            hashedPassword: password
+        }
+    })
+}
+
+export async function updateUserDetails(id: string, firstName: string, lastName: string, email: string) {
+    await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email
+        }
+    })
+}

@@ -1,7 +1,7 @@
 "use client";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts"
+import { Card, CardContent } from "@/components/ui/card"
+import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 import { HiStar } from "react-icons/hi";
 
 interface ChartProps {

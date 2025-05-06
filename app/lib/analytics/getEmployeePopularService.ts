@@ -10,6 +10,7 @@ export default async function getEmployeeMostPopularService(employeeId: string) 
             }
         },
         select: {
+            id: true,
             title: true,
             _count: {
                 select: {
@@ -20,22 +21,17 @@ export default async function getEmployeeMostPopularService(employeeId: string) 
                     }
                 }
             }
-        },
-        orderBy: {
-            appointment: {
-                _count: 'desc'
-            }
-        },
-        take: 3
+        }
     });
 
-
     const result = data
-    .filter(service => service._count.appointment > 0)
-    .map(service => ({
-        title: service.title,
-        count: service._count.appointment,
-    }));
+        .filter(service => service._count.appointment > 0)
+        .sort((a, b) => b._count.appointment - a._count.appointment)
+        .slice(0, 3)
+        .map(service => ({
+            title: service.title,
+            count: service._count.appointment,
+        }));
 
     return result;
 }

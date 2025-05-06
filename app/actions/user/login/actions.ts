@@ -4,13 +4,17 @@ import { verifyPassword } from "../../../lib/auth/hash";
 import { getUserByEmail } from "../db";
 import { createSession, deleteSession } from "../../../lib/auth/session";
 import { redirect } from "next/navigation";
+import { LoginFormState } from "@/app/lib/states/states";
 
-export async function login(state: any, formData: FormData) {
+export async function login(state: LoginFormState, formData: FormData) {
     const validationResult = loginSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
         return {
-            errors: validationResult.error.format(),
+            _errors: {
+                email: validationResult.error.format().email?._errors,
+                password: validationResult.error.format().password?._errors,
+            }
         }
     }
 
@@ -18,9 +22,7 @@ export async function login(state: any, formData: FormData) {
 
     if (!user) {
         return {
-            password: {
-                _errors: ["Email or password is incorrect."]
-            }
+            _errors: { password: ["Email or password is incorrect."] }
         }
     }
 
@@ -28,9 +30,7 @@ export async function login(state: any, formData: FormData) {
 
     if (!isPasswordValid) {
         return {
-            password: {
-                _errors: ["Email or password is incorrect."]
-            }
+            _errors: { password: ["Email or password is incorrect."] }
         }
     }
 

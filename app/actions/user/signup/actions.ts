@@ -5,21 +5,25 @@ import { saltAndHashPassword } from "../../../lib/auth/hash";
 import { addUser, getUserByEmail } from "../db";
 import { redirect } from "next/navigation";
 import { sendRegistrationSuccessEmail } from "@/app/lib/email/sendRegistrationSuccessEmail";
+import { SignupFormState } from "@/app/lib/states/states";
 
-export async function signup(state: any, formData: FormData) {
+export async function signup(state: SignupFormState, formData: FormData) {
     const validationResult = signupSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
         return {
-            errors: validationResult.error.format(),
-        }
+            _errors: {
+                email: validationResult.error.format().email?._errors,
+                password: validationResult.error.format().password?._errors,
+                firstname: validationResult.error.format().firstName?._errors,
+                lastname: validationResult.error.format().lastName?._errors,
+            }
+        };
     }
 
     if (await getUserByEmail(validationResult.data.email) != null) {
         return {
-            email: {
-                _errors: ["Email already exists."]
-            }
+            _errors: { email: ["Email already exists."] }
         }
     }
 

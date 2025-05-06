@@ -17,7 +17,7 @@ export async function addReviewAction(rating: number, content: string, serviceId
             const message = JSON.stringify(validationResult.error.flatten());
             throw new Error(message);
         }
-        const result = await addReview(rating, content, clientId, employeeId, serviceId);
+        await addReview(rating, content, clientId, employeeId, serviceId);
         return { success: true, message: "Review submitted successfuly!" };
     } catch (e) {
         console.error("Review creation failed:", e);

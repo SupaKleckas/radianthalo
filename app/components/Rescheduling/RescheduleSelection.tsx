@@ -13,6 +13,7 @@ import { getUnavailableWeekdays } from "@/app/lib/date/availability";
 import { SubmitButton } from "../UI/Buttons";
 import { Button } from "@/components/ui/button";
 import { HiOutlineClock } from "react-icons/hi";
+import { getEmployeeTimeOff } from "@/app/lib/date/availability";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,13 +31,16 @@ export default function RescheduleSelection({ appt, serviceEmployees, currEmploy
     const [selectedEmployee, setSelectedEmployee] = useState(currEmployee);
     const [date, setDate] = useState<Date>(new Date(appt.startTime.getFullYear(), appt.startTime.getMonth(), appt.startTime.getDate() + 1));
     const [time, setTime] = useState<string | null>(null);
-    const [unavailable, setUnavailable] = useState<string[]>([]);
+    const [unavailableWeekday, setUnavailableWeekday] = useState<string[]>([]);
+    const [unavailableDay, setUnavailableDay] = useState<string[]>([]);
 
     useEffect(() => {
         if (selectedEmployee) {
             const fetchAvailability = async () => {
                 const unavailableWeekdays = await getUnavailableWeekdays(selectedEmployee.id);
-                setUnavailable(unavailableWeekdays || []);
+                const unavailableDays = await getEmployeeTimeOff(selectedEmployee.id);
+                setUnavailableWeekday(unavailableWeekdays || []);
+                setUnavailableDay(unavailableDays || []);
             };
             fetchAvailability();
         }
@@ -64,14 +68,14 @@ export default function RescheduleSelection({ appt, serviceEmployees, currEmploy
                 <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
                 <Separator orientation="horizontal" className="w-f-ull h-[4px] bg-slate-500 lg:hidden block" />
                 <div className="flex-1 mt-5 mb-5 lg:mt-0">
-                    <BookingCalendar selectedDate={date} setSelectedDate={setDate} unavailable={unavailable} />
+                    <BookingCalendar selectedDate={date} setSelectedDate={setDate} unavailableWeekday={unavailableWeekday} unavailableDay={unavailableDay} />
                 </div>
                 <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
                 <Separator orientation="horizontal" className="w-f-ull h-[4px] bg-slate-500 lg:hidden block" />
                 <div className="flex-1 mt-5 mb-5 lg:mt-0">
                     {selectedEmployee && (
                         <TimeSelection employee={selectedEmployee} selectedDate={date} selectedTime={time} setSelectedTime={setTime}
-                            unavailable={unavailable.includes(format(date, "EEEE"))} />
+                            unavailable={unavailableWeekday.includes(format(date, "EEEE")) || unavailableDay.includes(format(date, "yyyy-MM-dd"))} />
                     )}
                 </div>
             </CardContent>

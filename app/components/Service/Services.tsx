@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ServiceCategory } from "@prisma/client";
 import { useSearchParams, usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 interface Params {
     isGuest: boolean,
@@ -17,7 +18,15 @@ interface Params {
     }[]>,
 }
 
-export default function Services({ isGuest, serviceCategories, groupedServices }: Params) {
+export default function Services(params: Params) {
+    return (
+        <Suspense fallback={<div className="text-4xl items-center text-slate-700">Loading...</div>}>
+            <ServicesContent {...params} />
+        </Suspense>
+    )
+}
+
+function ServicesContent({ isGuest, serviceCategories, groupedServices }: Params) {
     const pathname = usePathname()
     const searchParams = useSearchParams();
     const categoryParam = searchParams.get('category');

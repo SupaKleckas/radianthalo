@@ -1,3 +1,4 @@
+"use server";
 import { NextResponse } from 'next/server'
 import { stripe } from '@/app/lib/stripe/stripe'
 import prisma from '@/app/lib/database/db'
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
 
         return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments/${appt.id}`);
 
-    } catch (error) {
+    } catch {
         return NextResponse.redirect('/home/services');
     }
 }

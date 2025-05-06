@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
 import { ServiceCategory } from "@prisma/client";
 import { stripe } from "@/app/lib/stripe/stripe";
+import { redirect } from "next/navigation";
 
 export async function getAllServices() {
     return await prisma.service.findMany();
@@ -103,8 +104,7 @@ export async function updateService(id: string, title: string, price: number, du
     });
 
     if (!existingService || !existingService.stripeProductId) {
-        revalidatePath("/dashboard/services");
-        return
+        redirect("/dashboard/services");
     }
 
     const existingEmployeeIds = existingService.employees.map((e) => e.userId);
@@ -122,8 +122,7 @@ export async function updateService(id: string, title: string, price: number, du
     const validEmployeeIds = existingEmployees.map(e => e.userId);
 
     if (validEmployeeIds.length !== employeeIds.length) {
-        revalidatePath("/dashboard/services");
-        return
+        redirect("/dashboard/services");
     }
 
     const service = await prisma.service.update({

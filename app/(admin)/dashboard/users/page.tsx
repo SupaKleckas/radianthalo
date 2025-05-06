@@ -20,22 +20,20 @@ import { Search } from "@/app/components/Page/Search";
 import { RoleFilter } from "@/app/components/Page/RoleFilter";
 import { Suspense } from "react";
 
-interface SearchParamsProps {
-    searchParams?: {
-        page?: string,
-        query?: string,
-        role?: string
-    };
-}
+export type paramsType = Promise<{
+    page?: string;
+    query?: string;
+    role?: string;
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-    const params = await searchParams;
+export default async function Page(props: { params: paramsType }) {
+    const { page, query, role } = await props.params;
 
-    const query = params?.query || "";
-    const role = params?.role || "";
+    const queryParam = query || "";
+    const roleParam = role || "";
 
-    const currPage = Number(params?.page) || 1;
-    const [users, meta] = await getUsers(currPage, query, role);
+    const currPage = Number(page) || 1;
+    const [users, meta] = await getUsers(currPage, queryParam, roleParam);
     const pageAmount = meta?.pageCount;
 
     const getRoleIcon = (role: string) => {
@@ -59,17 +57,20 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     <h1 className="text-base opacity-60">Handle all users here.</h1>
                 </div>
                 <div className='w-full'>
-                    <div className='flex flex-col md:flex-row gap-6 mb-4 mt-4'>
-                        <Search />
-                        <RoleFilter />
-                        <Button className='bg-slate-700 hover:bg-slate-800'>
-                            <Link href="/dashboard/users/add" className="flex flex-row items-center">
-                                <HiUserAdd className='mr-2 text-2xl' />
-                                Add User
-                            </Link>
-                        </Button>
-                    </div>
-                    <PaginationComponent pageAmount={pageAmount} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <div className='flex flex-col md:flex-row gap-6 mb-4 mt-4'>
+                            <Search />
+                            <RoleFilter />
+                            <Button className='bg-slate-700 hover:bg-slate-800'>
+                                <Link href="/dashboard/users/add" className="flex flex-row items-center">
+                                    <HiUserAdd className='mr-2 text-2xl' />
+                                    Add User
+                                </Link>
+                            </Button>
+                        </div>
+
+                        <PaginationComponent pageAmount={pageAmount} />
+                    </Suspense>
                     <Suspense fallback={<div className="text-center py-4">Loading users...</div>}>
                         {users.length === 0 && (
                             <div className="text-center mt-8 text-slate-600">

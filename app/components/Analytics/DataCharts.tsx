@@ -61,23 +61,23 @@ const apptsPerMonthConfig = {
 
 export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerEmployee, apptsPerMonth }: ChartProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {/* First Chart - apptsPerService*/}
-            <Card className="bg-slate-300">
+            <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
                         Top 5 Appointments per Service
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={apptsPerServiceConfig} className="max-h-[200px] w-full">
+                    <ChartContainer config={apptsPerServiceConfig} className="max-h-[160px] w-full">
                         <BarChart data={apptsPerService} layout="vertical" barSize={60} margin={{ right: 20 }}>
                             <CartesianGrid horizontal={false} />
                             <YAxis dataKey="title" type="category" tickLine={false} axisLine={false} hide />
                             <XAxis dataKey="count" type="number" hide />
                             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                             <Bar dataKey="count" layout="vertical" className="fill-slate-700" radius={10}>
-                                <LabelList dataKey="title" position="insideLeft" offset={8} className="fill-slate-100" fontSize={14} />
+                                <LabelList dataKey="title" position="insideLeft" offset={8} className="fill-slate-100 text-xs" fontSize={14} />
                                 <LabelList dataKey="count" position="right" offset={8} className="fill-slate-700" fontSize={14} />
                             </Bar>
                         </BarChart>
@@ -85,14 +85,14 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerE
                 </CardContent>
             </Card>
             {/* Second Chart - apptsPerWeekday */}
-            <Card className="bg-slate-300">
+            <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
                         Appointments per Weekday
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={apptsPerWeekdayConfig} className="min-h-[200px] max-h-[200px] w-full">
+                    <ChartContainer config={apptsPerWeekdayConfig} className="min-h-[160px] max-h-[160px] w-full">
                         <BarChart accessibilityLayer data={apptsPerWeekday} margin={{ top: 20 }}>
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="weekday" tickLine={false} axisLine={false} />
@@ -105,14 +105,14 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerE
                 </CardContent>
             </Card>
             {/* Third Chart - apptsPerMonth */}
-            <Card className="bg-slate-300">
+            <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
                         Appointments per Month
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={apptsPerMonthConfig} className="min-h-[200px] max-h-[200px] w-full">
+                    <ChartContainer config={apptsPerMonthConfig} className="min-h-[160px] max-h-[160px] w-full">
                         <BarChart accessibilityLayer data={apptsPerMonth} margin={{ top: 20 }}>
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="month" tickLine={false} axisLine={false} />
@@ -124,21 +124,21 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerE
                     </ChartContainer>
                 </CardContent>
             </Card>
-            <Card className="bg-slate-300">
+            <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
                         Top 5 Most Active Employees
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={appointmentsPerEmployeeConfig} className="max-h-[200px] w-full">
+                    <ChartContainer config={appointmentsPerEmployeeConfig} className="max-h-[160px] w-full">
                         <BarChart data={apptsPerEmployee} layout="vertical" barSize={60} margin={{ right: 20 }}>
                             <CartesianGrid horizontal={false} />
                             <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} hide />
                             <XAxis dataKey="count" type="number" hide />
                             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                             <Bar dataKey="count" layout="vertical" className="fill-slate-700" radius={10}>
-                                <LabelList dataKey="name" position="insideLeft" offset={8} className="fill-slate-100" fontSize={14} />
+                                <LabelList dataKey="name" position="insideLeft" offset={8} className="fill-slate-100 text-xs" fontSize={14} />
                                 <LabelList dataKey="count" position="right" offset={8} className="fill-slate-700" fontSize={14} />
                             </Bar>
                         </BarChart>

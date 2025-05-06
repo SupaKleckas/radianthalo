@@ -33,7 +33,7 @@ export function TimeSelection({ employee, selectedDate, selectedTime, setSelecte
                 }
             })
             .finally(() => setLoading(false));
-    }, [employee, selectedDate, unavailable]);
+    }, [employee, selectedDate, unavailable, setSelectedTime]);
 
     return (
         <div className="flex flex-col items-center gap-2 mt-4 mb-4">

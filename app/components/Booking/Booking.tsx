@@ -104,7 +104,7 @@ export function Booking({ service, employees }: { service: Service, employees: U
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
                                 <h1 className="text-3xl font-bold text-slate-800">Select Payment Method</h1>
-                                <p className="text-slate-600">Choose how you'd like to pay for your appointment.</p>
+                                <p className="text-slate-600">Choose how you would like to pay for your appointment.</p>
                             </div>
 
                             <form action={handlePaymentSelection} className="space-y-6">

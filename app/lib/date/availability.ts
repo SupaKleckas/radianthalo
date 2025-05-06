@@ -76,7 +76,7 @@ export async function getEmployeeTimeOff(employeeId: string) {
 
     const dates: string[] = [];
     for (const timeOff of timeOffData) {
-        let current = new Date(timeOff.startDate);
+        const current = new Date(timeOff.startDate);
         const end = new Date(timeOff.endDate);
 
         while (current <= end) {

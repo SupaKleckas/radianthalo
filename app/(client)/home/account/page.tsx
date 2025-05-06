@@ -1,0 +1,41 @@
+import { getUserById } from "@/app/actions/user/db";
+import { logout } from "@/app/actions/user/login/actions";
+import AccountDetails from "@/app/components/User/AccountDetails"
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session"
+import { redirect } from "next/navigation";
+import Message from "@/app/components/Notifications/Message";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+export type paramsType = Promise<{ status?: string }>;
+
+type Props = {
+    params: paramsType;
+};
+
+export default async function Page({ params }: Props) {
+    const { status } = await params;
+
+    const userDetails = await getUserIdAndRoleFromSession();
+    if (!userDetails || userDetails.role != "USER") {
+        logout();
+        redirect("/");
+    }
+
+    const user = await getUserById(userDetails.userId);
+
+    if (!user) {
+        redirect("/");
+    }
+
+    return (
+        <ScrollArea className="h-[60vh] w-full rounded-md pr-4">
+            <div className="flex justify-center">
+                <div className="w-[90%] md:w-[70%]">
+                    {status == "password-success" ? <Message type="success" message="Password changed succesfully!" /> : null}
+                    {status == "detail-success" ? <Message type="success" message="Account details changed succesfully!" /> : null}
+                    <AccountDetails user={user} />
+                </div>
+            </div>
+        </ScrollArea>
+    )
+}

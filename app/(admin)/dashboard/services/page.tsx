@@ -19,20 +19,18 @@ import {
 import { Search } from "@/app/components/Page/Search";
 import { Suspense } from "react";
 
-interface SearchParamsProps {
-    searchParams?: {
-        page?: string,
-        query?: string
-    };
-}
+export type paramsType = Promise<{
+    page?: string;
+    query?: string;
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-    const params = await searchParams;
+export default async function Page(props: { params: paramsType }) {
+    const { page, query } = await props.params;
 
-    const query = params?.query || ''
+    const queryParam = query || "";
 
-    const currPage = Number(params?.page) || 1;
-    const [services, meta] = await getServices(currPage, query);
+    const currPage = Number(page) || 1;
+    const [services, meta] = await getServices(currPage, queryParam);
     const pageAmount = meta?.pageCount;
 
     return (
@@ -43,16 +41,19 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                     <h1 className="text-base opacity-60">Handle all services here.</h1>
                 </div>
                 <div className='w-full'>
-                    <div className='flex justify-between mb-4 mt-4'>
-                        <Search />
-                        <Button className="bg-slate-700 hover:bg-slate-800">
-                            <Link href="/dashboard/services/add" className='flex items-center'>
-                                <HiOutlineTruck className='mr-2 text-2xl' />
-                                Add Service
-                            </Link>
-                        </Button>
-                    </div>
-                    <PaginationComponent pageAmount={pageAmount} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <div className='flex justify-between mb-4 mt-4'>
+                            <Search />
+                            <Button className="bg-slate-700 hover:bg-slate-800">
+                                <Link href="/dashboard/services/add" className='flex items-center'>
+                                    <HiOutlineTruck className='mr-2 text-2xl' />
+                                    Add Service
+                                </Link>
+                            </Button>
+                        </div>
+
+                        <PaginationComponent pageAmount={pageAmount} />
+                    </Suspense>
                     <Suspense fallback={<div className="text-center py-4">Loading users...</div>}>
                         {services.length === 0 && (
                             <div className="text-center mt-8 text-slate-600">

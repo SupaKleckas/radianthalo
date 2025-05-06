@@ -3,14 +3,17 @@ import { redirect } from "next/navigation";
 import { getEmployeesByService } from "@/app/actions/user/db";
 import { Booking } from "@/app/components/Booking/Booking";
 
-interface ServiceParams {
-    params: {
-        id: string;
-    };
-}
+export type paramsType = Promise<{
+    id?: string;
+}>;
 
-export default async function Page({ params }: ServiceParams) {
-    const { id } = await params;
+export default async function Page(props: { params: paramsType }) {
+    const { id } = await props.params;
+
+    if (!id) {
+        redirect("/dashboard/services");
+    }
+
     const service = await getServiceById(id);
 
     if (!service) {

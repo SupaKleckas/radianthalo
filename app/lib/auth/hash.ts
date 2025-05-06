@@ -5,11 +5,11 @@ export async function saltAndHashPassword(password: string): Promise<string> {
     return hashedPassword;
 }
 
-export async function verifyPassword(userInputPassword: string, storedHashedPassword: string): Promise<Boolean> {
+export async function verifyPassword(userInputPassword: string, storedHashedPassword: string): Promise<boolean> {
     try {
         const result = await bcryptjs.compare(userInputPassword, storedHashedPassword);
         return result;
-    } catch (err) {
+    } catch {
         return false;
     }
 }

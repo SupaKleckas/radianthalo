@@ -27,6 +27,21 @@ export default function EmployeeSchedule({ appointments }: Props) {
     const [date, setDate] = useState(moment(new Date()).toDate());
 
     useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setView("day");
+            } else {
+                setView("week");
+            }
+        };
+
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
         setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
         if (timezone && appointments.length) {
             const offsetHours = getTimezoneOffset(timezone) / (3600 * 1000)
@@ -37,7 +52,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
             }));
             setEvents(timeZonedEvents);
         }
-    }, []);
+    }, [appointments, timezone]);
 
     const nextDateClick = useCallback(() => {
         if (view === "day") {
@@ -71,7 +86,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
 
     return (
         <div className="p-4 h-[500px]">
-            <div className="flex justify-between m-4">
+            <div className="flex flex-col items-center md:flex-row md:justify-between md:m-4">
                 <Button onClick={() => setDate(moment().toDate())} className={`bg-transparent rounded-none text-slate-800 hover:bg-slate-200 hover:cursor-pointer`}>
                     Go to today
                 </Button>
@@ -79,7 +94,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
                     <Button onClick={prevDateClick} className={`bg-transparent hover:bg-transparent text-slate-800 hover:cursor-pointer hover:text-slate-500`}>
                         <HiArrowSmLeft />
                     </Button>
-                    <p className="text-slate-800">{dateTextView}</p>
+                    <p className="text-slate-800 text-sm md:text-base">{dateTextView}</p>
                     <Button onClick={nextDateClick} className={`bg-transparent hover:bg-transparent text-slate-800 hover:cursor-pointer hover:text-slate-500`}>
                         <HiArrowSmRight />
                     </Button>
@@ -88,7 +103,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
                     <Button onClick={() => setView("day")} className={`rounded-none text-slate-800 hover:bg-slate-300 hover:cursor-pointer ${view === "day" ? "bg-slate-300" : "bg-transparent"}`}>
                         Day
                     </Button>
-                    <Button onClick={() => setView("week")} className={`rounded-none text-slate-800 hover:bg-slate-300 hover:cursor-pointer ${view === "week" ? "bg-slate-300" : "bg-transparent"}`}>
+                    <Button onClick={() => setView("week")} className={`rounded-none hidden md:inline-block md:text-slate-800 hover:bg-slate-300 hover:cursor-pointer ${view === "week" ? "bg-slate-300" : "bg-transparent"}`}>
                         Week
                     </Button>
                 </div>
@@ -107,7 +122,7 @@ export default function EmployeeSchedule({ appointments }: Props) {
                 date={date}
                 components={{
                     event: ({ event }) => (
-                        <div className="flex flex-col mt-1 ml-1 text-xs">
+                        <div className="flex flex-col mt-1 ml-1 text-[12px]">
                             <p>{event.title}</p>
                             <p>{event.client}</p>
                         </div>

@@ -5,18 +5,16 @@ import { getServiceById } from "@/app/actions/service/db";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { getUserById } from "@/app/actions/user/db";
 
-interface SearchParamsProps {
-    searchParams?: {
-        id?: string;
-    };
-}
+export type paramsType = Promise<{
+    id?: string;
+}>;
 
-export default async function Page({ searchParams }: SearchParamsProps) {
-    const params = await searchParams;
-    if (!params?.id) {
+export default async function Page(props: { params: paramsType }) {
+    const { id } = await props.params;
+    if (!id) {
         redirect("/home/appointments")
     }
-    const userAppointment = await getAppointmentById(params.id);
+    const userAppointment = await getAppointmentById(id);
     const user = await getUserIdAndRoleFromSession();
 
     if (!user || user.userId != userAppointment?.clientId || !userAppointment || !userAppointment.serviceId || !userAppointment.employeeId) {

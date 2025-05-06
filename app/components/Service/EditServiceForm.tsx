@@ -13,6 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Input } from '@/components/ui/input';
+import { EditServiceFormState } from "@/app/lib/states/states";
 
 type ServiceWithEmployees = {
     id: string;
@@ -24,8 +25,8 @@ type ServiceWithEmployees = {
 };
 
 export default function UserEditForm({ service, employees }: { service: ServiceWithEmployees, employees: User[] }) {
-    const [state, updateServiceAction] = useActionState(editServiceByForm, undefined);
-    const [selectedEmployees, setSelectedEmployees] = useState(service.employees.map((e: any) => e.userId)) || [];
+    const [state, updateServiceAction] = useActionState<EditServiceFormState, FormData>(editServiceByForm, {});
+    const [selectedEmployees, setSelectedEmployees] = useState(service.employees.map((e) => e.userId)) || [];
     const [servicecategory, setServiceCategory] = useState(service.category);
 
     return (
@@ -34,13 +35,13 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
                 <form action={updateServiceAction} className="flex flex-col w-full justify-center gap-y-2">
                     <Label htmlFor='title' className='text-base text-slate-700'>Title</Label>
                     <Input type="text" id='title' name="title" defaultValue={service.title} className='w-full' />
-                    {state?.errors?.title && <p className='text-red-500 text-sm'>{state.errors.title._errors[0]}</p>}
+                    {state?._errors?.title && <p className='text-red-500 text-sm'>{state._errors.title[0]}</p>}
                     <Label htmlFor='price' className='text-base text-slate-700'>Price</Label>
                     <Input type="number" id='price' name="price" defaultValue={service.price} className='w-full' />
-                    {state?.errors?.price && <p className='text-red-500 text-sm'>{state.errors.price._errors[0]}</p>}
+                    {state?._errors?.price && <p className='text-red-500 text-sm'>{state._errors.price[0]}</p>}
                     <Label htmlFor='duration' className='text-base text-slate-700'>Duration</Label>
                     <Input type="number" id='duration' name="duration" defaultValue={service.duration} className='w-full' />
-                    {state?.errors?.duration && <p className='text-red-500 text-sm'>{state.errors.duration._errors[0]}</p>}
+                    {state?._errors?.duration && <p className='text-red-500 text-sm'>{state._errors.duration[0]}</p>}
                     <Label htmlFor='category' className='text-base text-slate-700'>Category</Label>
                     <Select value={servicecategory} onValueChange={(value) => setServiceCategory(value as ServiceCategory)}>
                         <SelectTrigger className="w-full" >
@@ -66,7 +67,7 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
                         name="employeeIds"
                         value={JSON.stringify(selectedEmployees)}
                     />
-                    {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    {state?._errors?.employees && <p className='text-red-500 text-sm'>{state._errors.employees[0]}</p>}
                     <Input type="hidden" name="id" value={service.id} />
                     <div className="flex justify-center">
                         <Button className="hover:cursor-pointer w-fit bg-slate-700 hover:bg-slate-800 mt-4">Save</Button>

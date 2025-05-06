@@ -12,10 +12,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { EditUserFormState } from "@/app/lib/states/states";
 
 export default function UserEditForm({ user }: { user: User }) {
     const [formData, setFormData] = useState(user);
-    const [state, updateUserAction] = useActionState(editUserByForm, undefined);
+    const [state, updateUserAction] = useActionState<EditUserFormState, FormData>(editUserByForm, {});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,15 +33,15 @@ export default function UserEditForm({ user }: { user: User }) {
                     <Label htmlFor='firstName' className='text-base text-slate-700'>First Name</Label>
                     <Input type="text" name="firstName" value={formData.firstName ?? ''} onChange={handleChange}
                         className='w-full' />
-                    {state?.errors?.firstName && <p className='text-red-500 text-sm'>{state.errors.firstName._errors[0]}</p>}
+                    {state?._errors?.firstname && <p className='text-red-500 text-sm'>{state._errors.firstname[0]}</p>}
                     <Label htmlFor='lastName' className='text-base text-slate-700'>Last Name</Label>
                     <Input type="text" name="lastName" value={formData.lastName ?? ''} onChange={handleChange}
                         className='w-full' />
-                    {state?.errors?.lastName && <p className='text-red-500 text-sm'>{state.errors.lastName._errors[0]}</p>}
+                    {state?._errors?.lastname && <p className='text-red-500 text-sm'>{state._errors.lastname[0]}</p>}
                     <Label htmlFor='email' className='text-base text-slate-700'>Email</Label>
                     <Input type="email" name="email" value={formData.email} onChange={handleChange}
                         className='w-full' />
-                    {state?.errors?.email && <p className='text-red-500 text-sm'>{state.errors.email._errors[0]}</p>}
+                    {state?._errors?.email && <p className='text-red-500 text-sm'>{state._errors.email[0]}</p>}
                     <Label htmlFor='role' className='text-base text-slate-700'>Role</Label>
                     <Select value={formData.role ?? ''} onValueChange={(value) => setRole(value as Role)}>
                         <SelectTrigger className="w-full" defaultValue={Role.USER}>
@@ -52,8 +53,7 @@ export default function UserEditForm({ user }: { user: User }) {
                             <SelectItem value={`${Role.ADMIN}`}>{Role.ADMIN}</SelectItem>
                         </SelectContent>
                     </Select>
-                    {state?.errors?.role && <p className='text-red-500 text-sm'>{state.errors.role._errors[0]}</p>}
-                    {state?._errors && <p className='text-red-500 text-sm'>{state._errors}</p>}
+                    {state?._errors?.role && <p className='text-red-500 text-sm'>{state._errors.role[0]}</p>}
                     <Input type="hidden" name="role" value={formData.role ?? ''} />
                     <Input type="hidden" name="id" value={user.id} />
                     <div className='flex justify-center'>
