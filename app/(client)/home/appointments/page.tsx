@@ -11,13 +11,10 @@ import { groupByDate } from "@/app/lib/grouping/groupByDate";
 import Message from "@/app/components/Notifications/Message";
 import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
 
-export type paramsType = Promise<{
-    page?: string;
-    status?: string
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { page, status } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { page, status } = await props.searchParams;
     const userId = await getUserIdFromSession();
     if (!userId) {
         return;

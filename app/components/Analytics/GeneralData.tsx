@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { HiUser, HiIdentification, HiCash } from "react-icons/hi";
 
 interface DataProps {
@@ -43,9 +43,6 @@ export default function GeneralData({ employees, clients, earnings, employeeEarn
                             </CardTitle>
                             <p className="opacity-[60%] text-sm p-0"> Total Earnings </p>
                         </CardHeader>
-                        <CardContent className="opacity-[60%] text-sm p-0">
-                            Total Earnings
-                        </CardContent>
                     </Card>
                     :
                     null

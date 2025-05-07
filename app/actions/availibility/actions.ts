@@ -65,6 +65,5 @@ export async function addTemporaryLeave(fromDate: Date, toDate: Date, timeZone: 
     const apptsToEmail = await getEmployeeAppointmentsInInterval(fromDate, toDate, user.id);
     await sendTimeOffAnnounement(apptsToEmail, user);
 
-
     redirect("/staff-dashboard/availability?status=success");
 }

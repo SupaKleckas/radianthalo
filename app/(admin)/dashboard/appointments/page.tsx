@@ -22,12 +22,9 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-export type paramsType = Promise<{
-    page?: string;
-    query?: string;
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
+export default async function Page(props: { params: SearchParams }) {
     const { page, query } = await props.params;
 
     const currPage = Number(page) || 1;

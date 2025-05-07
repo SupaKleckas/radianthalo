@@ -19,13 +19,10 @@ import {
 import { Search } from "@/app/components/Page/Search";
 import { Suspense } from "react";
 
-export type paramsType = Promise<{
-    page?: string;
-    query?: string;
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { page, query } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { page, query } = await props.searchParams;
 
     const queryParam = query || "";
 

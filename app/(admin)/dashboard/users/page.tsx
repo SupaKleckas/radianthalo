@@ -20,14 +20,10 @@ import { Search } from "@/app/components/Page/Search";
 import { RoleFilter } from "@/app/components/Page/RoleFilter";
 import { Suspense } from "react";
 
-export type paramsType = Promise<{
-    page?: string;
-    query?: string;
-    role?: string;
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { page, query, role } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { page, query, role } = await props.searchParams;
 
     const queryParam = query || "";
     const roleParam = role || "";

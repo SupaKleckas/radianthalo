@@ -1,18 +1,14 @@
 import ReviewList from "@/app/components/Review/ReviewList";
 
-export type paramsType = Promise<{
-    page?: string,
-    query?: string,
-    service?: string,
-    category?: string,
-    client?: string,
-    employee?: string
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { page, query, service, category, client, employee } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const searchParams = await props.searchParams;
 
     return (
-        <ReviewList searchParams={{ page, query, service, category, client, employee }} />
+        <ReviewList searchParams={{
+            page: searchParams.page, query: searchParams.query, service: searchParams.service,
+            category: searchParams.category, client: searchParams.client, employee: searchParams.employee
+        }} />
     );
 }

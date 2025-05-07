@@ -10,12 +10,12 @@ import { RatingChart } from "@/app/components/Analytics/RatingChart";
 
 interface Props {
     searchParams?: {
-        page?: string,
-        query?: string,
-        service?: string,
-        category?: string,
-        client?: string,
-        employee?: string
+        page?: string | undefined,
+        query?: string | undefined,
+        service?: string | undefined,
+        category?: string | undefined,
+        client?: string | undefined,
+        employee?: string | undefined
     },
     staffView?: boolean
 }

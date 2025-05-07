@@ -150,18 +150,18 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
     if (dateUtc <= new Date()) {
-        return;
+        redirect(`/home/appointments/${appt.id}`);
     }
 
     const userInfo = await getUserIdAndRoleFromSession();
     if (!userInfo || userInfo.role != "USER") {
-        return;
+        redirect(`/`);
     }
 
     const user = await getUserById(userInfo.userId);
 
     if (!user) {
-        return;
+        redirect(`/home/appointments/${appt.id}`);
     }
 
     const startTime = addTimeToDate(dateUtc, time);
