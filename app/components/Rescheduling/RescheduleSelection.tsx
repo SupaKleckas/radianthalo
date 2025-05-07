@@ -85,7 +85,7 @@ export default function RescheduleSelection({ appt, serviceEmployees, currEmploy
                         <AlertDialogTrigger asChild>
                             <Button variant={"ghost"} className='hover:cursor-pointer'> Cancel Appointment </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="z-[800]">
                             <AlertDialogHeader>
                                 <AlertDialogTitle>{`Are you sure you want to cancel your appointment for ${appt.title} on ${format(appt.startTime, "MMMM do")}?`}</AlertDialogTitle>
                                 <AlertDialogDescription>
@@ -96,7 +96,7 @@ export default function RescheduleSelection({ appt, serviceEmployees, currEmploy
                                 <AlertDialogCancel className="hover:cursor-pointer hover:bg-slate-300">Go Back</AlertDialogCancel>
                                 <form action={deleteAppointmentAction.bind(null, appt.id)}>
                                     <AlertDialogAction asChild >
-                                        <Button type="submit" className="bg-slate-700 hover:cursor-pointer">Cancel appointment</Button>
+                                        <Button type="submit" className="bg-slate-700 w-full md:w-fit hover:cursor-pointer">Cancel appointment</Button>
                                     </AlertDialogAction>
                                 </form>
                             </AlertDialogFooter>
