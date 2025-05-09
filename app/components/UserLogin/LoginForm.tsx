@@ -48,7 +48,7 @@ export default function LoginForm({ onClose }: LoginFormProps) {
           </Button>
         </form>
         <span className='flex flex-row items-center mt-4 text-slate-800'>
-          <p>Create account</p>
+          <p>Create account?</p>
           <Button onClick={toggleSignupForm} variant='link' className='text-slate-800 text-base hover:underline hover:cursor-pointer'>Sign up</Button>
         </span>
       </div>
