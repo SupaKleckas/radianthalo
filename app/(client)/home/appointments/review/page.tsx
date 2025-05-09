@@ -5,12 +5,10 @@ import { getServiceById } from "@/app/actions/service/db";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { getUserById } from "@/app/actions/user/db";
 
-export type paramsType = Promise<{
-    id?: string;
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { id } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { id } = await props.searchParams;
     if (!id) {
         redirect("/home/appointments")
     }

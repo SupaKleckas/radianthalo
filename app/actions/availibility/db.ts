@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { revalidatePath } from "next/cache";
 import { User } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 interface Props {
     availabilityData: {
@@ -40,7 +40,7 @@ export async function updateAvailability({ availabilityData }: Props) {
             }
         }))
     );
-    revalidatePath("/staff-dashboard/availability");
+    redirect("/staff-dashboard/availability?status=availability-success");
 }
 
 export async function addTimeOff(fromDate: Date, toDate: Date, user: User) {

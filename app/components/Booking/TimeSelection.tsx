@@ -27,7 +27,7 @@ export function TimeSelection({ employee, selectedDate, selectedTime, setSelecte
                     setAvailableTimes([]);
                 } else if (times.length > 0) {
                     setAvailableTimes(times);
-                    setSelectedTime(times[0])
+                    setSelectedTime(times[0]);
                 } else {
                     setAvailableTimes([]);
                 }

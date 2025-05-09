@@ -12,6 +12,8 @@ export default async function Page(props: { params: paramsType }) {
   return (
     <div className="flex flex-col">
       {status == "signup-success" ? <Message type="success" message="You have been successfully registered in our system! Please login to your account." /> : null}
+      {status == "signup-success-noemail" ? <Message type="success" message="You have been successfully registered in our system! Please login to your account. 
+      However, the confirmation email could not be sent. Please verify your email address later." /> : null}
       <div className="flex flex-row justify-center md:justify-between m-10 gap-y-6">
         <div className="flex flex-col gap-y-6">
           <h1 className="text-6xl font-bold text-slate-800">

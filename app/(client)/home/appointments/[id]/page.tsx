@@ -38,6 +38,8 @@ export default async function Page(props: { params: paramsType }) {
     return (
         <div className="flex flex-col justify-center items-center">
             {status == "reschedule-success" ? <Message type="success" message="Appointment rescheduled succesfully!" /> : null}
+            {status == "reschedule-success-noemail" ? <Message type="success" message="Appointment rescheduled succesfully, but
+             the confirmation email could not be sent. Please verify your email address later." /> : null}
             <div className="flex flex-col justify-center w-[60%]">
                 <Link className="mb-6" href="/home/appointments">
                     <div className="flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">

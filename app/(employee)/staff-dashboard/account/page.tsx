@@ -25,7 +25,9 @@ export default async function Page(props: { params: paramsType }) {
 
     return (
         <div>
-            {status == "password-success" ? <Message type="success" message="Password changed succesfully!" /> : null}
+            {status == "password-success" ? <Message type="success" message="Password changed succesfully! A confirmation email has been sent to your inbox." /> : null}
+            {status == "password-success-noemail" ? <Message type="success" message="Password changed successfully, but
+                         the confirmation email could not be sent. Please verify your email address later." /> : null}
             {status == "detail-success" ? <Message type="success" message="Account details changed succesfully!" /> : null}
             <AccountDetails user={user} />
         </div>

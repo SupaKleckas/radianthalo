@@ -29,6 +29,11 @@ export async function signup(state: SignupFormState, formData: FormData) {
 
     const hashed = await saltAndHashPassword(validationResult.data.password);
     const user = await addUser(validationResult.data.email, hashed, validationResult.data.firstName, validationResult.data.lastName);
-    await sendRegistrationSuccessEmail(user);
-    redirect("/?status=signup-success");
+    const response = await sendRegistrationSuccessEmail(user);
+    if (response) {
+        redirect("/?status=signup-success");
+    } else {
+        redirect("/?status=signup-success-noemail");
+    }
+
 }

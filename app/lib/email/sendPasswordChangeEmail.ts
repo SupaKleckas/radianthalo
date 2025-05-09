@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import nodemailer from "nodemailer"
 
-export async function sendRegistrationSuccessEmail(client: User) {
+export async function sendPasswordChangeEmail(user: User) {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -16,12 +16,12 @@ export async function sendRegistrationSuccessEmail(client: User) {
     try {
         await transporter.sendMail({
             from: process.env.GMAIL_USERNAME,
-            to: `${client.email}`,
-            subject: `You have succesfully registered at Radiant Halo Lounge!`,
+            to: `${user.email}`,
+            subject: `Your Password Has Been Updated`,
             html: `
-            <p>Hello ${client.firstName},</p>
-            <p>you have succesfully registered at Radiant Halo Lounge!</p>
-            <p>When you're ready, book an appointment here http://localhost:3000/home/services</p>
+            <p>Hello ${user.firstName},</p>
+            <p>we want to inform you that the password for your <strong>Radiant Halo Lounge</strong> account was recently changed.</p>
+            <p>If this was not you, please contact support.</p>
             <p>Best regards,</p>
             <p>Radiant Halo Lounge team</p>
         `,

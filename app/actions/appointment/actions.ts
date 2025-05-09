@@ -14,25 +14,25 @@ import { adjustToUTC, addTimeToDate } from "@/app/lib/date/adjustTimes";
 
 export async function addAppointmentByBooking(employee: User, date: Date, time: string, service: Service, timeZone: string, paymentMethod: PaymentMethod) {
     if (await getEmployeeById(employee.id) == null) {
-        return;
+        return ({ redirectUrl: `/home/services` });
     }
 
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
     if (dateUtc <= new Date()) {
-        return;
+        return ({ redirectUrl: `/home/services` });
     }
 
     const userInfo = await getUserIdAndRoleFromSession();
     if (!userInfo || userInfo.role != "USER") {
-        return;
+        return ({ redirectUrl: `/home/services` });
     }
 
     const user = await getUserById(userInfo.userId);
 
     if (!user) {
-        return;
+        return ({ redirectUrl: `/home/services` });
     }
 
     const startTime = addTimeToDate(dateUtc, time);
@@ -40,12 +40,7 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
 
     const appt = await addAppointment(service.title, startTime, endTime, employee.id, user.id, service.id, paymentMethod);
 
-    try {
-        await sendAppointmentSuccessEmail(user, appt);
-    }
-    catch (e) {
-        console.log(e)
-    }
+    await sendAppointmentSuccessEmail(user, appt);
 
     return ({ redirectUrl: `/home/appointments/${appt.id}` });
 }
@@ -137,8 +132,13 @@ export async function deleteAppointmentAction(id: string) {
         return;
     }
     await deleteAppointment(id);
-    await sendCancelSuccessEmail(user, cancelled);
-    redirect(`/home/appointments?status=cancel-success`)
+    const response = await sendCancelSuccessEmail(user, cancelled);
+    if (response) {
+        redirect(`/home/appointments?status=cancel-success`)
+    } else {
+        redirect(`/home/appointments?status=cancel-success-noemail`)
+    }
+
 }
 
 export async function updateAppointmentAction(appt: Appointment, employee: User, date: Date, time: string, service: Service, timeZone: string) {
@@ -168,8 +168,14 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
     const updated = await updateAppointment(appt.id, startTime, endTime, employee.id);
-    await sendRescheduleSuccessEmail(user, updated);
-    redirect(`/home/appointments/${updated.id}?status=reschedule-success`);
+    const response = await sendRescheduleSuccessEmail(user, updated);
+
+    if (response) {
+        redirect(`/home/appointments/${updated.id}?status=reschedule-success`);
+    } else {
+        redirect(`/home/appointments/${updated.id}?status=reschedule-success-noemail`);
+    }
+
 }
 
 export async function deleteExpiredTemporaryAppointmentsAction() {

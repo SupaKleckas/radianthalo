@@ -4,7 +4,6 @@ import { Appointment, User } from "@prisma/client";
 import nodemailer from "nodemailer"
 
 export async function sendCancelSuccessEmail(client: User, appt: Appointment) {
-
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -27,9 +26,8 @@ export async function sendCancelSuccessEmail(client: User, appt: Appointment) {
         `,
             replyTo: process.env.GMAIL_USERNAME,
         });
-        return { success: true, message: 'Email sent successfully!' };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Failed to send email.' };
+        return { success: true };
+    } catch {
+        return { success: false };
     }
 }

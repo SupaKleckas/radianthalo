@@ -4,6 +4,7 @@ import { saltAndHashPassword } from "@/app/lib/auth/hash";
 import { addUser, getUserByEmail, getUserById, updateUser, updateUserDetails, updateUserPassword } from "@/app/actions/user/db"
 import { redirect } from "next/navigation";
 import { EditAccountState, EditPasswordState, AddUserFormState, EditUserFormState } from "@/app/lib/states/states";
+import { sendPasswordChangeEmail } from "@/app/lib/email/sendPasswordChangeEmail"
 
 export async function addUserByForm(state: AddUserFormState, formData: FormData) {
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
@@ -72,7 +73,7 @@ export async function editPasswordAction(state: EditPasswordState, formData: For
     const { newPassword } = validationResult.data;
     const userId = formData.get("userid") as string;
 
-    const user = getUserById(userId)
+    const user = await getUserById(userId)
 
     if (!user) {
         return { _errors: { confirmPassword: ["Something went wrong. Try again later."] } }
@@ -80,7 +81,19 @@ export async function editPasswordAction(state: EditPasswordState, formData: For
 
     const hashed = await saltAndHashPassword(newPassword);
     await updateUserPassword(userId, hashed);
-    redirect("/dashboard/account?status=password-success");
+
+    const response = await sendPasswordChangeEmail(user);
+
+    switch (user.role) {
+        case "ADMIN":
+            return redirect(response.success ? "/dashboard/account?status=password-success" : "/dashboard/account?status=password-success-noemail");
+        case "EMPLOYEE":
+            return redirect(response.success ? "/staff-dashboard/account?status=password-success" : "/staff-dashboard/account?status=password-success-noemail");
+        case "USER":
+            return redirect(response.success ? "/home/account?status=password-success" : "/home/account?status=password-success-noemail");
+        default:
+            return redirect("/");
+    }
 }
 
 export async function editAccountAction(state: EditAccountState, formData: FormData): Promise<EditAccountState> {

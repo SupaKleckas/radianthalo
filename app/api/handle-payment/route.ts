@@ -4,6 +4,8 @@ import { stripe } from '@/app/lib/stripe/stripe'
 import prisma from '@/app/lib/database/db'
 import { addAppointment, deleteTemporaryAppointment } from '@/app/actions/appointment/db'
 import { PaymentMethod } from '@prisma/client'
+import { sendAppointmentSuccessEmail } from '@/app/lib/email/sendAppointmentSuccessEmail';
+import { getUserById } from '@/app/actions/user/db';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -37,6 +39,14 @@ export async function GET(request: Request) {
         const appt = await addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId, PaymentMethod.Online);
 
         deleteTemporaryAppointment(tempAppointment.id);
+
+        const user = await getUserById(tempAppointment.clientId);
+
+        if (!user) {
+            return NextResponse.redirect('/home/services');
+        }
+
+        await sendAppointmentSuccessEmail(user, appt);
 
         return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments/${appt.id}`);
 

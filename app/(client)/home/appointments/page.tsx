@@ -30,6 +30,8 @@ export default async function Page(props: { searchParams: SearchParams }) {
             {status == "success" ? <Message type="success" message="Appointment booked successfully!" /> : null}
             {status == "review-success" ? <Message type="success" message="Review submitted successfully!" /> : null}
             {status == "cancel-success" ? <Message type="success" message="You successfully cancelled the appointment." /> : null}
+            {status == "cancel-success-noemail" ? <Message type="success" message="You successfully cancelled the appointment, but
+             the confirmation email could not be sent. Please verify your email address later." /> : null}
             <div className="flex flex-col p-4">
                 {appointments.length == 0 ?
                     <div className="flex items-center justify-center flex-col xl:flex-row text-2xl xl:text-4xl xl:gap-6 mt-[10%]">
