@@ -5,10 +5,10 @@ import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session"
 import { redirect } from "next/navigation";
 import Message from "@/app/components/Notifications/Message";
 
-export type paramsType = Promise<{ status?: string }>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-    const { status } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { status } = await props.searchParams;
     const userDetails = await getUserIdAndRoleFromSession();
     if (!userDetails || userDetails.role != "ADMIN") {
         logout();

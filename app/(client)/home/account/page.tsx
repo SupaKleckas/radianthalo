@@ -6,14 +6,10 @@ import { redirect } from "next/navigation";
 import Message from "@/app/components/Notifications/Message";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export type paramsType = Promise<{ status?: string }>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-type Props = {
-    params: paramsType;
-};
-
-export default async function Page({ params }: Props) {
-    const { status } = await params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { status } = await props.searchParams;
 
     const userDetails = await getUserIdAndRoleFromSession();
     if (!userDetails || userDetails.role != "USER") {

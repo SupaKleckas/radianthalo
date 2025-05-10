@@ -2,12 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Message from "@/app/components/Notifications/Message";
 
-export type paramsType = Promise<{
-  status?: string
-}>;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: paramsType }) {
-  const { status } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+  const { status } = await props.searchParams;
 
   return (
     <div className="flex flex-col">
@@ -44,63 +42,71 @@ export default async function Page(props: { params: paramsType }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Link href="/services?category=Hair">
-            <div className="hover:scale-105 transition">
+            <div className="hover:scale-105 transition overflow-hidden rounded-md">
               <h1 className="flex font-bold text-3xl text-slate-800 m-6">
                 Hair
               </h1>
-              <Image
-                src="/hair.jpg"
-                alt="Picture of hair service"
-                width={500}
-                height={200}
-                quality={100}
-                className="w-full h-50 object-cover rounded-md"
-              />
+              <div className="aspect-16/6 w-full relative">
+                <Image
+                  src="/hair.jpg"
+                  alt="Picture of hair service"
+                  fill
+                  quality={100}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover rounded-md"
+                />
+              </div>
             </div>
           </Link>
           <Link href="/services?category=Nails">
-            <div className="hover:scale-105 transition">
+            <div className="hover:scale-105 transition overflow-hidden rounded-md">
               <h1 className="flex font-bold text-3xl text-slate-800 m-6">
                 Nails
               </h1>
-              <Image
-                src="/nails.jpg"
-                alt="Picture of nail service."
-                width={500}
-                height={200}
-                quality={100}
-                className="w-full h-50 object-cover rounded-md"
-              />
+              <div className="aspect-16/6 w-full relative">
+                <Image
+                  src="/nails.jpg"
+                  alt="Picture of nail service."
+                  fill
+                  quality={100}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover rounded-md"
+                />
+              </div>
             </div>
           </Link>
           <Link href="/services?category=Brows">
-            <div className="hover:scale-105 transition">
+            <div className="hover:scale-105 transition overflow-hidden rounded-md">
               <h1 className="flex font-bold text-3xl text-slate-800 m-6">
                 Brows
               </h1>
-              <Image
-                src="/brows.jpg"
-                alt="Picture of brows service"
-                width={500}
-                height={200}
-                quality={100}
-                className="w-full h-50 object-cover object-[60%_40%] rounded-md"
-              />
+              <div className="aspect-16/6 w-full relative">
+                <Image
+                  src="/brows.jpg"
+                  alt="Picture of brows service"
+                  fill
+                  quality={100}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover rounded-md"
+                />
+              </div>
             </div>
           </Link>
           <Link href="/services?category=Lashes">
-            <div className="hover:scale-105 transition">
+            <div className="hover:scale-105 transition overflow-hidden rounded-md">
               <h1 className="flex font-bold text-3xl text-slate-800 m-6">
                 Lashes
               </h1>
-              <Image
-                src="/lashes.jpg"
-                alt="Picture of lashes service"
-                width={500}
-                height={200}
-                quality={100}
-                className="w-full h-50 object-cover rounded-md"
-              />
+              <div className="aspect-16/6 w-full relative">
+                <Image
+                  src="/lashes.jpg"
+                  alt="Picture of lashes service"
+                  fill
+                  quality={100}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                  className="object-cover rounded-md"
+                />
+              </div>
             </div>
           </Link>
         </div>

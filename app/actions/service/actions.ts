@@ -7,7 +7,7 @@ import { AddServiceFormState, EditServiceFormState } from "@/app/lib/states/stat
 export async function addServiceByForm(state: AddServiceFormState, formData: FormData) {
     if (formData.get('price') === '' || formData.get('duration') === '') {
         return {
-            _errors: { duration: ["Please fill in all fields."] }
+            _errors: { employees: ["Please fill in all fields."] }
         }
     }
 
@@ -46,7 +46,7 @@ export async function addServiceByForm(state: AddServiceFormState, formData: For
 export async function editServiceByForm(state: EditServiceFormState, formData: FormData) {
     if (formData.get('price') === '' || formData.get('duration') === '') {
         return {
-            _errors: { duration: ["Please fill in all fields."] }
+            _errors: { employees: ["Please fill in all fields."] }
         }
     }
 

@@ -157,7 +157,7 @@ export function ClientDashboardItems() {
         <>
             {clientItems.map((item) => (
                 <Link key={item.id} href={item.href} className={`
-                    flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-white
+                    flex items-center gap-3 px-3 py-2 transition-all hover:text-white
                     ${path === item.href ?
                         "text-white" :
                         "text-black"}`}>
@@ -174,7 +174,7 @@ export function GuestDashboardItems() {
         <>
             {guestItems.map((item) => (
                 <Link key={item.id} href={item.href} className={`
-                    flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-white
+                    flex items-center gap-3 px-3 py-2 transition-all hover:text-white
                     ${path === item.href ?
                         "text-white" :
                         "text-black"}`}>

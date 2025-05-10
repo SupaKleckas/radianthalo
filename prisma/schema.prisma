@@ -19,22 +19,22 @@ model User {
 }
 
 model Client {
-  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId               String                 @id
-  reviews              Review[]
-  appointments         Appointment[]
-  TemporaryAppointment TemporaryAppointment[]
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String                 @id
+  reviews               Review[]
+  appointments          Appointment[]
+  temporaryAppointments TemporaryAppointment[]
 }
 
 model Employee {
-  user                 User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId               String                 @id
-  availibility         Availability[]
-  appointments         Appointment[]
-  services             Service[]
-  reviews              Review[]
-  TemporaryAppointment TemporaryAppointment[]
-  TimeOff              TimeOff[]
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String                 @id
+  availability          Availability[]
+  appointments          Appointment[]
+  services              Service[]
+  reviews               Review[]
+  temporaryAppointments TemporaryAppointment[]
+  timeOff               TimeOff[]
 }
 
 model Appointment {
@@ -83,10 +83,10 @@ model Service {
   stripeProductId String? @unique
   stripePriceId   String? @unique
 
-  employees            Employee[]
-  appointment          Appointment[]
-  Review               Review[]
-  TemporaryAppointment TemporaryAppointment[]
+  employees             Employee[]
+  appointments          Appointment[]
+  reviews               Review[]
+  temporaryAppointments TemporaryAppointment[]
 }
 
 model Review {

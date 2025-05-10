@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { HiCheck, HiOutlineChevronDoubleDown } from "react-icons/hi";
+import { HiCheck, HiOutlineChevronDown } from "react-icons/hi";
 import { Button } from "@/components/ui/button"
 import { User } from "@prisma/client";
 import {
@@ -56,13 +56,13 @@ export function MultiSelect({
                     <div className="flex gap-2 justify-start">
                         {selectedEmployees.length > 0
                             ? selectedEmployees.map((e) => label(e)).join(", ")
-                            : "Select employees..."}
+                            : <span className="text-slate-500">Select employees...</span>}
                     </div>
-                    <HiOutlineChevronDoubleDown className="shrink-0 opacity-30" />
+                    <HiOutlineChevronDown className="shrink-0 opacity-30" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-0">
-                <Command>
+                <Command >
                     <CommandInput placeholder="Search employees..." />
                     <CommandEmpty>No employees found.</CommandEmpty>
                     <CommandList>

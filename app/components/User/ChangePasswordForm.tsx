@@ -18,7 +18,7 @@ export default function ChangePasswordForm({ onClose, userId }: ChangePasswordPr
 
     return (
         <div className='fixed inset-0 flex items-center justify-center z-[100]' style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} >
-            <div className='bg-white p-8 rounded-lg relative lg:w-1/4 max-w-[320px] w-full'>
+            <div className='bg-white p-8 rounded-lg relative max-w-[360px] w-full'>
                 <h1 className='text-3xl font-bold mb-6 text-start text-slate-800'>Change Password</h1>
                 <form action={addPassword} className="flex flex-col gap-y-4">
                     <Label htmlFor="newPassword">New Password</Label>

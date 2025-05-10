@@ -34,17 +34,17 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <div className="min-h-screen w-full grid md:grid-cols-[20%_1fr]">
-                <div className="hidden md:block bg-slate-400">
+            <div className="min-h-screen w-full grid md:grid-cols-[320px_1fr]">
+                <div className="hidden md:block bg-slate-400 max-w-[320px]">
                     <div className="flex h-full max-h-screen flex-col flex-col-gap">
-                        <div className="flex items-center md:h-[70px] bg-slate-400 lg:px-6">
+                        <div className="flex items-center md:h-[70px] bg-slate-400 px-6">
                             <Link href="/dashboard">
                                 <h3 className='text-3xl name font-bold px-5'>RH</h3>
                             </Link>
                         </div>
 
-                        <div className="flex-1 bg-slate-400">
-                            <nav className="grid items-start px-2 text-base lg:text-xl xl:px-4 xl:text-2xl">
+                        <div className="flex-1 bg-slate-400 max-w-[320px]">
+                            <nav className="grid items-start px-2 text-2xl">
                                 <AdminDashboardItems />
                             </nav>
                         </div>

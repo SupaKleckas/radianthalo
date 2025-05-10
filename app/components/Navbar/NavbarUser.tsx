@@ -17,8 +17,8 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 1280);
-            if (window.innerWidth >= 1280) {
+            setIsSmallScreen(window.innerWidth < 1024);
+            if (window.innerWidth >= 1024) {
                 setMenuOpen(false);
             }
         };
@@ -41,7 +41,8 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <div className='flex flex-row items-center ml-auto gap-10'>
-                    <div className={`bg-slate-400 z-50 flex gap-4 md:gap-10 lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-18 flex-col' : 'top-[-100%] flex-row'} lg:w-auto w-full px-5`}>
+                    <div className={`bg-slate-400 z-50 flex gap-4 md:gap-10 lg:static lg:min-h-fit absolute min-h-[20vh] left-0 ${menuOpen ? 'top-18 flex-col' : 'top-[-100%] flex-row'} 
+                        lg:w-auto w-full py-5 lg:py-0`}>
                         <ClientDashboardItems />
                     </div>
                     <div className=''>

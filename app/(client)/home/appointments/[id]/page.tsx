@@ -10,13 +10,15 @@ import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button";
 import Message from "@/app/components/Notifications/Message";
 
-export type paramsType = Promise<{
+type paramsType = Promise<{
     id?: string;
-    status?: string
 }>;
 
-export default async function Page(props: { params: paramsType }) {
-    const { id, status } = await props.params;
+type SearchParams = Promise<{ [key: string]: string | undefined }>
+
+export default async function Page(props: { type: paramsType, search: SearchParams }) {
+    const { id } = await props.type;
+    const { status } = await props.search;
 
     const client = await getUserIdAndRoleFromSession();
 
