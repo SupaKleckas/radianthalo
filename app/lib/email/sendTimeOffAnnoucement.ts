@@ -41,7 +41,7 @@ export async function sendTimeOffAnnounement(appts: AppointmentWithRelations[], 
             html: `
                 <p>Hello ${appt.client.user.firstName},</p>
                 <p>Unfortunately, service provider ${employee.firstName} you have booked will be unavailable during the time of the appointment.</p>
-                <p>Please kindly reschedule your appointment or change the service provider. You can do so here: http://localhost:3000/home/appointments/reschedule?id=${appt.id}</p>
+                <p>Please kindly reschedule your appointment or change the service provider. You can do so here: ${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments/reschedule?id=${appt.id}</p>
                 <p>We apologise for the inconvenience.</p>
                 <p>Best regards,</p>
                 <p>Radiant Halo Lounge team</p>

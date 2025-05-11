@@ -10,19 +10,17 @@ import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button";
 import Message from "@/app/components/Notifications/Message";
 
-type paramsType = Promise<{
-    id?: string;
-}>;
+type Params = Promise<{ id: string }>
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
-type SearchParams = Promise<{ [key: string]: string | undefined }>
-
-export default async function Page(props: { type: paramsType, search: SearchParams }) {
-    const { id } = await props.type;
-    const { status } = await props.search;
+export default async function Page(props: { params: Params, searchParams: SearchParams }) {
+    const { id } = await props.params;
+    const { status } = await props.searchParams;
 
     const client = await getUserIdAndRoleFromSession();
 
     if (!id || !client?.userId || client.role != "USER") {
+        console.log("??")
         redirect("/home/appointments");
     }
 

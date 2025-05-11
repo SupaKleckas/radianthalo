@@ -21,7 +21,7 @@ export async function sendRegistrationSuccessEmail(client: User) {
             html: `
             <p>Hello ${client.firstName},</p>
             <p>you have succesfully registered at Radiant Halo Lounge!</p>
-            <p>When you're ready, book an appointment here http://localhost:3000/home/services</p>
+            <p>When you're ready, book an appointment here ${process.env.NEXT_PUBLIC_BASE_URL}/home/services</p>
             <p>Best regards,</p>
             <p>Radiant Halo Lounge team</p>
         `,
