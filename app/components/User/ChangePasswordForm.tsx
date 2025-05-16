@@ -8,10 +8,9 @@ import { editPasswordAction } from "@/app/actions/user/actions";
 
 interface ChangePasswordProps {
     onClose: () => void;
-    userId: string
 }
 
-export default function ChangePasswordForm({ onClose, userId }: ChangePasswordProps) {
+export default function ChangePasswordForm({ onClose }: ChangePasswordProps) {
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [state, addPassword] = useActionState<EditPasswordState, FormData>(editPasswordAction, {});
@@ -27,7 +26,6 @@ export default function ChangePasswordForm({ onClose, userId }: ChangePasswordPr
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
                     <Input name="confirmPassword" type="password" value={confirmPass} onChange={e => setConfirmPass(e.target.value)} />
                     {state._errors?.confirmPassword && <p className='text-red-500 text-sm'>{state._errors.confirmPassword[0]}</p>}
-                    <Input type="hidden" name="userid" value={userId} />
                     <div className="flex flex-row gap-x-4 justify-end">
                         <Button variant={'ghost'} onClick={onClose} className='hover:cursor-pointer'>
                             Cancel

@@ -40,7 +40,7 @@ export default async function Page(props: { params: Params, searchParams: Search
             {status == "reschedule-success" ? <Message type="success" message="Appointment rescheduled succesfully!" /> : null}
             {status == "reschedule-success-noemail" ? <Message type="success" message="Appointment rescheduled succesfully, but
              the confirmation email could not be sent. Please verify your email address later." /> : null}
-            <div className="flex flex-col justify-center w-[60%]">
+            <div className="flex flex-col justify-center w-full lg:w-[70%]">
                 <Link className="mb-6" href="/home/appointments">
                     <div className="flex flex-row ml-4 items-center hover:cursor-pointer size-fit hover:text-slate-600 transition-all">
                         <HiArrowSmLeft className='text-4xl' />
@@ -50,8 +50,8 @@ export default async function Page(props: { params: Params, searchParams: Search
 
                 <h1 className="flex justify-center text-2xl md:text-4xl text-slate-800 font-semibold mb-8">Thank you for booking with Radiant Halo Lounge!</h1>
 
-                <div className="flex flex-col justify-between lg:grid" style={{ gridTemplateColumns: '1fr 1px 1fr 1px 1fr' }}>
-                    <div className="flex flex-col gap-y-4 items-center min-h-[150px]">
+                <div className="flex flex-col justify-between lg:grid" style={{ gridTemplateColumns: '1fr 1px 1fr 1px 1fr 1px 1fr' }}>
+                    <div className="flex flex-col gap-y-4 items-center min-h-[160px]">
                         <p className="text-slate-500">Service</p>
                         <p className="">{appt.title}</p>
                     </div>
@@ -70,6 +70,13 @@ export default async function Page(props: { params: Params, searchParams: Search
                     <div className="flex flex-col gap-y-4 items-center min-h-[150px] mt-6 md:mt-0">
                         <p className="text-slate-500">Service provider</p>
                         <p>{employee?.firstName + " " + employee?.lastName}</p>
+                    </div>
+                    <Separator orientation="vertical" className="self-stretch w-[4px] bg-slate-500 lg:block hidden" />
+                    <Separator orientation="horizontal" className="w-full h-[4px] bg-slate-500 lg:hidden block" />
+
+                    <div className="flex flex-col gap-y-4 items-center min-h-[150px] mt-6 md:mt-0">
+                        <p className="text-slate-500">Payment method</p>
+                        <p>{appt.paymentMethod}</p>
                     </div>
                 </div>
                 <div className="flex justify-end gap-x-4">

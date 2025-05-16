@@ -19,7 +19,8 @@ export async function getEvents(userId: string) {
                 title: `${service ? service.title : appointment.title}`,
                 start: new Date(appointment.startTime),
                 end: new Date(appointment.endTime),
-                client: `${client ? client.firstName + " " + client.lastName : ""}`
+                client: `${client ? client.firstName + " " + client.lastName : ""}`,
+                paymentMethod: `${appointment.paymentMethod}`
             };
         })
     );

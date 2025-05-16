@@ -1,5 +1,5 @@
 "use server";
-import { getEmployeeAvailability, updateAvailabilityAction } from "@/app/actions/availibility/actions";
+import { getEmployeeAvailability, updateAvailabilityAction } from "@/app/actions/availability/actions";
 import { SubmitButton } from "@/app/components/UI/Buttons";
 import { times } from "@/app/lib/date/times";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";

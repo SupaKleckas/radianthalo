@@ -47,18 +47,6 @@ export async function decrypt(session: string | undefined = "") {
     }
 }
 
-export async function getUserIdFromSession(): Promise<string | null> {
-    const cookie = await cookies();
-    const session = cookie.get("session")?.value;
-
-    const payload = await decrypt(session);
-    if (payload && typeof payload.userId === "string") {
-        return payload.userId;
-    }
-
-    return null;
-}
-
 export async function getUserIdAndRoleFromSession(): Promise<{ userId: string; role: string; } | null> {
     const cookie = await cookies();
     const session = cookie.get("session")?.value;

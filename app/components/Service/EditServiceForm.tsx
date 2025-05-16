@@ -42,7 +42,7 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
                     <Label htmlFor='duration' className='text-base text-slate-700'>Duration</Label>
                     <Input type="number" id='duration' name="duration" defaultValue={service.duration} className='w-full' />
                     {state?._errors?.duration && <p className='text-red-500 text-sm'>{state._errors.duration[0]}</p>}
-                    <Label htmlFor='category' className='text-base text-slate-700'>Category</Label>
+                    <Label className='text-base text-slate-700'>Category</Label>
                     <Select value={servicecategory} onValueChange={(value) => setServiceCategory(value as ServiceCategory)}>
                         <SelectTrigger className="w-full" >
                             <SelectValue placeholder="Category" />
@@ -55,7 +55,7 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
                         </SelectContent>
                     </Select>
                     <input type="hidden" name="category" value={servicecategory} />
-                    <Label htmlFor='employees' className='text-base text-slate-700'>Employees</Label>
+                    <Label className='text-base text-slate-700'>Employees</Label>
                     <MultiSelect
                         employees={employees}
                         selectedValues={selectedEmployees}

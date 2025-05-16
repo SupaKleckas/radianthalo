@@ -6,7 +6,7 @@ function stringToDay(val: string): Day {
     return Day[val as keyof typeof Day];
 }
 
-export async function getWorkingHoursFromAvailibility(userId: string, weekday: string, date: Date) {
+export async function getWorkingHoursFromAvailability(userId: string, weekday: string, date: Date) {
     const data = await prisma.availability.findFirst({
         where: {
             employeeId: userId,

@@ -11,12 +11,12 @@ export default async function getMostActiveEmployees() {
             },
             _count: {
                 select: {
-                    appointments: true
+                    appointment: true
                 }
             }
         },
         orderBy: {
-            appointments: {
+            appointment: {
                 _count: 'desc'
             }
         },
@@ -26,7 +26,7 @@ export default async function getMostActiveEmployees() {
 
     const result = data.map(item => ({
         name: item.user.firstName + " " + item.user.lastName,
-        count: item._count.appointments
+        count: item._count.appointment
     }));
 
     return result;

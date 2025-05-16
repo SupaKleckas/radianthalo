@@ -1,10 +1,10 @@
 "use server";
 import { Employee, User, Service, Appointment, PaymentMethod } from "@prisma/client";
 import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById, deleteExpiredTemporaryAppointments } from "@/app/actions/appointment/db";
-import { getEmployeeById, getClientById, getUserById } from "@/app/actions/user/db";
-import { getUserIdAndRoleFromSession, getUserIdFromSession } from "@/app/lib/auth/session"
+import { getEmployeeById, getUserById } from "@/app/actions/user/db";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
-import { getWorkingHoursFromAvailibility } from "@/app/lib/date/availability"
+import { getWorkingHoursFromAvailability } from "@/app/lib/date/availability"
 import { goToPayment } from "@/app/lib/payment/goToPayment";
 import { redirect } from "next/navigation";
 import { sendAppointmentSuccessEmail } from "@/app/lib/email/sendAppointmentSuccessEmail";
@@ -17,15 +17,15 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
         return ({ redirectUrl: `/home/services` });
     }
 
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
+        return ({ redirectUrl: `/home/services` });
+    }
+
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     const dateUtc = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
     if (dateUtc <= new Date()) {
-        return ({ redirectUrl: `/home/services` });
-    }
-
-    const userInfo = await getUserIdAndRoleFromSession();
-    if (!userInfo || userInfo.role != "USER") {
         return ({ redirectUrl: `/home/services` });
     }
 
@@ -56,20 +56,15 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
         return;
     }
 
-    const userId = await getUserIdFromSession();
-    if (!userId) {
-        return;
-    }
-
-    const client = await getClientById(userId);
-    if (!client) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER" || !userInfo.userId) {
         return;
     }
 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
-    return await addTemporaryAppointment(service.title, startTime, endTime, employee.id, client.userId, service.id);
+    return await addTemporaryAppointment(service.title, startTime, endTime, employee.id, userInfo.userId, service.id);
 }
 
 
@@ -78,7 +73,7 @@ export async function getAvailableTimeSlots(employee: Employee, date: Date, time
     const offsetHours = getTimezoneOffset(timeZone) / (3600 * 1000)
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + offsetHours, 0, 0, 0);
 
-    const timeData = await getWorkingHoursFromAvailibility(employee.userId, format(date, "EEEE"), date);
+    const timeData = await getWorkingHoursFromAvailability(employee.userId, format(date, "EEEE"), date);
 
     if (timeData == undefined) {
         return []
@@ -106,6 +101,11 @@ export async function getAvailableTimeSlots(employee: Employee, date: Date, time
 }
 
 export async function handleBooking(paymentMethod: string, employee: User, date: Date, time: string, service: Service, timeZone: string) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
+        return ({ redirectUrl: `/home/services` });
+    }
+
     if (paymentMethod === "cash") {
         if (employee && time) {
             return addAppointmentByBooking(employee, date, time, service, timeZone, PaymentMethod.Cash);

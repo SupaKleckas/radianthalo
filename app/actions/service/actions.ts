@@ -1,10 +1,18 @@
+"use server";
 import { addServiceSchema, editServiceSchema } from "../../lib/database/zod";
 import { addService, getServiceById, updateService } from "./db";
 import { redirect } from "next/navigation";
 import { ServiceCategory } from "@prisma/client";
 import { AddServiceFormState, EditServiceFormState } from "@/app/lib/states/states";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
+import { logout } from "../user/login/actions";
 
 export async function addServiceByForm(state: AddServiceFormState, formData: FormData) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
+
     if (formData.get('price') === '' || formData.get('duration') === '') {
         return {
             _errors: { employees: ["Please fill in all fields."] }
@@ -14,7 +22,7 @@ export async function addServiceByForm(state: AddServiceFormState, formData: For
     const formDataObject = Object({
         title: formData.get('title'),
         price: parseFloat(formData.get('price') as string),
-        duration: parseInt(formData.get('duration') as string)
+        duration: parseFloat(formData.get('duration') as string)
     })
 
     const validationResult = addServiceSchema.safeParse(formDataObject);
@@ -44,6 +52,11 @@ export async function addServiceByForm(state: AddServiceFormState, formData: For
 }
 
 export async function editServiceByForm(state: EditServiceFormState, formData: FormData) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
+
     if (formData.get('price') === '' || formData.get('duration') === '') {
         return {
             _errors: { employees: ["Please fill in all fields."] }

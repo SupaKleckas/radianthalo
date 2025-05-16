@@ -1,5 +1,4 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
 import { ServiceCategory } from "@prisma/client";
 import { stripe } from "@/app/lib/stripe/stripe";
@@ -94,7 +93,7 @@ export async function addService(title: string, price: number, duration: number,
         }
     });
 
-    revalidatePath("/dashboard/services");
+    redirect("/dashboard/services");
 }
 
 export async function updateService(id: string, title: string, price: number, duration: number, category: ServiceCategory, employeeIds: string[]) {
@@ -148,25 +147,25 @@ export async function updateService(id: string, title: string, price: number, du
     });
 
     await stripe.products.update(
-        service.id,
+        service.stripeProductId!,
         {
             name: service.title,
             default_price: newPrice.id,
         }
     );
 
-    revalidatePath("/dashboard/services");
+    redirect("/dashboard/services");
 }
 
 export async function deleteService(id: string): Promise<void> {
-    await prisma.service.delete({ where: { id: id } });
+    const service = await prisma.service.delete({ where: { id: id } });
 
     await stripe.products.update(
-        id,
+        service.stripeProductId!,
         {
             active: false
         }
     );
 
-    revalidatePath("/dashboard/services");
+    redirect("/dashboard/services");
 }

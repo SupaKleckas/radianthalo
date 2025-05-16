@@ -24,8 +24,8 @@ import {
 
 type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default async function Page(props: { params: SearchParams }) {
-    const { page, query } = await props.params;
+export default async function Page(props: { searchParams: SearchParams }) {
+    const { page, query } = await props.searchParams;
 
     const currPage = Number(page) || 1;
     const [appointments, meta] = await getAppointments(currPage, query);

@@ -1,15 +1,68 @@
 "use server";
 import prisma from "@/app/lib/database/db";
 import { Employee, PaymentMethod } from "@prisma/client";
+import { parseISO, isValid, startOfDay, endOfDay } from "date-fns";
 
 export async function getAppointments(currPage: number, query?: string) {
-    const searchTerm = query
-        ? {
-            OR: [
-                { title: { contains: query, mode: 'insensitive' as const } },
-            ]
+    let searchTerm = {};
+    if (query) {
+        const queryTrimmed = query.trim();
+        const possibleDate = parseISO(queryTrimmed);
+        const validDate = isValid(possibleDate);
+
+        if (validDate) {
+            searchTerm = {
+                OR: [
+                    { title: { contains: query, mode: 'insensitive' as const } },
+                    // CLIENT first + last name
+                    {
+                        AND: [
+                            { client: { user: { firstName: { contains: query.split(' ')[0], mode: 'insensitive' as const } } } },
+                            { client: { user: { lastName: { contains: query.split(' ')[1] || query.split(' ')[0], mode: 'insensitive' as const } } } }
+                        ]
+                    },
+                    // EMPLOYEE first + last name
+                    {
+                        AND: [
+                            { employee: { user: { firstName: { contains: query.split(' ')[0], mode: 'insensitive' as const } } } },
+                            { employee: { user: { lastName: { contains: query.split(' ')[1] || query.split(' ')[0], mode: 'insensitive' as const } } } }
+                        ]
+                    },
+                    // Individual
+                    { client: { user: { firstName: { contains: query, mode: 'insensitive' as const } } } },
+                    { client: { user: { lastName: { contains: query, mode: 'insensitive' as const } } } },
+                    { employee: { user: { firstName: { contains: query, mode: 'insensitive' as const } } } },
+                    { employee: { user: { lastName: { contains: query, mode: 'insensitive' as const } } } },
+                    { startTime: { gte: startOfDay(possibleDate), lte: endOfDay(possibleDate) } }
+                ]
+            }
+        } else {
+            searchTerm = {
+                OR: [
+                    { title: { contains: query, mode: 'insensitive' as const } },
+                    // CLIENT first + last name
+                    {
+                        AND: [
+                            { client: { user: { firstName: { contains: query.split(' ')[0], mode: 'insensitive' as const } } } },
+                            { client: { user: { lastName: { contains: query.split(' ')[1] || query.split(' ')[0], mode: 'insensitive' as const } } } }
+                        ]
+                    },
+                    // EMPLOYEE first + last name
+                    {
+                        AND: [
+                            { employee: { user: { firstName: { contains: query.split(' ')[0], mode: 'insensitive' as const } } } },
+                            { employee: { user: { lastName: { contains: query.split(' ')[1] || query.split(' ')[0], mode: 'insensitive' as const } } } }
+                        ]
+                    },
+                    // Individual
+                    { client: { user: { firstName: { contains: query, mode: 'insensitive' as const } } } },
+                    { client: { user: { lastName: { contains: query, mode: 'insensitive' as const } } } },
+                    { employee: { user: { firstName: { contains: query, mode: 'insensitive' as const } } } },
+                    { employee: { user: { lastName: { contains: query, mode: 'insensitive' as const } } } }
+                ]
+            };
         }
-        : {};
+    }
 
     const result = await prisma.appointment
         .paginate({

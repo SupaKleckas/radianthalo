@@ -1,14 +1,14 @@
 "use server";
-import { getAvailability, updateAvailability } from "@/app/actions/availibility/db";
+import { getAvailability, updateAvailability } from "@/app/actions/availability/db";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { logout } from "@/app/actions/user/login/actions";
-import { addTimeOff } from "@/app/actions/availibility/db";
+import { addTimeOff } from "@/app/actions/availability/db";
 import { adjustToUTC } from "@/app/lib/date/adjustTimes";
 import { getUserById } from "../user/db";
 import { getEmployeeAppointmentsInInterval } from "../appointment/db";
 import { sendTimeOffAnnounement } from "@/app/lib/email/sendTimeOffAnnoucement";
 import { redirect } from "next/navigation";
-import { format, parse } from "date-fns";
+import { parse } from "date-fns";
 
 export async function getEmployeeAvailability() {
     const user = await getUserIdAndRoleFromSession();
@@ -22,7 +22,6 @@ export async function getEmployeeAvailability() {
 
 export async function updateAvailabilityAction(formData: FormData) {
     const user = await getUserIdAndRoleFromSession();
-
     if (!user || user.role != "EMPLOYEE") {
         logout();
     }
@@ -65,7 +64,6 @@ export async function updateAvailabilityAction(formData: FormData) {
 
 export async function addTemporaryLeave(fromDate: Date, toDate: Date, timeZone: string) {
     const userInfo = await getUserIdAndRoleFromSession();
-
     if (!userInfo || userInfo.role != "EMPLOYEE") {
         logout();
         return;

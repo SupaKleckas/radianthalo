@@ -11,7 +11,7 @@ import { HiOutlineCalendar } from "react-icons/hi";
 import { format, addDays } from "date-fns";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { SubmitButton } from "../UI/Buttons";
-import { addTemporaryLeave } from "@/app/actions/availibility/actions";
+import { addTemporaryLeave } from "@/app/actions/availability/actions";
 
 
 export default function TemporaryLeaveForm() {

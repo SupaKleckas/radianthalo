@@ -1,15 +1,18 @@
-import { getUserIdFromSession } from "@/app/lib/auth/session";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EmployeeSchedule from "@/app/components/Schedule/EmployeeSchedule"
 import { getEvents } from "@/app/lib/schedule/getEvents";
+import { redirect } from "next/navigation";
+import { logout } from "@/app/actions/user/login/actions";
 
 export default async function Page() {
-    const userId = await getUserIdFromSession();
-    if (!userId) {
-        return;
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "EMPLOYEE") {
+        logout();
+        redirect("/");
     }
 
-    const events = await getEvents(userId);
+    const events = await getEvents(userInfo.userId);
 
     return (
         <ScrollArea className="h-[80vh] w-full rounded-md pr-4">

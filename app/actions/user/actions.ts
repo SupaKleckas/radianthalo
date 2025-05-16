@@ -5,8 +5,15 @@ import { addUser, getUserByEmail, getUserById, updateUser, updateUserDetails, up
 import { redirect } from "next/navigation";
 import { EditAccountState, EditPasswordState, AddUserFormState, EditUserFormState } from "@/app/lib/states/states";
 import { sendPasswordChangeEmail } from "@/app/lib/email/sendPasswordChangeEmail"
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
+import { logout } from "./login/actions";
 
 export async function addUserByForm(state: AddUserFormState, formData: FormData) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
+
     const validationResult = addUserSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
@@ -31,6 +38,11 @@ export async function addUserByForm(state: AddUserFormState, formData: FormData)
 }
 
 export async function editUserByForm(state: EditUserFormState, formData: FormData) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
+
     const validationResult = editUserSchema.safeParse(Object.fromEntries(formData));
 
     if (!validationResult.success) {
@@ -55,6 +67,12 @@ export async function editUserByForm(state: EditUserFormState, formData: FormDat
 }
 
 export async function editPasswordAction(state: EditPasswordState, formData: FormData): Promise<EditPasswordState> {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || !userInfo.userId) {
+        logout();
+        redirect("/");
+    }
+
     const data = {
         newPassword: formData.get("newPassword"),
         confirmPassword: formData.get("confirmPassword"),
@@ -71,16 +89,15 @@ export async function editPasswordAction(state: EditPasswordState, formData: For
         };
     }
     const { newPassword } = validationResult.data;
-    const userId = formData.get("userid") as string;
 
-    const user = await getUserById(userId)
+    const user = await getUserById(userInfo.userId)
 
     if (!user) {
         return { _errors: { confirmPassword: ["Something went wrong. Try again later."] } }
     }
 
     const hashed = await saltAndHashPassword(newPassword);
-    await updateUserPassword(userId, hashed);
+    await updateUserPassword(userInfo.userId, hashed);
 
     const response = await sendPasswordChangeEmail(user);
 
@@ -97,6 +114,12 @@ export async function editPasswordAction(state: EditPasswordState, formData: For
 }
 
 export async function editAccountAction(state: EditAccountState, formData: FormData): Promise<EditAccountState> {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || !userInfo.userId) {
+        logout();
+        redirect("/");
+    }
+
     const data = {
         firstName: formData.get("firstname"),
         lastName: formData.get("lastname"),
@@ -115,9 +138,7 @@ export async function editAccountAction(state: EditAccountState, formData: FormD
         };
     }
 
-    const userId = formData.get("userid") as string;
-
-    const user = await getUserById(userId)
+    const user = await getUserById(userInfo.userId)
 
     if (!user) {
         return {
@@ -126,7 +147,7 @@ export async function editAccountAction(state: EditAccountState, formData: FormD
         }
     }
 
-    await updateUserDetails(userId, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.email);
+    await updateUserDetails(userInfo.userId, validationResult.data.firstName, validationResult.data.lastName, validationResult.data.email);
     switch (user.role) {
         case "ADMIN":
             redirect("/dashboard/account?status=detail-success");

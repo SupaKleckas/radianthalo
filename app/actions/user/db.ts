@@ -2,8 +2,15 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../../lib/database/db";
 import { Role, Prisma } from "@prisma/client";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
+import { logout } from "./login/actions";
 
 export async function getUsers(currPage: number, query?: string, role?: string) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
+
     const searchTerm: Prisma.UserWhereInput = {
         AND: [
             query
@@ -32,6 +39,10 @@ export async function getUsers(currPage: number, query?: string, role?: string) 
 }
 
 export async function getEmployees() {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "ADMIN") {
+        logout();
+    }
     return await prisma.user.findMany({
         where: {
             role: 'EMPLOYEE'
@@ -41,6 +52,11 @@ export async function getEmployees() {
 }
 
 export async function getEmployeeById(id: string) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo) {
+        logout();
+    }
+
     return await prisma.employee.findUnique({
         where: {
             userId: id
@@ -50,6 +66,11 @@ export async function getEmployeeById(id: string) {
 }
 
 export async function getEmployeesByService(serviceId: string) {
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
+        logout();
+    }
+
     return await prisma.user.findMany({
         where: {
             employee: {
@@ -61,15 +82,6 @@ export async function getEmployeesByService(serviceId: string) {
             }
         }
     })
-}
-
-export async function getClients() {
-    return await prisma.user.findMany({
-        where: {
-            role: 'USER'
-        }
-    }
-    )
 }
 
 export async function getClientById(id: string) {
@@ -112,7 +124,7 @@ export async function addUser(email: string, hashedPassword: string, firstName: 
         await prisma.employee.create({
             data: {
                 userId: user.id,
-                availibility: {
+                availability: {
                     createMany: {
                         data: [
                             {
@@ -191,7 +203,7 @@ export async function updateUser(id: string, email: string, firstName: string, l
             update: {},
             create: {
                 userId: id,
-                availibility: {
+                availability: {
                     createMany: {
                         data: [
                             {

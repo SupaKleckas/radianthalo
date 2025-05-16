@@ -64,7 +64,6 @@ export default function AccountDetails({ user }: Props) {
                         />
                         {state._errors?.email && <p className='text-red-500 text-sm'>{state._errors.email[0]}</p>}
                     </div>
-                    <Input type="hidden" name="userid" value={user.id} />
 
                     <div className="flex gap-4 mt-2 justify-end">
                         <Button type="submit" className="bg-slate-700 hover:bg-slate-800 hover:cursor-pointer">
@@ -83,7 +82,7 @@ export default function AccountDetails({ user }: Props) {
 
                 {isPasswordChangeOpen && (
                     <div className="mt-4">
-                        <ChangePasswordForm onClose={toggleChangePasswordForm} userId={user.id} />
+                        <ChangePasswordForm onClose={toggleChangePasswordForm} />
                     </div>
                 )}
             </div>

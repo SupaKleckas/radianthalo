@@ -4,24 +4,27 @@ import { format } from "date-fns-tz"
 import { getClientAppointments } from "@/app/actions/appointment/db";
 import { PaginationComponent } from "@/app/components/Page/Pagination";
 import { Appointment } from "@prisma/client";
-import { getUserIdFromSession } from "@/app/lib/auth/session";
+import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { groupByDate } from "@/app/lib/grouping/groupByDate";
 import Message from "@/app/components/Notifications/Message";
 import { canLeaveReview } from "@/app/lib/reviews/canLeaveReview";
+import { logout } from "@/app/actions/user/login/actions";
+import { redirect } from "next/navigation";
 
 type SearchParams = Promise<{ [key: string]: string | undefined }>
 
 export default async function Page(props: { searchParams: SearchParams }) {
     const { page, status } = await props.searchParams;
-    const userId = await getUserIdFromSession();
-    if (!userId) {
-        return;
+    const userInfo = await getUserIdAndRoleFromSession();
+    if (!userInfo || userInfo.role != "USER") {
+        logout();
+        redirect("/");
     }
 
     const currPage = Number(page) || 1;
-    const [appointments, meta] = await getClientAppointments(currPage, userId);
+    const [appointments, meta] = await getClientAppointments(currPage, userInfo.userId);
     const pageAmount = meta?.pageCount;
     const dateGroups = groupByDate(appointments);
 
@@ -52,7 +55,7 @@ export default async function Page(props: { searchParams: SearchParams }) {
                                     {appts.map(async (appointment) => {
                                         const canReview = appointment.endTime < new Date() &&
                                             await canLeaveReview(
-                                                userId,
+                                                userInfo.userId,
                                                 appointment.employeeId,
                                                 appointment.serviceId
                                             );
