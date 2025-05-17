@@ -4,7 +4,7 @@ import { groupByCategory } from "@/app/lib/grouping/groupByCategory";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ServiceCategory } from "@prisma/client";
 
-export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
     const serviceCategories = Object.values(ServiceCategory) as ServiceCategory[];
