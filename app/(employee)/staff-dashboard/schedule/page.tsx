@@ -1,5 +1,4 @@
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import EmployeeSchedule from "@/app/components/Schedule/EmployeeSchedule"
 import { getEvents } from "@/app/lib/schedule/getEvents";
 import { redirect } from "next/navigation";

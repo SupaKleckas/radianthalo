@@ -7,7 +7,6 @@ import {
     CarouselContent,
     CarouselItem,
 } from "@/components/ui/carousel"
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function Home() {
     const services = await getAllServices();
