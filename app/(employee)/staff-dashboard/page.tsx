@@ -8,6 +8,8 @@ import getAppointmentsPerMonth from "@/app/lib/analytics/getAppointmentsPerMonth
 import getEmployeePopularService from "@/app/lib/analytics/getEmployeePopularService";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
     const employees = await getEmployeeCount();
     const clients = await getClientCount();

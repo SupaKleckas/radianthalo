@@ -8,6 +8,8 @@ import { getClientCount, getEmployeeCount } from "@/app/lib/analytics/getClientE
 import getAllEarnings from "@/app/lib/analytics/getEarnings";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
     const employees = await getEmployeeCount();
     const clients = await getClientCount();

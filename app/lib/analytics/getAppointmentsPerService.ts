@@ -2,6 +2,11 @@ import prisma from "@/app/lib/database/db";
 
 export default async function getAppointmentsPerService() {
     const data = await prisma.service.findMany({
+        where: {
+            appointment: {
+                some: {}
+            }
+        },
         select: {
             title: true,
             _count: {
@@ -16,13 +21,10 @@ export default async function getAppointmentsPerService() {
         take: 5
     });
 
-    const result = data
-        .filter(service => service._count.appointment > 0)
-        .sort((a, b) => b._count.appointment - a._count.appointment)
-        .map(service => ({
-            title: service.title,
-            count: service._count.appointment,
-        }));
+    const result = data.map(service => ({
+        title: service.title,
+        count: service._count.appointment
+    }));
 
     return result;
 }
