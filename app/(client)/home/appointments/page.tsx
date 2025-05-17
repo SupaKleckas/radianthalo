@@ -61,23 +61,23 @@ export default async function Page(props: { searchParams: SearchParams }) {
                                             );
 
                                         return (
-                                            <li key={appointment.id} className="flex items-center justify-between rounded-lg mb-2 w-full bg-slate-400 hover:bg-[#7d94b6]">
+                                            <li key={appointment.id} className="flex items-center rounded-lg mb-2 w-full bg-slate-400 hover:bg-slate-500">
                                                 <div className="w-full p-4">
-                                                    <div className="flex items-center flex-col lg:flex-row space-x-6 text-base">
-                                                        <span className="flex items-center lg:w-1/2"> <HiOutlineCalendar /> {appointment.title}</span>
-                                                        <span className="flex items-center justify-between lg:w-1/2">
+                                                    <div className="flex justify-between flex-col lg:flex-row">
+                                                        <span className="flex items-center "> <HiOutlineCalendar /> {appointment.title}</span>
+                                                        <span className="flex justify-between w-full lg:w-1/2 flex-col lg:flex-row">
                                                             <div className="flex items-center">
                                                                 <HiOutlineClock /> {format(appointment.startTime, "HH:mm")} - {format(appointment.endTime, "HH:mm")}
                                                             </div>
-                                                            <div>
+                                                            <div className="flex flex-row text-base lg:text-xl">
                                                                 {canReview ?
                                                                     <Link href={`/home/appointments/review?id=${appointment.id}`}>
-                                                                        <Button variant={"link"} className="text-1xl hover:cursor-pointer hover:text-slate-600"> Leave a review! </Button>
+                                                                        <Button variant={"link"} className="hover:cursor-pointer"> Leave a review! </Button>
                                                                     </Link>
                                                                     :
                                                                     null}
                                                                 <Link href={`/home/appointments/${appointment.id}`}>
-                                                                    <Button variant={"ghost"} className="text-1xl hover:cursor-pointer "> View appointment </Button>
+                                                                    <Button variant={"ghost"} className="hover:cursor-pointer "> View appointment </Button>
                                                                 </Link>
                                                             </div>
                                                         </span>

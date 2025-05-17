@@ -41,7 +41,7 @@ function ServicesContent({ isGuest, serviceCategories, groupedServices }: Params
                 <div>
                     <h1 className="flex justify-end mb-6 text-5xl md:text-7xl font-bold text-slate-800">...{chosenCategory}</h1>
                     <div className="flex justify-center w-full">
-                        <ul className="flex flex-col justify-center items-center w-[90%] md:w-[80%]">
+                        <ul className="flex flex-col justify-center items-center w-full md:w-[80%]">
                             {currentServices?.map((service) =>
                                 <li key={service.id} className="flex flex-col rounded-lg mb-2 w-full outline-0 bg-slate-300">
                                     <div className="flex justify-between p-4">
@@ -52,22 +52,22 @@ function ServicesContent({ isGuest, serviceCategories, groupedServices }: Params
                                             null
                                             :
                                             <div className="mt-auto flex justify-center">
-                                                <Button className="hover:cursor-pointer bg-slate-500 hover:bg-slate-600">
+                                                <Button className="hover:cursor-pointer bg-slate-700 hover:bg-slate-800">
                                                     <Link href={`/home/services/${service.id}`}>Book now</Link>
                                                 </Button>
                                             </div>
                                         }
                                     </div>
                                     <div className="flex flex-row justify-end px-4 pb-4">
-                                        <span className="flex items-center text-base md:text-2xl">
-                                            <HiOutlineCash className="mr-2" /> {service?.price} €
+                                        <span className="flex items-center text-sm md:text-2xl">
+                                            <HiOutlineCash className="mr-2 text-xl md:text-2xl" /> {service?.price} €
                                         </span>
-                                        <span className="flex items-center ml-4 text-base md:text-2xl">
+                                        <span className="flex items-center ml-4 text-sm md:text-2xl">
                                             <HiOutlineClock className="mr-2 text-xl md:text-2xl" /> {service.duration} min
                                         </span>
                                         <span className="flex items-center ml-4">
                                             <Link href={`${isGuest ? `/reviews?service=${service.title}` : `/${pathname.split('/')[1]}/reviews?service=${service.title}`}`}>
-                                                <Button variant={"link"} className="text-base md:text-1xl hover:cursor-pointer hover:text-slate-600"> View reviews </Button>
+                                                <Button variant={"link"} className="text-sm md:text-xl hover:cursor-pointer hover:text-slate-600"> View reviews </Button>
                                             </Link>
                                         </span>
                                     </div>

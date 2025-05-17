@@ -66,7 +66,7 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerE
             <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
-                        Top 5 Appointments per Service
+                        Most popular services
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -127,7 +127,7 @@ export default function DataCharts({ apptsPerService, apptsPerWeekday, apptsPerE
             <Card className="bg-slate-300 max-h-[260px]">
                 <CardHeader>
                     <CardTitle className="text-slate-800">
-                        Top 5 Most Active Employees
+                        Most Active Employees
                     </CardTitle>
                 </CardHeader>
                 <CardContent>

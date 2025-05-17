@@ -17,12 +17,12 @@ export const faqItems: item[] = [
     {
         value: "q1",
         question: "How do I book an appointment?",
-        content: "Just sign up to our website and you can book whichever service you desire in the Services tab!"
+        content: "Just sign up to our website and you can book the service you desire in the Services tab!"
     },
     {
         value: "q2",
         question: "Can I reshedule or cancel my appointment?",
-        content: "If you cannot make it to your appoitment, you can reshedule it at a later date through our website! As for refunds and cancellations, we do not offer that."
+        content: "If you cannot make it to your appointment, you can reshedule it at a different date through our website! As for refunds and cancellations, we do not offer that."
     },
     {
         value: "q3",

@@ -15,7 +15,7 @@ export default async function Page() {
     const events = await getEvents(userInfo.userId);
 
     return (
-        <ScrollArea className="h-[80vh] w-full rounded-md pr-4">
+        <div>
             <div className="text-slate-800 mb-6">
                 <h1 className="text-5xl">Your Schedule</h1>
                 <h1 className="text-base opacity-60">Review your schedule here.</h1>
@@ -23,6 +23,6 @@ export default async function Page() {
             <div className="h-full">
                 <EmployeeSchedule appointments={events} />
             </div>
-        </ScrollArea>
+        </div>
     );
 }

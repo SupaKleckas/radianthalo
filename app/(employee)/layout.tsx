@@ -76,7 +76,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 </div>
 
                 {menuOpen ? (
-                    <div className="absolute top-[70px] h-[calc(100vh-70px)] w-[50%] bg-slate-400" >
+                    <div className="absolute top-[69px] h-[calc(100vh-70px)] w-[50%] bg-slate-400" >
                         <nav className="grid items-start px-2 text-xl">
                             <EmployeeDashboardItems />
                         </nav>

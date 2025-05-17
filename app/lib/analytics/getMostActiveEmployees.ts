@@ -24,10 +24,12 @@ export default async function getMostActiveEmployees() {
 
     });
 
-    const result = data.map(item => ({
-        name: item.user.firstName + " " + item.user.lastName,
-        count: item._count.appointment
-    }));
+    const result = data
+        .filter(employee => employee._count.appointment > 0)
+        .map(employee => ({
+            name: employee.user.firstName + " " + employee.user.lastName,
+            count: employee._count.appointment,
+        }));
 
     return result;
 }
