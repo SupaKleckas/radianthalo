@@ -6,6 +6,7 @@ import { ServiceCategory } from "@prisma/client";
 import { AddServiceFormState, EditServiceFormState } from "@/app/lib/states/states";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session";
 import { logout } from "../user/login/actions";
+import { revalidatePath } from "next/cache";
 
 export async function addServiceByForm(state: AddServiceFormState, formData: FormData) {
     const userInfo = await getUserIdAndRoleFromSession();
@@ -48,6 +49,8 @@ export async function addServiceByForm(state: AddServiceFormState, formData: For
     const category = formData.get('category') as ServiceCategory;
 
     await addService(validationResult.data.title, validationResult.data.price, validationResult.data.duration, category, employeeIds);
+    revalidatePath("/services");
+    revalidatePath("/home/services");
     redirect("/dashboard/services");
 }
 
@@ -99,5 +102,7 @@ export async function editServiceByForm(state: EditServiceFormState, formData: F
     const category = formData.get('category') as ServiceCategory;
 
     updateService(validationResult.data.id, validationResult.data.title, validationResult.data.price, validationResult.data.duration, category, employeeIds);
+    revalidatePath("/services");
+    revalidatePath("/home/services");
     redirect("/dashboard/services");
 }

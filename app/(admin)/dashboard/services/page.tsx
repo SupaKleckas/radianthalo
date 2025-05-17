@@ -18,16 +18,18 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Search } from "@/app/components/Page/Search";
 import { Suspense } from "react";
+import { ReviewFilters } from "@/app/components/Review/ReviewFilters";
 
 type SearchParams = Promise<{ [key: string]: string | undefined }>
 
 export default async function Page(props: { searchParams: SearchParams }) {
-    const { page, query } = await props.searchParams;
+    const { page, query, category } = await props.searchParams;
 
     const queryParam = query || "";
+    const categoryParam = category || "";
 
     const currPage = Number(page) || 1;
-    const [services, meta] = await getServices(currPage, queryParam);
+    const [services, meta] = await getServices(currPage, queryParam, categoryParam);
     const pageAmount = meta?.pageCount;
 
     return (
@@ -39,8 +41,9 @@ export default async function Page(props: { searchParams: SearchParams }) {
                 </div>
                 <div className='w-full'>
                     <Suspense fallback={<div>Loading...</div>}>
-                        <div className='flex justify-between mb-4 mt-4'>
+                        <div className='flex justify-between mb-4 mt-4 flex-col gap-y-4 md:gap-y-0 md:flex-row md:gap-x-4'>
                             <Search />
+                            <ReviewFilters />
                             <Button className="bg-slate-700 hover:bg-slate-800">
                                 <Link href="/dashboard/services/add" className='flex items-center'>
                                     <HiOutlineTruck className='mr-2 text-2xl' />

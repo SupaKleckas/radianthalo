@@ -57,7 +57,7 @@ function SignupForm({ onClose }: SignupFormProps) {
             className='w-full p-2 mt-4 mb-4 border border-slate-700 rounded focus:outline-none'
           />
           {state?._errors?.lastname && <p className='text-red-500 text-sm'>{state._errors.lastname[0]}</p>}
-          <SubmitButton text="Sign up" className="w-full bg-slate-700 mt-4" />
+          <SubmitButton text="Sign up" className="w-full bg-slate-700 hover:cursor-pointer mt-4" />
         </form>
       </div>
     </div>

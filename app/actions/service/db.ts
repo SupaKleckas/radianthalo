@@ -30,19 +30,25 @@ export async function getPopularServices() {
     });
 }
 
-export async function getServices(currPage: number, query?: string) {
-    const searchTerm = query
-        ? {
-            OR: [
-                { title: { contains: query, mode: 'insensitive' as const } },
-            ]
-        }
-        : {};
+export async function getServices(currPage: number, query?: string, category?: string) {
+    const searchTerm = query ? {
+        OR: [
+            { title: { contains: query, mode: 'insensitive' as const } },
+        ]
+    } : {};
 
+    const categoryFilter = category ? {
+        category: { equals: category as ServiceCategory }
+    } : {};
+
+    const whereClause = {
+        ...searchTerm,
+        ...categoryFilter,
+    };
 
     const result = await prisma.service
         .paginate({
-            where: searchTerm,
+            where: whereClause,
         })
         .withPages({
             limit: 10,
