@@ -20,7 +20,6 @@ export default async function Page(props: { params: Params, searchParams: Search
     const client = await getUserIdAndRoleFromSession();
 
     if (!id || !client?.userId || client.role != "USER") {
-        console.log("??")
         redirect("/home/appointments");
     }
 

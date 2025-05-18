@@ -1,6 +1,6 @@
 "use server";
 import { Employee, User, Service, Appointment, PaymentMethod } from "@prisma/client";
-import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById, deleteExpiredTemporaryAppointments, doesApptExist } from "@/app/actions/appointment/db";
+import { getAppointmentForTimeSlots, addAppointment, addTemporaryAppointment, deleteAppointment, updateAppointment, getAppointmentById, doesApptExist } from "@/app/actions/appointment/db";
 import { getEmployeeById, getUserById } from "@/app/actions/user/db";
 import { getUserIdAndRoleFromSession } from "@/app/lib/auth/session"
 import { getTimezoneOffset, format } from "date-fns-tz"
@@ -39,7 +39,7 @@ export async function addAppointmentByBooking(employee: User, date: Date, time: 
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
 
     if (await doesApptExist(employee.id, startTime, endTime)) {
-        return ({ redirectUrl: `/home/services?status=failed` });
+        return ({ redirectUrl: `/home/services/${service.id}` });
     }
 
     const appt = await addAppointment(service.title, startTime, endTime, employee.id, user.id, service.id, paymentMethod);
@@ -67,10 +67,6 @@ export async function addTemporaryAppointmentByBooking(employee: User, date: Dat
 
     const startTime = addTimeToDate(dateUtc, time);
     const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate(), startTime.getHours(), startTime.getMinutes() + service.duration, 0, 0);
-
-    if (await doesApptExist(employee.id, startTime, endTime)) {
-        return ({ redirectUrl: `/home/services?status=failed` });
-    }
 
     return await addTemporaryAppointment(service.title, startTime, endTime, employee.id, userInfo.userId, service.id);
 }
@@ -183,13 +179,4 @@ export async function updateAppointmentAction(appt: Appointment, employee: User,
     } else {
         redirect(`/home/appointments/${updated.id}?status=reschedule-success-noemail`);
     }
-
-}
-
-export async function deleteExpiredTemporaryAppointmentsAction() {
-    const userInfo = await getUserIdAndRoleFromSession();
-    if (!userInfo || userInfo.role != "ADMIN") {
-        return;
-    }
-    deleteExpiredTemporaryAppointments();
 }

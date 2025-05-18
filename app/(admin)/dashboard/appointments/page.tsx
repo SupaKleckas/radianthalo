@@ -2,25 +2,12 @@ import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
 import Link from "next/link";
 import { format } from "date-fns-tz"
 import { getAppointments } from "@/app/actions/appointment/db";
-import { deleteExpiredTemporaryAppointmentsAction } from "@/app/actions/appointment/actions";
 import { PaginationComponent } from "@/app/components/Page/Pagination";
 import { Appointment } from "@prisma/client";
 import { groupByDate } from "@/app/lib/grouping/groupByDate";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search } from "@/app/components/Page/Search";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 
 type SearchParams = Promise<{ [key: string]: string | undefined }>
 
@@ -42,29 +29,6 @@ export default async function Page(props: { searchParams: SearchParams }) {
                 <Suspense fallback={<div>Loading...</div>}>
                     <div className="flex flex-col md:flex-row gap-y-4 justify-between">
                         <Search />
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant={"outline"} className="hover:cursor-pointer hover:bg-slate-300 text-slate-800">
-                                    Clear expired records
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>{`Are you sure you want to clear all expired records?`}</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This action will delete all expired temporary appointment records from the database.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel className="hover:cursor-pointer hover:bg-slate-300">Cancel</AlertDialogCancel>
-                                    <form action={deleteExpiredTemporaryAppointmentsAction}>
-                                        <AlertDialogAction asChild >
-                                            <Button type="submit" className="bg-slate-700 hover:cursor-pointer">Continue</Button>
-                                        </AlertDialogAction>
-                                    </form>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
                     </div>
                     <PaginationComponent pageAmount={pageAmount} />
                 </Suspense>

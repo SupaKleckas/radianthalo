@@ -1,6 +1,6 @@
 "use server";
 import prisma from "@/app/lib/database/db";
-import { Employee, PaymentMethod, User } from "@prisma/client";
+import { Employee, PaymentMethod } from "@prisma/client";
 import { parseISO, isValid, startOfDay, endOfDay } from "date-fns";
 
 export async function getAppointments(currPage: number, query?: string) {
@@ -234,18 +234,6 @@ export async function getEmployeeAppointmentsInInterval(fromDate: Date, toDate: 
             }
         }
     })
-}
-
-export async function deleteExpiredTemporaryAppointments() {
-    const oneDayOld = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const deleted = await prisma.temporaryAppointment.deleteMany({
-        where: {
-            createdAt: {
-                lte: oneDayOld
-            }
-        }
-    })
-    console.log(`Deleted ${deleted.count} expired temporary appointments.`);
 }
 
 export async function doesApptExist(employeeId: string, startTime: Date, endTime: Date) {

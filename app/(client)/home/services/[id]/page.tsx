@@ -3,11 +3,9 @@ import { redirect } from "next/navigation";
 import { getEmployeesByService } from "@/app/actions/user/db";
 import { Booking } from "@/app/components/Booking/Booking";
 
-export type paramsType = Promise<{
-    id?: string;
-}>;
+type Params = Promise<{ id: string }>
 
-export default async function Page(props: { params: paramsType }) {
+export default async function Page(props: { params: Params }) {
     const { id } = await props.params;
 
     if (!id) {
