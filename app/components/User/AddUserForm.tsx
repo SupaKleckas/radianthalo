@@ -70,19 +70,21 @@ export default function AddUserForm() {
                         className='w-full'
                     />
                     {state?._errors?.lastname && <p className='text-red-500 text-sm'>{state._errors.lastname[0]}</p>}
-                    <Label htmlFor='role' className='text-base text-slate-700'>Role</Label>
-                    <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-                        <SelectTrigger className="w-full" defaultValue={Role.USER}>
-                            <SelectValue placeholder="Role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value={`${Role.USER}`}>{Role.USER}</SelectItem>
-                            <SelectItem value={`${Role.EMPLOYEE}`}>{Role.EMPLOYEE}</SelectItem>
-                            <SelectItem value={`${Role.ADMIN}`}>{Role.ADMIN}</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    {state?._errors?.role && <p className='text-red-500 text-sm'>{state._errors.role[0]}</p>}
-                    <Input type="hidden" name="role" value={role} />
+                    <Label htmlFor='role' className='text-base text-slate-700'>
+                        Role
+                        <Select value={role} onValueChange={(value) => setRole(value as Role)}>
+                            <SelectTrigger className="w-full" defaultValue={Role.USER}>
+                                <SelectValue placeholder="Role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={`${Role.USER}`}>{Role.USER}</SelectItem>
+                                <SelectItem value={`${Role.EMPLOYEE}`}>{Role.EMPLOYEE}</SelectItem>
+                                <SelectItem value={`${Role.ADMIN}`}>{Role.ADMIN}</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        {state?._errors?.role && <p className='text-red-500 text-sm'>{state._errors.role[0]}</p>}
+                        <Input type="hidden" name="role" value={role} />
+                    </Label>
                     <div className='flex justify-center'>
                         <Button type='submit' className='bg-slate-700 hover:bg-slate-800 hover:cursor-pointer'>
                             Add user
