@@ -44,9 +44,11 @@ export async function GET(request: Request) {
 
         deleteTemporaryAppointment(tempAppointment.id);
 
+        const duplicateExists = await doesApptExist(tempAppointment.employeeId, tempAppointment.startTime, tempAppointment.endTime);
+
         const appt = await addAppointment(tempAppointment.title, tempAppointment.startTime, tempAppointment.endTime, tempAppointment.employeeId, tempAppointment.clientId, tempAppointment.serviceId, PaymentMethod.Online);
 
-        if (await doesApptExist(tempAppointment.employeeId, tempAppointment.startTime, tempAppointment.endTime)) {
+        if (duplicateExists) {
             return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/home/appointments/reschedule?id=${appt.id}`);
         }
 
