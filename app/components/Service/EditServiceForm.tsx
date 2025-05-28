@@ -42,33 +42,33 @@ export default function UserEditForm({ service, employees }: { service: ServiceW
                     <Label htmlFor='duration' className='text-base text-slate-700'>Duration</Label>
                     <Input type="number" id='duration' name="duration" defaultValue={service.duration} className='w-full' />
                     {state?._errors?.duration && <p className='text-red-500 text-sm'>{state._errors.duration[0]}</p>}
-                    <Label className='text-base text-slate-700'>Category
-                        <Select value={servicecategory} onValueChange={(value) => setServiceCategory(value as ServiceCategory)}>
-                            <SelectTrigger className="w-full" >
-                                <SelectValue placeholder="Category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value='Hair'>{ServiceCategory.Hair}</SelectItem>
-                                <SelectItem value='Lashes'>{ServiceCategory.Lashes}</SelectItem>
-                                <SelectItem value='Brows'>{ServiceCategory.Brows}</SelectItem>
-                                <SelectItem value='Nails'>{ServiceCategory.Nails}</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </Label>
+                    <Label className='text-base text-slate-700'>Category</Label>
+                    <Select value={servicecategory} onValueChange={(value) => setServiceCategory(value as ServiceCategory)}>
+                        <SelectTrigger className="w-full" >
+                            <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value='Hair'>{ServiceCategory.Hair}</SelectItem>
+                            <SelectItem value='Lashes'>{ServiceCategory.Lashes}</SelectItem>
+                            <SelectItem value='Brows'>{ServiceCategory.Brows}</SelectItem>
+                            <SelectItem value='Nails'>{ServiceCategory.Nails}</SelectItem>
+                        </SelectContent>
+                    </Select>
+
                     <input type="hidden" name="category" value={servicecategory} />
-                    <Label className='text-base text-slate-700'>Employees
-                        <MultiSelect
-                            employees={employees}
-                            selectedValues={selectedEmployees}
-                            setSelectedValues={setSelectedEmployees}
-                        />
-                        <Input
-                            id='employees'
-                            type="hidden"
-                            name="employeeIds"
-                            value={JSON.stringify(selectedEmployees)}
-                        />
-                    </Label>
+                    <Label className='text-base text-slate-700'>Employees</Label>
+                    <MultiSelect
+                        employees={employees}
+                        selectedValues={selectedEmployees}
+                        setSelectedValues={setSelectedEmployees}
+                    />
+                    <Input
+                        id='employees'
+                        type="hidden"
+                        name="employeeIds"
+                        value={JSON.stringify(selectedEmployees)}
+                    />
+
                     {state?._errors?.employees && <p className='text-red-500 text-sm'>{state._errors.employees[0]}</p>}
                     <Input type="hidden" name="id" value={service.id} />
                     <div className="flex justify-center">
