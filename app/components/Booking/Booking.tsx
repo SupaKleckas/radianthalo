@@ -83,7 +83,7 @@ export function Booking({ service, employees }: { service: Service, employees: U
                                 )}
                             </div>
                             <div className="flex justify-end col-start-5">
-                                <Button className="w-fit bg-slate-700 hover:cursor-pointer" onClick={() => setNext(true)}>Next <HiArrowSmRight /></Button>
+                                {unavailableDay.includes(format(date, "yyyy-MM-dd")) ? null : <Button className="w-fit bg-slate-700 hover:cursor-pointer" onClick={() => setNext(true)}>Next <HiArrowSmRight /></Button>}
                             </div>
                         </CardContent>
                     </Card>
